@@ -1,0 +1,6 @@
+node_module
+.env
+./client/node_module
+./client/src/utils
+node_modules
+Wishly-20211021T055305Z-001.zip
