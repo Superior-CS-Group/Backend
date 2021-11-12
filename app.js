@@ -26,7 +26,7 @@ export const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.WISHIFYDATABASE, {
+  .connect(process.env.ONEPERCENTDATABASE, {
     useUnifiedTopology: true,
     useNewUrlParser: true
   })
