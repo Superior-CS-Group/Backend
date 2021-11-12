@@ -27,7 +27,7 @@ export const addUserRole = async (req, res) => {
   }
 };
 
-export const UserRolePermisionList = async (req, res) => {
+export const UserRoleList = async (req, res) => {
   let data = [];
 
   const userId = req.query.userId || req.user._id;

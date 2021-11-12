@@ -23,7 +23,7 @@ import {
 const UserRoute = express.Router();
 
 // Lead
-UserRoute.post("/add-lead", authProtect, addLead);
+UserRoute.post("/add", authProtect, addLead);
 UserRoute.get("/upcoming-estimation", authProtect, UpcomingEstimaitonLead);
 
 // Customer Profile

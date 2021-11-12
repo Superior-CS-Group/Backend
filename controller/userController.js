@@ -393,8 +393,8 @@ export const updateAccount = async (req, res) => {
       { _id: currentUser._id },
       {
         $set: {
-          firstName: body.firstName,
-          lastName: body.lastName,
+          name: body.name,
+          companyName: body.companyName,
           profileImage: profileImg,
         },
       }
