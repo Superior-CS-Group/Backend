@@ -1,6 +1,6 @@
 import Mongoose from "mongoose";
 
-const UserRolePermisionSchema = new Mongoose.Schema(
+const LeadSourceSchema = new Mongoose.Schema(
   {
     
     name: {
@@ -10,12 +10,12 @@ const UserRolePermisionSchema = new Mongoose.Schema(
     activeStatus: {
       type: Boolean,
       default: true,
-    },
   },
+},
   {
     timestamps: true,
   }
 );
 
-const UserRolePermisionModel = Mongoose.model("UserRole", UserRolePermisionSchema);
-export default UserRolePermisionModel;
+const LeadSourceModel = Mongoose.model("LeadSource", LeadSourceSchema);
+export default LeadSourceModel;

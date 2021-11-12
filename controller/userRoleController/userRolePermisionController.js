@@ -1,4 +1,4 @@
-import UserRoleModel from "../../model/admin/userRoleModel.js";
+import UserRoleModel from "../../model/userRole/userRoleModel.js";
 import StaffModel from "../../model/staff/staffModel.js";
 
 export const addUserRole = async (req, res) => {

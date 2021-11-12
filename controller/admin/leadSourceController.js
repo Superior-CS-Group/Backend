@@ -1,4 +1,4 @@
-import LeadSourceModel from "../../model/admin/leadSourceModel.js";
+import LeadSourceModel from "../../model/leadSource/leadSourceModel.js";
 import StaffModel from "../../model/staff/staffModel.js";
 
 export const addLeadSource = async (req, res) => {

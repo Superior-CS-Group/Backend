@@ -27,7 +27,7 @@ import {
   UpcomingEstimaitonLead,
 } from "../controller/admin/leadController.js";
 
-import { addUserRole } from "../controller/admin/userRolePermisionController.js";
+import { addUserRole } from "../controller/userRoleController/userRolePermisionController.js";
 
 const AdminRoute = express.Router();
 
