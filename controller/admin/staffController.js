@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
 
-import StaffModel from "../../model/admin/staffModel.js"; 
+import StaffModel from "../../model/staff/staffModel.js"; 
 import validateSignUpInput from "../../validator/signUp.validator.js";
 import services from "../../utils/services.js";
 import sendEmail from "../../utils/sendEmail.js";

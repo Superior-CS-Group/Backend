@@ -1,5 +1,5 @@
 import LeadSourceModel from "../../model/admin/leadSourceModel.js";
-import StaffModel from "../../model/admin/staffModel.js";
+import StaffModel from "../../model/staff/staffModel.js";
 import LeadModel from "../../model/leadModel.js";
 import { InvoiceNumber } from "invoice-number";
 

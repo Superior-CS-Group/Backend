@@ -1,5 +1,5 @@
 import LeadSourceModel from "../../model/admin/leadSourceModel.js";
-import StaffModel from "../../model/admin/staffModel.js";
+import StaffModel from "../../model/staff/staffModel.js";
 
 export const addLeadSource = async (req, res) => {
   // const userId = req.query.userId || req.user._id;

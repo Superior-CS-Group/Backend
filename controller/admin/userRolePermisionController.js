@@ -1,5 +1,5 @@
 import UserRoleModel from "../../model/admin/userRoleModel.js";
-import StaffModel from "../../model/admin/staffModel.js";
+import StaffModel from "../../model/staff/staffModel.js";
 
 export const addUserRole = async (req, res) => {
   const userId = req.query.userId || req.user._id;

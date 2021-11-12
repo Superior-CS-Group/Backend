@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import services from "../utils/services.js";
-import User from "../model/admin/staffModel.js";
+import User from "../model/staff/staffModel.js";
 import { promisify } from "util";
 
 export const authProtect = async (req, res, next) => {

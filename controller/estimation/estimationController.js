@@ -1,6 +1,6 @@
 import LeadSourceModel from "../../model/admin/leadSourceModel.js";
-import StaffModel from "../../model/admin/staffModel.js";
-import LeadModel from "../../model/leadModel.js";
+import StaffModel from "../../model/staff/staffModel.js";
+import EstimationModel from "../../model/estimation/estimationModel.js";
 import { InvoiceNumber } from "invoice-number";
 
 export const addLead = async (req, res) => {
@@ -15,14 +15,14 @@ export const addLead = async (req, res) => {
   try {
     
 
-    const getData = await LeadModel.find().sort({ _id: -1 }).limit(1);
+    const getData = await EstimationModel.find().sort({ _id: -1 }).limit(1);
 
     const preInvoiceNumber = (getData[0].leadInvoinceNo);
 
     var newInvoiceNo = InvoiceNumber.next(`${preInvoiceNumber}`);
  
 
-    const createLeadData = await LeadModel.create({
+    const createLeadData = await EstimationModel.create({
       name: req.body.customerName,
       email: req.body.email,
       contactNo: req.body.contactNo,
@@ -55,11 +55,11 @@ export const UpcomingEstimaitonLead = async (req, res) => {
   }
   try {
 
-    const leadData = await LeadModel.find({leadPerson: { $in: [userId] }}).sort({ _id: -1 });
+    const leadData = await EstimationModel.find({leadPerson: { $in: [userId] }}).sort({ _id: -1 });
 
     res.status(200).json({
-      userDataLength: leadData.length,
-      userData: leadData,
+      DataLength: leadData.length,
+      Data: leadData,
     });
   } catch (error) {
     console.log("error:", error);
@@ -105,7 +105,7 @@ export const ChangeStatus = async (req, res) => {
   }
 };
 
-export const LeadSourceRemove = async (req, res) => {
+export const CustomerLeadRemove = async (req, res) => {
   const userId = req.query.userId || req.user._id;
   // console.log(userId);
   const currentUser = await StaffModel.findById(userId);

@@ -16,6 +16,7 @@ import UserRoute from "./route/customer.js";
 import AdminRoute from "./route/admin.js";
 import EstimaitonRoute from "./route/estimation.js";
 import ServicesRoute from "./route/services.js";
+import StaffRoute from "./route/staff.js";
 
 const app = express();
 app.use(cors());
@@ -60,6 +61,8 @@ app.use("/api/admin", AdminRoute);
 app.use("/api/customer", UserRoute);
 app.use("/api/estimation", EstimaitonRoute);
 app.use("/api/services", ServicesRoute);
+app.use("/api/staff", StaffRoute);
+
 app.get("/", (req, res) => res.status(200).send("Yes its working"));
 
 const server = http.createServer(app);

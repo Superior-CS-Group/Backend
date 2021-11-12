@@ -31,9 +31,13 @@ const StaffSchema = new Mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    companyName: {
+      type: String,
+      default: "",
+    },
     userRole: {
       type: String,
-      default: "staff",
+      default: "admin",
     },
   },
   {

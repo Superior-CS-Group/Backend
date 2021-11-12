@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
 
-import UserModel from "../model/admin/staffModel.js";
+import UserModel from "../model/staff/staffModel.js";
 import validateSignUpInput from "../validator/signUp.validator.js";
 import services from "../utils/services.js";
 import sendEmail from "../utils/sendEmail.js";
@@ -21,10 +21,11 @@ export const signUp = async (req, res) => {
       $or: [{ email: req.body.email }],
     });
     if (existingUser) {
-      return res.status(409).json({ errors: { email: "User already exists" } });
+      return res.status(409).json({ errors: { email: "Email Id already exists" } });
     }
     const newUser = new UserModel({
       email: req.body.email,
+      companyName:req.body.companyName
     });
 
     const payload1 = {
