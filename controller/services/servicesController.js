@@ -18,9 +18,8 @@ export const addServiceCatelog = async (req, res) => {
   if (!currentUser) {
     return res.status(401).json({ error: "User not found" });
   }
-   
+
   try {
-     
     const ServieData = {
       name: req.body.name,
       hours: req.body.hours,
@@ -30,9 +29,7 @@ export const addServiceCatelog = async (req, res) => {
       type: req.body.type,
     };
     const createServieData = new ServicesModel(ServieData);
-    await createServieData.save()
-    
-
+    await createServieData.save();
 
     for (let i in req.body.variation) {
       const updatedVariation = req.body.variation[i];
@@ -51,7 +48,7 @@ export const addServiceCatelog = async (req, res) => {
       };
 
       const createVariatioData = new VariationModel(variationData);
-      await createVariatioData.save()
+      await createVariatioData.save();
     }
 
     res.status(200).json({
@@ -60,11 +57,10 @@ export const addServiceCatelog = async (req, res) => {
       VariationData: createVariatioData,
     });
   } catch (errors) {
-    console.log(errors,"errors")
+    console.log(errors, "errors");
     res.status(500).json({ errors: { error: "Internal Server Error" } });
   }
 };
-
 
 export const ListServiceCatelog = async (req, res) => {
   const userId = req.query.userId || req.user._id;
@@ -74,16 +70,16 @@ export const ListServiceCatelog = async (req, res) => {
   if (!currentUser) {
     return res.status(401).json({ error: "User not found" });
   }
-   
+
   try {
-      
-    const checkData = await ServicesModel.find().sort({_id:-1});
+    const checkData = await ServicesModel.find().sort({ _id: -1 });
     var servicesData = [];
 
     for (let i in checkData) {
       const updatedVariation = checkData[i];
-      const checkVariationData = await VariationModel.find({catelogId:updatedVariation._id}).sort({_id:-1});
-
+      const checkVariationData = await VariationModel.find({
+        catelogId: updatedVariation._id,
+      }).sort({ _id: -1 });
 
       const Data = {
         _id: updatedVariation._id,
@@ -92,62 +88,59 @@ export const ListServiceCatelog = async (req, res) => {
         days: updatedVariation.days,
         price: updatedVariation.rate,
         unit: updatedVariation.unit,
-        VariationDataLenth: checkVariationData.length, 
-        VariationData:checkVariationData
+        VariationDataLenth: checkVariationData.length,
+        VariationData: checkVariationData,
       };
 
       servicesData.push(Data);
- 
     }
 
     res.status(200).json({
       message: "List",
-      DataLenth: servicesData.length, 
-      Data: servicesData, 
+      DataLenth: servicesData.length,
+      Data: servicesData,
     });
   } catch (errors) {
-    console.log(errors,"errors")
+    console.log(errors, "errors");
     res.status(500).json({ errors: { error: "Internal Server Error" } });
   }
 };
 
-
 export const DetailServiceCatelog = async (req, res) => {
   const userId = req.query.userId || req.user._id;
- 
+
   const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
     return res.status(401).json({ error: "User not found" });
   }
-   
+
   try {
-    
-    const checkData = await ServicesModel.findById({_id:req.body._id});
+    const checkData = await ServicesModel.findById({ _id: req.body._id });
     var servicesData = [];
-    
-      const checkVariationData = await VariationModel.find({catelogId:req.body._id}).sort({_id:-1});
 
-       
-      const Data = {
-        _id: checkData._id,
-        title: checkData.name,
-        hours: checkData.hours,
-        days: checkData.days,
-        price: checkData.rate,
-        unit: checkData.unit, 
-        VariationData:checkVariationData
-      };
+    const checkVariationData = await VariationModel.find({
+      catelogId: req.body._id,
+    }).sort({ _id: -1 });
 
-      servicesData.push(Data);
-  
+    const Data = {
+      _id: checkData._id,
+      title: checkData.name,
+      hours: checkData.hours,
+      days: checkData.days,
+      price: checkData.rate,
+      unit: checkData.unit,
+      VariationData: checkVariationData,
+    };
+
+    servicesData.push(Data);
 
     res.status(200).json({
-      message: "Detail", 
-      Data: servicesData, 
+      message: "Detail",
+      Data: servicesData,
     });
   } catch (errors) {
-    console.log(errors,"errors")
+    console.log(errors, "errors");
     res.status(500).json({ errors: { error: "Internal Server Error" } });
   }
 };
@@ -160,9 +153,8 @@ export const updateServiceCatelog = async (req, res) => {
   if (!currentUser) {
     return res.status(401).json({ error: "User not found" });
   }
-   
+
   try {
-     
     const ServieData = {
       name: req.body.name,
       hours: req.body.hours,
@@ -171,10 +163,11 @@ export const updateServiceCatelog = async (req, res) => {
       unit: req.body.unit,
       type: req.body.type,
     };
-    const createServieData = new ServicesModel(ServieData);
-    await createServieData.save()
-    
-
+    const updateData = await ServicesModel.findByIdAndUpdate(
+      { _id: req.body._id },
+      ServieData,
+      { new: true }
+    );
 
     for (let i in req.body.variation) {
       const updatedVariation = req.body.variation[i];
@@ -189,24 +182,24 @@ export const updateServiceCatelog = async (req, res) => {
         price: updatedVariation.price,
         unit: updatedVariation.unit,
         image: variationImage,
-        catelogId: createServieData._id,
+        catelogId: req.body._id,
       };
 
-      const createVariatioData = new VariationModel(variationData);
-      await createVariatioData.save()
+      const createVariatioData = await VariationModel.findByIdAndUpdate(
+        { _id: updatedVariation._id },
+        variationData
+      );
     }
 
     res.status(200).json({
       message: "Success",
-      Data: createServieData,
-      VariationData: createVariatioData,
+      Data: updateData,
     });
   } catch (errors) {
-    console.log(errors,"errors")
+    console.log(errors, "errors");
     res.status(500).json({ errors: { error: "Internal Server Error" } });
   }
 };
-
 
 export const ChangeStatus = async (req, res) => {
   const userId = req.query.userId || req.user._id;
