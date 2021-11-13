@@ -82,15 +82,17 @@ export const ListServiceCatelog = async (req, res) => {
 
     for (let i in checkData) {
       const updatedVariation = checkData[i];
-      const checkVariationData = await VariationModel.find({catelogId:updatedVariation[i]._id}).sort({_id:-1});
+      const checkVariationData = await VariationModel.find({catelogId:updatedVariation._id}).sort({_id:-1});
 
 
       const Data = {
+        _id: updatedVariation._id,
         title: updatedVariation.name,
-        price: updatedVariation.price,
+        hours: updatedVariation.hours,
+        days: updatedVariation.days,
+        price: updatedVariation.rate,
         unit: updatedVariation.unit,
-        image: variationImage,
-        catelogId: createServieData._id,
+        VariationDataLenth: checkVariationData.length, 
         VariationData:checkVariationData
       };
 
@@ -100,6 +102,7 @@ export const ListServiceCatelog = async (req, res) => {
 
     res.status(200).json({
       message: "List",
+      DataLenth: servicesData.length, 
       Data: servicesData, 
     });
   } catch (errors) {
@@ -108,6 +111,46 @@ export const ListServiceCatelog = async (req, res) => {
   }
 };
 
+
+export const DetailServiceCatelog = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+ 
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ error: "User not found" });
+  }
+   
+  try {
+    
+    const checkData = await ServicesModel.findById({_id:req.body._id});
+    var servicesData = [];
+    
+      const checkVariationData = await VariationModel.find({catelogId:req.body._id}).sort({_id:-1});
+
+       
+      const Data = {
+        _id: checkData._id,
+        title: checkData.name,
+        hours: checkData.hours,
+        days: checkData.days,
+        price: checkData.rate,
+        unit: checkData.unit, 
+        VariationData:checkVariationData
+      };
+
+      servicesData.push(Data);
+  
+
+    res.status(200).json({
+      message: "Detail", 
+      Data: servicesData, 
+    });
+  } catch (errors) {
+    console.log(errors,"errors")
+    res.status(500).json({ errors: { error: "Internal Server Error" } });
+  }
+};
 
 export const updateServiceCatelog = async (req, res) => {
   const userId = req.query.userId || req.user._id;
