@@ -3,7 +3,7 @@ import { authProtect } from "../controller/authController.js";
 
 
 
-import { addStaff } from "../controller/Staff/staffController.js";
+import { addStaff } from "../controller/staff/staffController.js";
 
 
 const StaffRoute = express.Router();

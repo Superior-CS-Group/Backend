@@ -4,42 +4,33 @@ const ServicesSchema = new Mongoose.Schema(
   {
     name: {
       type: String,
-      default: "",
+      required: true,
     },
     hours: {
-      type: parseFloat,
-      default: 0,
+      type: Number,
+      required: function () {
+        return this.type === "service";
+      },
     },
     days: {
-      type: parseFloat,
-      default: 0,
+      type: Number,
+      required: function () {
+        return this.type === "service";
+      },
     },
     rate: {
-      type: parseFloat,
-      default: 0,
+      type: Number,
+      required: true,
     },
     unit: {
       type: String,
-      default: "",
-    },
-    variation: {
-      type: [
-        {
-          title: { type: String, required: true },
-          price: { type: String, required: true },
-          unit: { type: Boolean, default: true },
-          image: { type: Array, required: false },
-        },
-      ],
-      required: false,
+      required: function () {
+        return this.type !== "service";
+      },
     },
     type: {
       type: String,
-      default: "services",
-    },
-    image: {
-      type: Array,
-      required: false,
+      default: "service",
     },
     activeStatus: {
       type: Boolean,
@@ -51,5 +42,5 @@ const ServicesSchema = new Mongoose.Schema(
   }
 );
 
-const ServiceseModel = Mongoose.model("Services", ServicesSchema);
+const ServiceseModel = Mongoose.model("services", ServicesSchema);
 export default ServiceseModel;

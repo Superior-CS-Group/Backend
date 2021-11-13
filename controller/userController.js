@@ -21,11 +21,15 @@ export const signUp = async (req, res) => {
       $or: [{ email: req.body.email }],
     });
     if (existingUser) {
-      return res.status(409).json({ errors: { email: "Email Id already exists" } });
+      return res
+        .status(409)
+        .json({ errors: { email: "Email Id already exists" } });
     }
     const newUser = new UserModel({
       email: req.body.email,
-      companyName:req.body.companyName
+      companyName: req.body.companyName,
+      currency: req.body.currency,
+      timeZone: req.body.timeZone,
     });
 
     const payload1 = {
@@ -35,7 +39,6 @@ export const signUp = async (req, res) => {
       expiresIn: 31556926,
     });
     //  console.log(req.headers)
-     
 
     bcrypt.genSalt(10, (err, salt) => {
       if (err) {
@@ -57,10 +60,42 @@ export const signUp = async (req, res) => {
           expiresIn: 31556926,
         });
 
+        let profileImage = "";
+        if (req.body.profileImage) {
+          profileImage = await base64ToFile(
+            req.body.profileImage,
+            newUser._id,
+            profileImage,
+            req
+          );
+        } else {
+          profileImage = "";
+        }
+
+        let companyImage = "";
+        if (req.body.companyImage) {
+          companyImage = await base64ToFile(
+            req.body.companyImage,
+            newUser._id,
+            companyImage,
+            req
+          );
+        } else {
+          companyImage = "";
+        }
+
+        const userData = await UserModel.findByIdAndUpdate(
+          { _id: newUser._id },
+          {
+            $set: { profileImage: profileImage,companyImage: companyImage },
+          },
+          {new:true}
+        );
+
         return res.status(200).json({
           message: "User registred Successfully",
           token: token,
-          user: newUser,
+          user: userData,
         });
       });
     });

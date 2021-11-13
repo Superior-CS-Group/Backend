@@ -39,7 +39,7 @@ const CustomerLeadSchema = new Mongoose.Schema(
       type: String,
       default: "Process",
     },
-    
+        
     leadInvoinceNo: {
       type: Number,
       default: 1000001,

@@ -1,20 +1,14 @@
 import express from "express";
 import { authProtect } from "../controller/authController.js";
- 
 
 import {
-  updateEmailSetting,
-  getEmailSetting,
-  changePassword,
-} from "../controller/admin/emailSettingController.js";
-   
+  addServiceCatelog,
+  ListServiceCatelog,
+} from "../controller/services/servicesController.js";
 
-const AdminRoute = express.Router();
- 
+const ServicesRoute = express.Router();
 
-AdminRoute.post("/get-email-setting", authProtect, getEmailSetting);
-AdminRoute.post("/update-email-setting", authProtect, updateEmailSetting);
-AdminRoute.post("/update-password", authProtect, changePassword);
- 
+ServicesRoute.post("/add", authProtect, addServiceCatelog);
+ServicesRoute.post("/list", authProtect, ListServiceCatelog);
 
-export default AdminRoute;
+export default ServicesRoute;

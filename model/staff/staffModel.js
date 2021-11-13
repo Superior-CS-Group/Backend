@@ -34,10 +34,18 @@ const StaffSchema = new Mongoose.Schema(
     companyName: {
       type: String,
       default: "",
-    },
-    userRole: {
+    }, 
+    companyImage: {
       type: String,
-      default: "admin",
+      default: "",
+    },
+    currency: {
+      type: String,
+      default: "",
+    },
+    timeZone: {
+      type: String,
+      default: "",
     },
   },
   {
