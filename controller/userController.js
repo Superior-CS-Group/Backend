@@ -87,9 +87,9 @@ export const signUp = async (req, res) => {
         const userData = await UserModel.findByIdAndUpdate(
           { _id: newUser._id },
           {
-            $set: { profileImage: profileImage,companyImage: companyImage },
+            $set: { profileImage: profileImage, companyImage: companyImage },
           },
-          {new:true}
+          { new: true }
         );
 
         return res.status(200).json({
@@ -199,6 +199,54 @@ export const getUserDetails = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const updateAccount = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+  const body = req.body;
+
+  try {
+    const currentUser = await UserModel.findById(userId);
+
+    if (!currentUser) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    let profileImg = "";
+    if (body.profileImage) {
+      profileImg = await base64ToFile(
+        body.profileImage,
+        currentUser._id,
+        "profilepictures"
+      );
+    } else {
+      profileImg = currentUser.profileImage;
+    }
+
+    await UserModel.findByIdAndUpdate(
+      { _id: currentUser._id },
+      {
+        $set: {
+          email: req.body.email,
+          name: req.body.name,
+          companyName: req.body.companyName,
+          currency: req.body.currency,
+          timeZone: req.body.timeZone,
+          profileImage: profileImg,
+        },
+      }
+    );
+    const userData = await UserModel.findById(userId);
+    // console.log(userData);
+    return res.status(200).json({
+      message: "Successfully Account Updated!",
+      user: userData,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// -------------
 
 export const recoverPassword = async (req, res) => {
   const emailId = req.body.email;
@@ -399,49 +447,6 @@ export const updateEmail = async (req, res) => {
     });
   } catch (error) {
     // console.log(error)
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-export const updateAccount = async (req, res) => {
-  const userId = req.query.userId || req.user._id;
-  const body = req.body;
-
-  try {
-    const currentUser = await UserModel.findById(userId);
-
-    if (!currentUser) {
-      return res.status(401).json({ error: "User not found" });
-    }
-    let profileImg = "";
-    if (body.profileImage) {
-      profileImg = await base64ToFile(
-        body.profileImage,
-        currentUser._id,
-        "profilepictures"
-      );
-    } else {
-      profileImg = currentUser.profileImage;
-    }
-
-    await UserModel.findByIdAndUpdate(
-      { _id: currentUser._id },
-      {
-        $set: {
-          name: body.name,
-          companyName: body.companyName,
-          profileImage: profileImg,
-        },
-      }
-    );
-    const userData = await UserModel.findById(userId);
-    // console.log(userData);
-    return res.status(200).json({
-      message: "Successfully Account Updated!",
-      user: userData,
-    });
-  } catch (error) {
-    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

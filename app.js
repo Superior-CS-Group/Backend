@@ -19,6 +19,8 @@ import ServicesRoute from "./route/services.js";
 import StaffRoute from "./route/staff.js";
 import LeadSourceRoute from "./route/leadsource.js";
 import UserRoleRoute from "./route/userrole.js";
+import UnitRoute from "./route/unit.js";
+import StatusNameRoute from "./route/statusName.js";
 
 const app = express();
 app.use(cors());
@@ -66,6 +68,8 @@ app.use("/api/services", ServicesRoute);
 app.use("/api/staff", StaffRoute);
 app.use("/api/lead-source", LeadSourceRoute);
 app.use("/api/user-role", UserRoleRoute);
+app.use("/api/unit", UnitRoute);
+app.use("/api/status", StatusNameRoute);
 
 app.get("/", (req, res) => res.status(200).send("Yes its working"));
 

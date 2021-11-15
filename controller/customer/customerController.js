@@ -17,38 +17,83 @@ export const addLead = async (req, res) => {
   try {
     var preInvoiceNumber;
 
-    const getData = await EstimationModel.find().sort({ _id: -1 }).limit(1);
-    if (getData.length>0) {
+    const getData = await CustomerLeadModel.find().sort({ _id: -1 }).limit(1);
+    if (getData.length > 0) {
       preInvoiceNumber = getData[0].leadInvoinceNo;
     } else {
-      preInvoiceNumber = "1000001";
+      preInvoiceNumber = "C1000001";
     }
 
     var newInvoiceNo = InvoiceNumber.next(`${preInvoiceNumber}`);
 
-   const customerLead =  await CustomerLeadModel.create({
+    const customerLead = await CustomerLeadModel.create({
       name: req.body.customerName,
       email: req.body.email,
       contactNo: req.body.contactNo,
-      leadSource: req.body.leadSource,
-      leadPerson: req.body.leadPerson,
-      estimaitonDate: req.body.estimaitonDate,
-      estimaitonSentDate: req.body.estimaitonSentDate,
-      estimaitonStatus: req.body.estimaitonStatus,
+      country: req.body.country,
+      state: req.body.state,
+      city: req.body.city,
+      postalCode: req.body.postalCode,
+      address: req.body.address,
       leadInvoinceNo: newInvoiceNo,
     });
 
+    // const createLeadData = await EstimationModel.create({
+    //   name: req.body.customerName,
+    //   email: req.body.email,
+    //   contactNo: req.body.contactNo,
+    //   leadSource: req.body.leadSource,
+    //   leadPerson: req.body.leadPerson,
+    //   estimaitonDate: req.body.estimaitonDate,
+    //   estimaitonSentDate: req.body.estimaitonSentDate,
+    //   estimaitonStatus: req.body.estimaitonStatus,
+    //   leadInvoinceNo: newInvoiceNo,
+    //   customerLeadId: customerLead._id,
+    // });
+
+    res.status(200).json({
+      message: "Success",
+      Data: customerLead,
+    });
+  } catch (errors) {
+    console.log(errors);
+    res.status(500).json({ errors: { error: "Internal Server Error" } });
+  }
+};
+
+export const assignCustomerLead = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+  // console.log(req.body);
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ error: "User not found" });
+  }
+
+  try {
+    var preInvoiceNumber;
+
+    const getCustomerData = await CustomerLeadModel.findById({
+      _id: req.body.customerId,
+    });
+
+    const getData = await EstimationModel.find().sort({ _id: -1 }).limit(1);
+    if (getData.length > 0) {
+      preInvoiceNumber = getData[0].leadInvoinceNo;
+    } else {
+      preInvoiceNumber = "E1000001";
+    }
+
+    var newInvoiceNo = InvoiceNumber.next(`${preInvoiceNumber}`);
+
     const createLeadData = await EstimationModel.create({
-      name: req.body.customerName,
-      email: req.body.email,
-      contactNo: req.body.contactNo,
-      leadSource: req.body.leadSource,
-      leadPerson: req.body.leadPerson,
-      estimaitonDate: req.body.estimaitonDate,
-      estimaitonSentDate: req.body.estimaitonSentDate,
-      estimaitonStatus: req.body.estimaitonStatus,
+      name: getCustomerData.customerName,
+      email: getCustomerData.email,
+      contactNo: getCustomerData.contactNo,
+      leadSource: getCustomerData.leadSource,
+      leadPerson: req.body.salsePersonId,
       leadInvoinceNo: newInvoiceNo,
-      customerLeadId:customerLead._id
+      customerLeadId: getCustomerData._id,
     });
 
     res.status(200).json({
@@ -58,6 +103,38 @@ export const addLead = async (req, res) => {
   } catch (errors) {
     console.log(errors);
     res.status(500).json({ errors: { error: "Internal Server Error" } });
+  }
+};
+
+
+export const updateCustomerInfo = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+  console.log(req.body);
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ error: "User not found" });
+  }
+  try {
+    const checkData = await CustomerLeadModel.findById({ _id: req.body.id });
+    if (checkData) {
+      
+        await CustomerLeadModel.findByIdAndUpdate(
+          { _id: req.body.id },
+          {
+            $set:  req.body,
+          }
+        );
+       
+    } else {
+    }
+    const checkData1 = await CustomerLeadModel.findById({ _id: req.body.id });
+    res.status(200).json({
+      Data: checkData1,
+    });
+  } catch (error) {
+    console.log("error:", error);
+    res.status(500).json({ msg: "Internal server error" });
   }
 };
 

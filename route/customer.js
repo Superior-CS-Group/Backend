@@ -1,4 +1,4 @@
-import express from "express"
+import express from "express";
 import { authProtect } from "../controller/authController.js";
 
 import {
@@ -12,18 +12,22 @@ import {
   removeProfileImage,
   changeEmail,
   updateEmail,
-  notificationSettings
+  notificationSettings,
 } from "../controller/userController.js";
- 
+
 import {
   addLead,
   UpcomingEstimaitonLead,
+  assignCustomerLead,
+  updateCustomerInfo,
 } from "../controller/customer/customerController.js";
 
 const UserRoute = express.Router();
 
 // Lead
 UserRoute.post("/add", authProtect, addLead);
+UserRoute.post("/update-info", authProtect, updateCustomerInfo);
+UserRoute.post("/assign-lead", authProtect, assignCustomerLead);
 UserRoute.get("/upcoming-estimation", authProtect, UpcomingEstimaitonLead);
 
 // Customer Profile
@@ -37,7 +41,7 @@ UserRoute.post("/change-email-link", changeEmail);
 UserRoute.post("/update-email", updateEmail);
 
 UserRoute.get("/get-user-details", authProtect, getUserDetails);
-UserRoute.post("/update-user-data", authProtect, updateAccount);
+UserRoute.post("/update", authProtect, updateAccount);
 UserRoute.get("/remove-profile-image", authProtect, removeProfileImage);
 UserRoute.post("/notification-settings", authProtect, notificationSettings);
 

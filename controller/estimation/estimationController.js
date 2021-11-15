@@ -55,7 +55,7 @@ export const UpcomingEstimaitonLead = async (req, res) => {
   }
   try {
 
-    const leadData = await EstimationModel.find({leadPerson: { $in: [userId] }}).sort({ _id: -1 });
+    const leadData = await EstimationModel.find({leadPerson: { $in: [userId] }}).sort({ _id: -1 }).populate("leadPerson").populate("customerLeadId");
 
     res.status(200).json({
       DataLength: leadData.length,

@@ -15,10 +15,38 @@ const CustomerLeadSchema = new Mongoose.Schema(
       type: String,
       default: "",
     },
+    country: {
+      type: String,
+      default: "",
+    },
+    state: {
+      type: String,
+      default: "",
+    },
+    city: {
+      type: String,
+      default: "",
+    },
+    postalCode: {
+      type: String,
+      default: "",
+    },
+    address: {
+      type: String,
+      default: "",
+    },
+    otherInformation: {
+      type: String,
+      default: "",
+    },
+    otherNote: {
+      type: String,
+      default: "",
+    },
     activeStatus: {
       type: Boolean,
       default: true,
-    }, 
+    },
     leadSource: {
       type: String,
       default: "Website",
@@ -39,10 +67,10 @@ const CustomerLeadSchema = new Mongoose.Schema(
       type: String,
       default: "Process",
     },
-        
+
     leadInvoinceNo: {
-      type: Number,
-      default: 1000001,
+      type: String,
+      default: "C1000001",
     },
   },
   {

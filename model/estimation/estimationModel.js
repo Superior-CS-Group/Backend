@@ -29,7 +29,7 @@ const EstimationSchema = new Mongoose.Schema(
     },
     customerLeadId: {
       type: [Mongoose.Types.ObjectId],
-      ref: "Customer",
+      ref: "CustomerLead",
     },
     estimaitonDate: {
       type: String,
@@ -45,8 +45,8 @@ const EstimationSchema = new Mongoose.Schema(
     },
 
     leadInvoinceNo: {
-      type: Number,
-      default: 1000001,
+      type: String,
+      default: "E1000001",
     },
   },
   {

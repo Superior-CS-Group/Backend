@@ -31,6 +31,8 @@ export const addServiceCatelog = async (req, res) => {
     const createServieData = new ServicesModel(ServieData);
     await createServieData.save();
 
+    let createVariatioData=[];
+    
     for (let i in req.body.variation) {
       const updatedVariation = req.body.variation[i];
       const variationImage = await base64ToFile(
@@ -47,7 +49,7 @@ export const addServiceCatelog = async (req, res) => {
         catelogId: createServieData._id,
       };
 
-      const createVariatioData = new VariationModel(variationData);
+      createVariatioData = new VariationModel(variationData);
       await createVariatioData.save();
     }
 
@@ -239,7 +241,7 @@ export const ChangeStatus = async (req, res) => {
   }
 };
 
-export const CustomerLeadRemove = async (req, res) => {
+export const RemoveServiceCatelog = async (req, res) => {
   const userId = req.query.userId || req.user._id;
   // console.log(userId);
   const currentUser = await StaffModel.findById(userId);
@@ -248,12 +250,82 @@ export const CustomerLeadRemove = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
-    await LeadSourceModel.findByIdAndDelete({ _id: req.body.id });
+    await VariationModel.deleteMany({ catelogId: req.body._id });
+    await ServicesModel.findByIdAndDelete({ _id: req.body._id });
 
-    const checkData = await LeadSourceModel.find().sort({ _id: -1 });
+    const checkData = await ServicesModel.find().sort({ _id: -1 });
+
+    var servicesData = [];
+
+    for (let i in checkData) {
+      const updatedVariation = checkData[i];
+      const checkVariationData = await VariationModel.find({
+        catelogId: updatedVariation._id,
+      }).sort({ _id: -1 });
+
+      const Data = {
+        _id: updatedVariation._id,
+        title: updatedVariation.name,
+        hours: updatedVariation.hours,
+        days: updatedVariation.days,
+        price: updatedVariation.rate,
+        unit: updatedVariation.unit,
+        VariationDataLenth: checkVariationData.length,
+        VariationData: checkVariationData,
+      };
+
+      servicesData.push(Data);
+    }
 
     res.status(200).json({
-      Data: checkData,
+      message: "Removed Success",
+      DataLenth: servicesData.length,
+      Data: servicesData,
+    });
+  } catch (error) {
+    console.log("error:", error);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+export const RemoveServiceCatelogVariation = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+  // console.log(userId);
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ error: "User not found" });
+  }
+  try {
+    await VariationModel.findByIdAndDelete({ _id: req.body.variation_id }); 
+    const checkData = await ServicesModel.find({ _id: req.body.catelog_id });
+
+    var servicesData = [];
+
+    for (let i in checkData) {
+      const updatedVariation = checkData[i];
+      const checkVariationData = await VariationModel.find({
+        catelogId: updatedVariation._id,
+      }).sort({ _id: -1 });
+
+      const Data = {
+        _id: updatedVariation._id,
+        title: updatedVariation.name,
+        hours: updatedVariation.hours,
+        days: updatedVariation.days,
+        price: updatedVariation.rate,
+        unit: updatedVariation.unit,
+        VariationDataLenth: checkVariationData.length,
+        VariationData: checkVariationData,
+      };
+
+      servicesData.push(Data);
+    }
+
+    res.status(200).json({
+      message: "Removed Success",
+      DataLenth: servicesData.length,
+      Data: servicesData,
     });
   } catch (error) {
     console.log("error:", error);
