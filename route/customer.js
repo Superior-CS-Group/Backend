@@ -20,6 +20,7 @@ import {
   UpcomingEstimaitonLead,
   assignCustomerLead,
   updateCustomerInfo,
+  GetInfoCustomerLead,
 } from "../controller/customer/customerController.js";
 
 const UserRoute = express.Router();
@@ -29,6 +30,7 @@ UserRoute.post("/add", authProtect, addLead);
 UserRoute.post("/update-info", authProtect, updateCustomerInfo);
 UserRoute.post("/assign-lead", authProtect, assignCustomerLead);
 UserRoute.get("/upcoming-estimation", authProtect, UpcomingEstimaitonLead);
+UserRoute.post("/get-info", authProtect, GetInfoCustomerLead);
 
 // Customer Profile
 UserRoute.post("/sign-up", signUp);

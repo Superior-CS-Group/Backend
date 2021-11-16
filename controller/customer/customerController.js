@@ -61,6 +61,26 @@ export const addLead = async (req, res) => {
   }
 };
 
+export const GetInfoCustomerLead = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+  console.log(req.body);
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ error: "User not found" });
+  }
+  try {
+    const checkData = await CustomerLeadModel.findById({ _id: req.body.id });
+      
+    res.status(200).json({
+      Data: checkData,
+    });
+  } catch (error) {
+    console.log("error:", error);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
 export const assignCustomerLead = async (req, res) => {
   const userId = req.query.userId || req.user._id;
   // console.log(req.body);

@@ -28,8 +28,8 @@ export const signUp = async (req, res) => {
     const newUser = new UserModel({
       email: req.body.email,
       companyName: req.body.companyName,
-      currency: req.body.currency,
-      timeZone: req.body.timeZone,
+      currency: "USD",
+      timeZone: "(GMT +8) Pacific Standard Time",
     });
 
     const payload1 = {
@@ -146,9 +146,14 @@ export const signIn = async (req, res) => {
     } else {
       details.username = req.body.email;
     }
+
+    if(req.body.email ==="" || req.body.password ===""){
+      return res.status(401).json({ error: "Fields are not blank!" });
+    }
+
     const user = await UserModel.findOne(details);
     if (!user) {
-      return res.status(401).json({ error: "Username  not found" });
+      return res.status(401).json({ error: "Organization  not found" });
     }
     if (!bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(401).json({ error: "Password are incorrect " });
@@ -166,7 +171,7 @@ export const signIn = async (req, res) => {
       expiresIn: 31556926,
     });
     return res.status(200).json({
-      message: "User logged in Successfully",
+      message: "Organization logged in Successfully",
       token: token,
       user: user,
     });
