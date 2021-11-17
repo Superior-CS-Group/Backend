@@ -12,7 +12,7 @@ import fs from "fs";
 
 export const addServiceCatelog = async (req, res) => {
   const userId = req.query.userId || req.user._id;
-  // console.log(req.body)
+  console.log(req.body)
   const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
@@ -31,26 +31,27 @@ export const addServiceCatelog = async (req, res) => {
     const createServieData = new ServicesModel(ServieData);
     await createServieData.save();
 
-    let createVariatioData=[];
-    
-    for (let i in req.body.variation) {
-      const updatedVariation = req.body.variation[i];
-      const variationImage = await base64ToFile(
-        updatedVariation.image,
-        currentUser._id,
-        "variation"
-      );
+    let createVariatioData = [];
+    if (req.body.variation) {
+      for (let i in req.body.variation) {
+        const updatedVariation = req.body.variation[i];
+        const variationImage = await base64ToFile(
+          updatedVariation.image,
+          currentUser._id,
+          "variation"
+        );
 
-      const variationData = {
-        title: updatedVariation.name,
-        price: updatedVariation.price,
-        unit: updatedVariation.unit,
-        image: variationImage,
-        catelogId: createServieData._id,
-      };
+        const variationData = {
+          title: updatedVariation.name,
+          price: updatedVariation.price,
+          unit: updatedVariation.unit,
+          image: variationImage,
+          catelogId: createServieData._id,
+        };
 
-      createVariatioData = new VariationModel(variationData);
-      await createVariatioData.save();
+        createVariatioData = new VariationModel(variationData);
+        await createVariatioData.save();
+      }
     }
 
     res.status(200).json({
@@ -116,7 +117,7 @@ export const DetailServiceCatelog = async (req, res) => {
   if (!currentUser) {
     return res.status(401).json({ error: "User not found" });
   }
-
+  console.log(req.body);
   try {
     const checkData = await ServicesModel.findById({ _id: req.body._id });
     var servicesData = [];
@@ -297,7 +298,7 @@ export const RemoveServiceCatelogVariation = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
-    await VariationModel.findByIdAndDelete({ _id: req.body.variation_id }); 
+    await VariationModel.findByIdAndDelete({ _id: req.body.variation_id });
     const checkData = await ServicesModel.find({ _id: req.body.catelog_id });
 
     var servicesData = [];
