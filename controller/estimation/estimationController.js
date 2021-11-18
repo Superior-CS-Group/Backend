@@ -13,14 +13,11 @@ export const addLead = async (req, res) => {
   }
 
   try {
-    
-
     const getData = await EstimationModel.find().sort({ _id: -1 }).limit(1);
 
-    const preInvoiceNumber = (getData[0].leadInvoinceNo);
+    const preInvoiceNumber = getData[0].leadInvoinceNo;
 
     var newInvoiceNo = InvoiceNumber.next(`${preInvoiceNumber}`);
- 
 
     const createLeadData = await EstimationModel.create({
       name: req.body.customerName,
@@ -31,12 +28,12 @@ export const addLead = async (req, res) => {
       estimaitonDate: req.body.estimaitonDate,
       estimaitonSentDate: req.body.estimaitonSentDate,
       estimaitonStatus: req.body.estimaitonStatus,
-      leadInvoinceNo:newInvoiceNo
+      leadInvoinceNo: newInvoiceNo,
     });
 
     res.status(200).json({
       message: "Success",
-      Data:createLeadData
+      Data: createLeadData,
     });
   } catch (errors) {
     res.status(500).json({ errors: { error: "Internal Server Error" } });
@@ -54,8 +51,12 @@ export const UpcomingEstimaitonLead = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
-
-    const leadData = await EstimationModel.find({leadPerson: { $in: [userId] }}).sort({ _id: -1 }).populate("leadPerson").populate("customerLeadId");
+    const leadData = await EstimationModel.find({
+      leadPerson: { $in: [userId] },
+    })
+      .sort({ _id: -1 })
+      .populate("leadPerson")
+      .populate("customerLeadId");
 
     res.status(200).json({
       DataLength: leadData.length,

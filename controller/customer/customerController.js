@@ -27,7 +27,7 @@ export const addLead = async (req, res) => {
     var newInvoiceNo = InvoiceNumber.next(`${preInvoiceNumber}`);
 
     const customerLead = await CustomerLeadModel.create({
-      name: req.body.customerName,
+      name: req.body.name,
       email: req.body.email,
       contactNo: req.body.contactNo,
       country: req.body.country,
@@ -35,21 +35,39 @@ export const addLead = async (req, res) => {
       city: req.body.city,
       postalCode: req.body.postalCode,
       address: req.body.address,
+      otherInformation: req.body.otherInformation,
       leadInvoinceNo: newInvoiceNo,
+      leadPerson: currentUser._id,
     });
 
-    // const createLeadData = await EstimationModel.create({
-    //   name: req.body.customerName,
-    //   email: req.body.email,
-    //   contactNo: req.body.contactNo,
-    //   leadSource: req.body.leadSource,
-    //   leadPerson: req.body.leadPerson,
-    //   estimaitonDate: req.body.estimaitonDate,
-    //   estimaitonSentDate: req.body.estimaitonSentDate,
-    //   estimaitonStatus: req.body.estimaitonStatus,
-    //   leadInvoinceNo: newInvoiceNo,
-    //   customerLeadId: customerLead._id,
-    // });
+    var preEstimateInvoiceNumber;
+
+    const getCustomerData = await CustomerLeadModel.findById({
+      _id: customerLead._id,
+    });
+
+    const getEstimateData = await EstimationModel.find()
+      .sort({ _id: -1 })
+      .limit(1);
+    if (getEstimateData.length > 0) {
+      preEstimateInvoiceNumber = getEstimateData[0].leadInvoinceNo;
+    } else {
+      preEstimateInvoiceNumber = "E1000001";
+    }
+
+    var newEstimateInvoiceNo = InvoiceNumber.next(
+      `${preEstimateInvoiceNumber}`
+    );
+
+    await EstimationModel.create({
+      name: getCustomerData.customerName,
+      email: getCustomerData.email,
+      contactNo: getCustomerData.contactNo,
+      leadSource: getCustomerData.leadSource,
+      leadPerson: currentUser._id,
+      leadInvoinceNo: newEstimateInvoiceNo,
+      customerLeadId: getCustomerData._id,
+    });
 
     res.status(200).json({
       message: "Success",
@@ -71,7 +89,7 @@ export const GetInfoCustomerLead = async (req, res) => {
   }
   try {
     const checkData = await CustomerLeadModel.findById({ _id: req.body.id });
-      
+
     res.status(200).json({
       Data: checkData,
     });
@@ -126,7 +144,6 @@ export const assignCustomerLead = async (req, res) => {
   }
 };
 
-
 export const updateCustomerInfo = async (req, res) => {
   const userId = req.query.userId || req.user._id;
   console.log(req.body);
@@ -138,14 +155,12 @@ export const updateCustomerInfo = async (req, res) => {
   try {
     const checkData = await CustomerLeadModel.findById({ _id: req.body.id });
     if (checkData) {
-      
-        await CustomerLeadModel.findByIdAndUpdate(
-          { _id: req.body.id },
-          {
-            $set:  req.body,
-          }
-        );
-       
+      await CustomerLeadModel.findByIdAndUpdate(
+        { _id: req.body.id },
+        {
+          $set: req.body,
+        }
+      );
     } else {
     }
     const checkData1 = await CustomerLeadModel.findById({ _id: req.body.id });

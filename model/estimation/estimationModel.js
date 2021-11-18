@@ -31,17 +31,53 @@ const EstimationSchema = new Mongoose.Schema(
       type: [Mongoose.Types.ObjectId],
       ref: "CustomerLead",
     },
-    estimaitonDate: {
+    autoFollowUp: {
+      type: Boolean,
+      default: true,
+    },
+    estimaitonSent: {
+      type: Boolean,
+      default: false,
+    },
+    estimaitonStatus: {
       type: String,
-      default: "",
+      default: "Process",
     },
     estimaitonSentDate: {
       type: String,
       default: "",
     },
-    estimaitonStatus: {
+    daysItTookToSendEstimate: {
+      type: Number,
+      default: 0,
+    },
+    design: {
+      type: Boolean,
+      default: false,
+    },
+    designPaid: {
+      type: Boolean,
+      default: false,
+    },
+    noOfPhoneFollowUp: {
       type: String,
-      default: "Process",
+      default: "",
+    },
+    lastDatePhoneFollowUp: {
+      type: String,
+      default: "",
+    },
+    noOfEmailFollowUp: {
+      type: String,
+      default: "",
+    },
+    lastDateEmailFollowUp: {
+      type: String,
+      default: "",
+    },
+    estimaitonCloseDate: {
+      type: String,
+      default: "",
     },
 
     leadInvoinceNo: {
