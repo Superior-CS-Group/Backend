@@ -196,7 +196,7 @@ export const getUserDetails = async (req, res) => {
     });
     return res.status(200).json({
       message: "User details",
-      // token: token,
+      token: token,
       user: user,
     });
   } catch (error) {
@@ -251,7 +251,7 @@ export const updateAccount = async (req, res) => {
   }
 };
 
-// -------------
+//-------------
 
 export const recoverPassword = async (req, res) => {
   const emailId = req.body.email;
