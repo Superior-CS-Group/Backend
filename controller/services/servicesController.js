@@ -12,7 +12,7 @@ import fs from "fs";
 
 export const addServiceCatelog = async (req, res) => {
   const userId = req.query.userId || req.user._id;
-  console.log(req.body)
+  console.log(req.body);
   const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
@@ -35,11 +35,14 @@ export const addServiceCatelog = async (req, res) => {
     if (req.body.variation) {
       for (let i in req.body.variation) {
         const updatedVariation = req.body.variation[i];
-        const variationImage = await base64ToFile(
-          updatedVariation.image,
-          currentUser._id,
-          "variation"
-        );
+        let variationImage;
+        if (updatedVariation.image) {
+           variationImage = await base64ToFile(
+            updatedVariation.image,
+            currentUser._id,
+            "variation"
+          );
+        }
 
         const variationData = {
           title: updatedVariation.name,
