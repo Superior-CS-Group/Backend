@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config("./.env");
 
-import UserRoute from "./route/customer.js"; 
+import UserRoute from "./route/customer.js";
 import AdminRoute from "./route/admin.js";
 import EstimaitonRoute from "./route/estimation.js";
 import ServicesRoute from "./route/services.js";
@@ -21,6 +21,7 @@ import LeadSourceRoute from "./route/leadsource.js";
 import UserRoleRoute from "./route/userrole.js";
 import UnitRoute from "./route/unit.js";
 import StatusNameRoute from "./route/statusName.js";
+import FormulaRoute from "./route/formula/formula.route.js";
 
 const app = express();
 app.use(cors());
@@ -30,7 +31,7 @@ export const PORT = process.env.PORT || 5000;
 mongoose
   .connect(process.env.ONEPERCENTDATABASE, {
     useUnifiedTopology: true,
-    useNewUrlParser: true
+    useNewUrlParser: true,
   })
   .then(() => console.log("Connected to DB"))
   .catch((error) => console.log("error:", error));
@@ -60,7 +61,7 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-app.use("/api/auth", UserRoute); 
+app.use("/api/auth", UserRoute);
 app.use("/api/admin", AdminRoute);
 app.use("/api/customer", UserRoute);
 app.use("/api/estimation", EstimaitonRoute);
@@ -70,6 +71,7 @@ app.use("/api/lead-source", LeadSourceRoute);
 app.use("/api/user-role", UserRoleRoute);
 app.use("/api/unit", UnitRoute);
 app.use("/api/status", StatusNameRoute);
+app.use("/api/formula", FormulaRoute);
 
 app.get("/", (_req, res) => res.status(200).send("Yes its working"));
 
