@@ -1,7 +1,8 @@
-import FormulaModel from "../../model/formula/formulaModel";
+import mongoose from "mongoose";
+import FormulaModel from "../../model/formula/formulaModel.js";
 
 //validators
-import validateAddNewFormulaInput from "../../validator/formula/addNewFormula.validator";
+import validateAddNewFormulaInput from "../../validator/formula/addNewFormula.validator.js";
 
 /**
  * @author - digimonk technologies
@@ -54,29 +55,8 @@ export async function getFormulaByIdHandler(req, res) {
    */
   try {
     const { id } = req.params;
-    const formula = await FormulaModel.findOne(id, (err, formulas) => {
-      if (err) {
-        console.log("err populating", err);
-        return res
-          .status(500)
-          .json({ errors: err, msg: "Internal Server Error" });
-      }
+    const formula = await FormulaModel.findById(id);
 
-      const populateChildren = async (modal, id) => {
-        const element = await modal.findOne({ _id: id });
-        if (!element.children || !element.children.length) {
-          return element;
-        }
-        return Promise.all(
-          element.children.map((childId) => populateChildren(modal, childId))
-        ).then((children) => Object.assign(element, { children }));
-      };
-      return Promise.all(
-        formulas.map((formula) => {
-          return populateChildren(FormulaModel, formula._id);
-        })
-      );
-    });
     if (!formula) {
       return res.status(404).json({ errors: "Formula not found" });
     }
