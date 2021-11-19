@@ -71,7 +71,7 @@ app.use("/api/user-role", UserRoleRoute);
 app.use("/api/unit", UnitRoute);
 app.use("/api/status", StatusNameRoute);
 
-app.get("/", (req, res) => res.status(200).send("Yes its working"));
+app.get("/", (_req, res) => res.status(200).send("Yes its working"));
 
 const server = http.createServer(app);
 
