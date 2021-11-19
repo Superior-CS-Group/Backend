@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongooseAutopopulate from "mongoose-autopopulate";
 
 /**
  * @author - digimonk technologies
@@ -36,15 +37,18 @@ const FormulaSchema = new mongoose.Schema({
   children: {
     type: [mongoose.Types.ObjectId],
     ref: "Formula",
+    autopopulate: true,
   },
 });
+
+FormulaSchema.plugin(mongooseAutopopulate);
 
 /**
  * @author - digimonk technologies
  * @developer - Saral Shrivastava
  * @version - 1.0.0
  */
-FormulaSchema.pre("save", (next) => {
+FormulaSchema.pre("save", function (next) {
   /**
    * @summary: validate the formula before saving in database
    * @description: the validation is for bracket balancing and arthmatic operations.
