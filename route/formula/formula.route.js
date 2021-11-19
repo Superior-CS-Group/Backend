@@ -1,9 +1,12 @@
 import express from "express";
-import { addNewFormulaHandler, getFormulaById } from "../../controller/formula/formula.controller";
+import {
+  addNewFormulaHandler,
+  getFormulaByIdHandler,
+} from "../../controller/formula/formula.controller.js";
 
 const FormulaRoute = express.Router();
 
-FormulaRoute.post("/add-new-formula", addNewFormulaHandler );
-FormulaRoute.post("/get-formula-by-id/:id", getFormulaByIdHandler);
+FormulaRoute.post("/add-new-formula", addNewFormulaHandler);
+FormulaRoute.get("/get-formula-by-id/:id", getFormulaByIdHandler);
 
 export default FormulaRoute;
