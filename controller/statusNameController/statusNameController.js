@@ -42,8 +42,8 @@ export const StatusList = async (req, res) => {
     const statusListData = await StatusNameModel.find().sort({ _id: -1 });
 
     res.status(200).json({
-      userDataLength: statusListData.length,
-      userData: statusListData,
+      DataLength: statusListData.length,
+      Data: statusListData,
     });
   } catch (error) {
     console.log("error:", error);

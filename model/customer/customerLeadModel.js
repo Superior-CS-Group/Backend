@@ -63,6 +63,10 @@ const CustomerLeadSchema = new Mongoose.Schema(
       type: String,
       default: "",
     },
+    autoReminderEmail: {
+      type: Boolean,
+      default: true,
+    },
     estimaitonStatus: {
       type: String,
       default: "Process",

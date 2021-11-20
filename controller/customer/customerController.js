@@ -146,7 +146,7 @@ export const assignCustomerLead = async (req, res) => {
 
 export const updateCustomerInfo = async (req, res) => {
   const userId = req.query.userId || req.user._id;
-  console.log(req.body);
+  // console.log(req.body);
   const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
@@ -159,11 +159,13 @@ export const updateCustomerInfo = async (req, res) => {
         { _id: req.body.id },
         {
           $set: req.body,
-        }
+        },
+        { new: true },
       );
     } else {
     }
     const checkData1 = await CustomerLeadModel.findById({ _id: req.body.id });
+    // console.log(checkData1)
     res.status(200).json({
       Data: checkData1,
     });
