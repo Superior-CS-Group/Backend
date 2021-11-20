@@ -2,7 +2,7 @@
  * @author digimonk Technologies
  * @developer Saral Shrivastava
  * @version 1.0.0
- * @description Formula Service used to update formula details
+ * @description Formula Service used to update formula details and prevent user from updating customId
  * @param {object} data - data to be used to update formula
  * @param {string?} data.title - title of the formula
  * @param {string?} data.formula - formula used to evaluate the value of expression
