@@ -20,14 +20,9 @@ export const addServiceCatelog = async (req, res) => {
   }
 
   try {
-    const ServieData = {
-      name: req.body.name,
-      hours: req.body.hours,
-      days: req.body.days,
-      rate: req.body.rate,
-      unit: req.body.unit,
-      type: req.body.type,
-    };
+
+    const ServieData = req.body;
+
     const createServieData = new ServicesModel(ServieData);
     await createServieData.save();
 
@@ -89,6 +84,80 @@ export const ListServiceCatelog = async (req, res) => {
 
       const Data = {
         _id: updatedVariation._id,
+        type: updatedVariation.type,
+        title: updatedVariation.name,
+        hours: updatedVariation.hours,
+        days: updatedVariation.days,
+        price: updatedVariation.rate,
+        unit: updatedVariation.unit,
+        VariationDataLenth: checkVariationData.length,
+        VariationData: checkVariationData,
+      };
+
+      servicesData.push(Data);
+    }
+
+    res.status(200).json({
+      message: "List",
+      DataLenth: servicesData.length,
+      Data: servicesData,
+    });
+  } catch (errors) {
+    console.log(errors, "errors");
+    res.status(500).json({ errors: { error: "Internal Server Error" } });
+  }
+};
+
+export const VariationListServiceCatelog = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+  // console.log(req.body)
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ error: "User not found" });
+  }
+
+  try {
+     
+ 
+      const checkVariationData = await VariationModel.find().sort({ _id: -1 }).populate("catelogId");
+ 
+ 
+
+    res.status(200).json({
+      message: "List",
+      DataLenth: checkVariationData.length,
+      Data: checkVariationData,
+    });
+  } catch (errors) {
+    console.log(errors, "errors");
+    res.status(500).json({ errors: { error: "Internal Server Error" } });
+  }
+};
+
+
+export const ListServiceCatelogByType = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+  // console.log(req.body)
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ error: "User not found" });
+  }
+
+  try {
+    const checkData = await ServicesModel.find({type:req.body.type}).sort({ _id: -1 });
+    var servicesData = [];
+
+    for (let i in checkData) {
+      const updatedVariation = checkData[i];
+      const checkVariationData = await VariationModel.find({
+        catelogId: updatedVariation._id,
+      }).sort({ _id: -1 });
+
+      const Data = {
+        _id: updatedVariation._id,
+        type: updatedVariation.type,
         title: updatedVariation.name,
         hours: updatedVariation.hours,
         days: updatedVariation.days,

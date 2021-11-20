@@ -3,7 +3,7 @@ import Mongoose from "mongoose";
 const VariationSchema = new Mongoose.Schema(
   {
     title: { type: String, required: true },
-    price: { type: Number, required: true },
+    price: { type: Number, required: false },
     unit: { type: Number, required: false },
     image: { type: Array, required: false },
     catelogId: {

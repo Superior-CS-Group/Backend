@@ -20,12 +20,14 @@ const ServicesSchema = new Mongoose.Schema(
     },
     rate: {
       type: Number,
-      required: true,
+      required: function () {
+        return this.type === "service";
+      },
     },
     unit: {
-      type: String,
+      type: Number,
       required: function () {
-        return this.type !== "service";
+        return this.type == "service";
       },
     },
     type: {
