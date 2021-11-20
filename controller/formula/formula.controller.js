@@ -1,26 +1,22 @@
-import mongoose from "mongoose";
 import FormulaModel from "../../model/formula/formulaModel.js";
+import { updateFormulaRequestService } from "../../services/formula.services.js";
 
 //validators
 import validateAddNewFormulaInput from "../../validator/formula/addNewFormula.validator.js";
 
 /**
- * @author - digimonk technologies
- * @developer - Saral Shrivastava
- * @version - 1.0.0
+ * @author digimonk technologies
+ * @developer Saral Shrivastava
+ * @version 1.0.0
+ * @description handler for add new formula to store in db
+ * @param {object} req request object
+ * @param {string} req.body.title title of formula
+ * @param {string} req.body.customId custom id of formula used by other formula expressions
+ * @param {string} req.body.formula formula used to evaluate the value
+ * @param {string} req.body.formulaToShow formula used to show in frontend
+ * @param {string} req.body.chilsdren children of formula
  */
 export async function addNewFormulaHandler(req, res) {
-  /**
-   * @description - handler for add new formula to store in db
-   * @param {object} req - request object
-   * @requires {
-   *      title: string,
-   *      customId: string,
-   *      formula: string,
-   *      formulaToShow: string,
-   *      children: array,
-   * }
-   */
   try {
     const { errors, isValid } = validateAddNewFormulaInput(req.body);
     if (!isValid) {
@@ -41,18 +37,14 @@ export async function addNewFormulaHandler(req, res) {
 }
 
 /**
- * @author - digimonk technologies
- * @developer - Saral Shrivastava
- * @version - 1.0.0
+ * @author digimonk technologies
+ * @developer Saral Shrivastava
+ * @version  1.0.0
+ * @description handler for get formula by id
+ * @param {object} req request object
+ * @param {string} req.body.id id of formula
  */
 export async function getFormulaByIdHandler(req, res) {
-  /**
-   * @description - handler for get formula by id
-   * @param {object} req - request object
-   * @requires {
-   *      id: string,
-   * }
-   */
   try {
     const { id } = req.params;
     const formula = await FormulaModel.findById(id);
@@ -64,6 +56,39 @@ export async function getFormulaByIdHandler(req, res) {
       data: formula,
       message: "Formula found successfully",
     });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ errors: error, msg: "Internal Server Error" });
+  }
+}
+
+/**
+ * @author - digimonk technologies
+ * @developer - Saral Shrivastava
+ * @version - 1.0.0
+ * @description - handler for update formula
+ * @param {object} req request object
+ * @param {string} req.params.id id of formula
+ * @param {string?} req.body.title title of formula
+ * @param {string?} req.body.formula - formula used to evaluate the value of expression
+ * @param {string?} req.body.formulaToShow - formula used to show on frontend
+ * @param {string[]?} req.body.children - children of the formula
+ */
+export async function updateFormulaByIdHandler(req, res) {
+  try {
+    const { id } = req.params;
+    const updateDetails = updateFormulaRequestService(req.body);
+    const newFormula = await FormulaModel.findByIdAndUpdate(id, {
+      $set: { ...updateDetails },
+    });
+    if (!newFormula) {
+      return res.status(404).json({ errors: "Formula not Found" });
+    }
+    return res
+      .status(200)
+      .json({ data: newFormula, message: "Formula updated successfully" });
   } catch (error) {
     console.log(error);
     return res
