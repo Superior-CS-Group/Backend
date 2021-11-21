@@ -1,10 +1,8 @@
-import UserRoleModel from "../../model/userRole/userRoleModel.js";
 import StaffModel from "../../model/staff/staffModel.js";
 import UnitModel from "../../model/unit/unitModel.js";
 
 export const addUnit = async (req, res) => {
   const userId = req.query.userId || req.user._id;
-  // console.log(userId)
   const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
@@ -12,6 +10,9 @@ export const addUnit = async (req, res) => {
   }
 
   try {
+    if (!req.body.name) {
+      return res.status(400).json({ error: "Name is required" });
+    }
     await UnitModel.create({
       name: req.body.name,
     });
@@ -102,7 +103,6 @@ export const Remove = async (req, res) => {
   }
 };
 
-
 export const Details = async (req, res) => {
   const userId = req.query.userId || req.user._id;
   // console.log(userId);
@@ -111,11 +111,10 @@ export const Details = async (req, res) => {
   if (!currentUser) {
     return res.status(401).json({ error: "User not found" });
   }
-  try { 
-
+  try {
     const checkData = await UnitModel.find({ _id: req.body.id });
 
-    res.status(200).json({ 
+    res.status(200).json({
       Data: checkData,
     });
   } catch (error) {
