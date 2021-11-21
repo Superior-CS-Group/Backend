@@ -3,11 +3,11 @@ import Mongoose from "mongoose";
 const VariationSchema = new Mongoose.Schema(
   {
     title: { type: String, required: true },
-    price: { type: Number, required: false },
-    unit: { type: Number, required: false },
+    price: { type: Number, required: true },
+    unit: { type: String, required: true },
     image: { type: Array, required: false },
     catelogId: {
-      type: [Mongoose.Types.ObjectId],
+      type: Mongoose.Types.ObjectId, // making catelogId as ObjectId not a array because one variation is always belong to only one cateloag
       ref: "services",
     },
     activeStatus: {
