@@ -7,7 +7,7 @@ import mongooseAutopopulate from "mongoose-autopopulate";
  * @version - 1.0.0
  */
 const FormulaSchema = new mongoose.Schema({
-  title: {
+  name: {
     type: String,
     required: true,
   },
@@ -24,7 +24,9 @@ const FormulaSchema = new mongoose.Schema({
      * @sample = "###hours_id*@@@laborCharge_id*@@@markup_id" and for pre definded formula we use "***"
      */
     type: String,
-    required: true,
+    required: function () {
+      return !this.root;
+    },
   },
   formulaToShow: {
     /**
@@ -38,6 +40,17 @@ const FormulaSchema = new mongoose.Schema({
     type: [mongoose.Types.ObjectId],
     ref: "Formula",
     autopopulate: true,
+  },
+  root: {
+    type: Boolean,
+    default: false,
+  },
+  formulaArray: {
+    /**
+     * formula array is used to make edits in formula
+     */
+    type: Array,
+    default: [],
   },
 });
 

@@ -6,6 +6,10 @@ const ServicesSchema = new Mongoose.Schema(
       type: String,
       required: true,
     },
+    customId: {
+      type: Number,
+      default: Date.now() + Math.floor(Math.random() * 100000),
+    },
     hours: {
       type: Number,
       required: function () {
