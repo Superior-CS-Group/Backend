@@ -5,7 +5,7 @@ const UnitSchema = new Mongoose.Schema(
     
     name: {
       type: String,
-      default: "",
+      required: true
     },
     activeStatus: {
       type: Boolean,
