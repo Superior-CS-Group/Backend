@@ -10,6 +10,8 @@ import {
   RemoveServiceCatelogVariation,
   ListServiceCatelogByType,
   VariationListServiceCatelog,
+  searchCatelogByName,
+  getVariationByCatelogId,
 } from "../controller/services/servicesController.js";
 
 const ServicesRoute = express.Router();
@@ -29,6 +31,13 @@ ServicesRoute.post(
   "/remove-service-catelog-variation",
   authProtect,
   RemoveServiceCatelogVariation
+);
+
+ServicesRoute.get("/search-catelog-by-name", authProtect, searchCatelogByName);
+ServicesRoute.get(
+  "/get-variation-by-catelog-id/:catelogId",
+  authProtect,
+  getVariationByCatelogId
 );
 
 export default ServicesRoute;
