@@ -29,7 +29,6 @@ export const addUnit = async (req, res) => {
 };
 
 export const UnitList = async (req, res) => {
-  let data = [];
 
   const userId = req.query.userId || req.user._id;
   //console.log(userId)
