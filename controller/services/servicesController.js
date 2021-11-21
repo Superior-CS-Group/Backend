@@ -1,14 +1,8 @@
 import LeadSourceModel from "../../model/leadSource/leadSourceModel.js";
 import StaffModel from "../../model/staff/staffModel.js";
-import EstimationModel from "../../model/estimation/estimationModel.js";
 import ServicesModel from "../../model/services/servicesModel.js";
 import VariationModel from "../../model/services/variationModel.js";
-import { InvoiceNumber } from "invoice-number";
-import validateSignUpInput from "../../validator/signUp.validator.js";
-import services from "../../utils/services.js";
-import sendEmail from "../../utils/sendEmail.js";
 import base64ToFile from "../../utils/base64ToFile.js";
-import fs from "fs";
 
 export const addServiceCatelog = async (req, res) => {
   const userId = req.query.userId || req.user._id;
@@ -20,7 +14,6 @@ export const addServiceCatelog = async (req, res) => {
   }
 
   try {
-
     const ServieData = req.body;
 
     const createServieData = new ServicesModel(ServieData);
@@ -32,7 +25,7 @@ export const addServiceCatelog = async (req, res) => {
         const updatedVariation = req.body.variation[i];
         let variationImage;
         if (updatedVariation.image) {
-           variationImage = await base64ToFile(
+          variationImage = await base64ToFile(
             updatedVariation.image,
             currentUser._id,
             "variation"
@@ -118,11 +111,9 @@ export const VariationListServiceCatelog = async (req, res) => {
   }
 
   try {
-     
- 
-      const checkVariationData = await VariationModel.find().sort({ _id: -1 }).populate("catelogId");
- 
- 
+    const checkVariationData = await VariationModel.find()
+      .sort({ _id: -1 })
+      .populate("catelogId");
 
     res.status(200).json({
       message: "List",
@@ -135,7 +126,6 @@ export const VariationListServiceCatelog = async (req, res) => {
   }
 };
 
-
 export const ListServiceCatelogByType = async (req, res) => {
   const userId = req.query.userId || req.user._id;
   // console.log(req.body)
@@ -146,7 +136,9 @@ export const ListServiceCatelogByType = async (req, res) => {
   }
 
   try {
-    const checkData = await ServicesModel.find({type:req.body.type}).sort({ _id: -1 });
+    const checkData = await ServicesModel.find({ type: req.body.type }).sort({
+      _id: -1,
+    });
     var servicesData = [];
 
     for (let i in checkData) {
@@ -403,5 +395,53 @@ export const RemoveServiceCatelogVariation = async (req, res) => {
   } catch (error) {
     console.log("error:", error);
     res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+/**
+ * @author digimonk Technologies
+ * @developer Saral Shrivastava
+ * @description This function is used to get services by there name
+ * @param {object} req req object
+ * @param {object} res res object
+ * @param {string} req.query.catelogName name of the catalog we are searching
+ * @returns
+ */
+export const searchCatelogByName = async (req, res) => {
+  const catelogName = req.query.catelogName || "";
+  try {
+    const checkData = await ServicesModel.find({
+      name: { $regex: catelogName, $options: "i" },
+      type: "material",
+    });
+    res.status(200).json({
+      DataLenth: checkData.length,
+      Data: checkData,
+    });
+  } catch (error) {
+    console.log("error");
+    return res.status(500).json({ msg: "Internal Server error" });
+  }
+};
+
+/**
+ *
+ * @param {object} req
+ * @param {object} res
+ * @param {string} req.query.catelogId id of the catalog for which we are searching variaitons
+ * @returns
+ */
+export const getVariationByCatelogId = async (req, res) => {
+  const catelogId = req.params.catelogId || "";
+  if (!catelogId) {
+    return res.status(400).json({ msg: "Bad Request" });
+  }
+  try {
+    const variationList = await VariationModel.find({ catelogId });
+    res
+      .status(200)
+      .json({ Data: variationList, DataLength: variationList.length });
+  } catch (error) {
+    return res.status(500).json({ msg: "Internal Server error" });
   }
 };
