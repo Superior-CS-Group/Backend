@@ -17,6 +17,10 @@ const SentEstimationSchema = new Mongoose.Schema(
       type: String,
       default: "",
     },
+    type: {
+      type: String,
+      default: "remider",
+    },
   },
   {
     timestamps: true,

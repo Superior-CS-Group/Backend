@@ -5,6 +5,7 @@ import {
   addLead,
   UpcomingEstimaitonLead,
   sentEstimation,
+  sentFinalEstimation,
 } from "../controller/estimation/estimationController.js";
 
 const estimationRoute = express.Router();
@@ -17,5 +18,6 @@ estimationRoute.get(
   UpcomingEstimaitonLead
 );
 estimationRoute.post("/sent-estimate", authProtect, sentEstimation);
+estimationRoute.post("/sent-estimate-contract", authProtect, sentFinalEstimation);
 
 export default estimationRoute;
