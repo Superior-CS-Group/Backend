@@ -3,7 +3,7 @@ import {
   addNewFormulaHandler,
   getFormulaByIdHandler,
   updateFormulaByIdHandler,
-} from "../../controller/formula/formula.controller.js";
+} from "../../../controller/formula/v1/formula.controller.js";
 
 const FormulaRoute = express.Router();
 
