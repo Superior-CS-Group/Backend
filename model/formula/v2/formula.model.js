@@ -13,11 +13,10 @@ const FormulaSchema = new mongoose.Schema({
   elements: {
     type: [
       {
-        name: { type: String, required: true },
+        name: { type: String },
         type: {
           type: String,
           enum: ["manual", "prefilled", "result_editable", "result_locked"],
-          required: true,
         },
         unit: {
           type: String,
@@ -30,26 +29,14 @@ const FormulaSchema = new mongoose.Schema({
         value: {
           type: String,
         },
-      },
-    ],
-    default: [
-      {
-        name: "Total Cost",
-        unit: "",
-        view: "client",
-        value: "",
-      },
-      {
-        name: "Gross Profit",
-        unit: "",
-        view: "client",
-        value: "",
-      },
-      {
-        name: "Markup",
-        unit: "",
-        view: "client",
-        value: "",
+        automatic: {
+          type: Boolean,
+          default: false,
+        },
+        color: {
+          type: String,
+          default: "#00ac07",
+        },
       },
     ],
   },
@@ -58,19 +45,15 @@ const FormulaSchema = new mongoose.Schema({
       {
         name: {
           type: String,
-          required: true,
         },
         quantity: {
           type: String,
-          required: true,
         },
         cost: {
           type: String,
-          required: true,
         },
         charge: {
           type: String,
-          required: true,
         },
       },
     ],

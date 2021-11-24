@@ -14,7 +14,33 @@ const validateAddNewFormulaInput = (data) => {
   data.clientContract = !isEmpty(data.clientContract)
     ? data.clientContract
     : "";
-  data.elements = !isEmpty(data.elements) ? data.elements : [];
+  data.elements = !isEmpty(data.elements)
+    ? data.elements
+    : [
+        {
+          name: "Total Cost",
+          unit: "",
+          view: "client",
+          value: "",
+          automatic: true,
+          color: "gray",
+        },
+        {
+          name: "Gross Profit",
+          unit: "",
+          view: "client",
+          value: "",
+          automatic: true,
+        },
+        {
+          name: "Markup",
+          unit: "",
+          view: "client",
+          value: "",
+          automatic: true,
+          color: "gray",
+        },
+      ];
   data.materials = !isEmpty(data.materials) ? data.materials : [];
 
   if (Validator.isEmpty(data.title)) {

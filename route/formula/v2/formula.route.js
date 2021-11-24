@@ -3,6 +3,7 @@ import {
   addNewFormulaHandler,
   getAllFormulaHandler,
   getFormulaByIdHandler,
+  searchFormulaByName,
   updateFormulaByIdHandler,
 } from "../../../controller/formula/v2/formula.controller.js";
 
@@ -15,4 +16,5 @@ FormulaRouteV2.put(
 );
 FormulaRouteV2.get("/get-formula-by-id/:formulaId", getFormulaByIdHandler);
 FormulaRouteV2.get("/get-all-formula", getAllFormulaHandler);
+FormulaRouteV2.get("/search-formula-by-name/:searchTerm", searchFormulaByName);
 export default FormulaRouteV2;

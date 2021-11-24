@@ -13,7 +13,9 @@ export async function addNewFormulaHandler(req, res) {
     if (!isValid) {
       return res.status(400).json({ errors: errors });
     }
-    const formula = new FormulaModelV2(req.body);
+    const formula = new FormulaModelV2({
+      ...req.body,
+    });
     const savedFormula = await formula.save();
     return res.status(200).json({
       data: savedFormula,
@@ -69,6 +71,22 @@ export async function getFormulaByIdHandler(req, res) {
 export async function getAllFormulaHandler(req, res) {
   try {
     const formulas = await FormulaModelV2.find();
+    return res.status(200).json({ data: formulas });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ errors: error, msg: "Internal Server Error" });
+  }
+}
+
+export async function searchFormulaByName(req, res) {
+  try {
+    const { searchTerm } = req.params;
+    const formulas = await FormulaModelV2.find({
+      title: { $regex: new RegExp(searchTerm), $options: "i" },
+    });
+    console.log("formulas: ", formulas, searchTerm);
     return res.status(200).json({ data: formulas });
   } catch (error) {
     console.log(error);
