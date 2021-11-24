@@ -10,7 +10,7 @@ const sendEmail = async (options) => {
   // let pass = emailsettings.password;
 
   let host = 'gmail';
-  let user = 'ram.gautam@digimonk.in';
+  let user = 'tonyc@superiorcsgroup.com';
   let pass = 'Digimonk#123';
 
   var transporter = nodemailer.createTransport(
@@ -29,7 +29,7 @@ const sendEmail = async (options) => {
 
   //2 define email options
   const mailOptions = {
-    from: `Wishfy ${user}`,
+    from: `OnePercent noreply@onepercent.com`,
     to: options.email,
     subject: options.subject,
     html: options.message,

@@ -4,6 +4,7 @@ import { authProtect } from "../controller/authController.js";
 import {
   addLead,
   UpcomingEstimaitonLead,
+  sentEstimation,
 } from "../controller/estimation/estimationController.js";
 
 const estimationRoute = express.Router();
@@ -15,5 +16,6 @@ estimationRoute.get(
   authProtect,
   UpcomingEstimaitonLead
 );
+estimationRoute.post("/sent-estimate", authProtect, sentEstimation);
 
 export default estimationRoute;
