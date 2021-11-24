@@ -1,8 +1,8 @@
-import FormulaModel from "../../model/formula/formulaModel.js";
-import { updateFormulaRequestService } from "../../services/formula.services.js";
+import FormulaModel from "../../../model/formula/v1/formulaModel.js";
+import { updateFormulaRequestService } from "../../../services/formula.services.js";
 
 //validators
-import validateAddNewFormulaInput from "../../validator/formula/addNewFormula.validator.js";
+import validateAddNewFormulaInput from "../../../validator/formula/v1/addNewFormula.validator.js";
 
 /**
  * @author digimonk technologies
