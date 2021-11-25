@@ -410,9 +410,8 @@ export const RemoveServiceCatelogVariation = async (req, res) => {
 export const searchCatelogByName = async (req, res) => {
   const catelogName = req.query.catelogName || "";
   try {
-    const checkData = await ServicesModel.find({
-      name: { $regex: catelogName, $options: "i" },
-      type: "material",
+    const checkData = await VariationModel.find({
+      title: { $regex: catelogName, $options: "i" },
     });
     res.status(200).json({
       DataLenth: checkData.length,

@@ -55,6 +55,9 @@ const FormulaSchema = new mongoose.Schema({
         charge: {
           type: String,
         },
+        formula: {
+          type: Array,
+        },
       },
     ],
   },
