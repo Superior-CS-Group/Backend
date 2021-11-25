@@ -33,6 +33,10 @@ const FormulaSchema = new mongoose.Schema({
           type: Boolean,
           default: false,
         },
+        disabled: {
+          type: Boolean,
+          default: false,
+        },
         color: {
           type: String,
           default: "#00ac07",
@@ -56,7 +60,8 @@ const FormulaSchema = new mongoose.Schema({
           type: String,
         },
         formula: {
-          type: Array,
+          type: [mongoose.Schema.Types.ObjectId],
+          ref: "variation",
         },
       },
     ],

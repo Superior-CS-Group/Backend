@@ -24,6 +24,7 @@ const validateAddNewFormulaInput = (data) => {
           value: "",
           automatic: true,
           color: "gray",
+          disabled: true,
         },
         {
           name: "Gross Profit",
@@ -31,14 +32,16 @@ const validateAddNewFormulaInput = (data) => {
           view: "client",
           value: "",
           automatic: true,
+          disabled: true,
         },
         {
           name: "Markup",
           unit: "",
           view: "client",
-          value: "",
+          value: "60",
           automatic: true,
           color: "gray",
+          disabled: true,
         },
       ];
   data.materials = !isEmpty(data.materials) ? data.materials : [];

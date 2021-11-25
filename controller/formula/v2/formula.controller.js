@@ -85,7 +85,7 @@ export async function searchFormulaByName(req, res) {
     const { searchTerm } = req.params;
     const formulas = await FormulaModelV2.find({
       title: { $regex: new RegExp(searchTerm), $options: "i" },
-    });
+    }).populate("materials.formula");
     console.log("formulas: ", formulas, searchTerm);
     return res.status(200).json({ data: formulas });
   } catch (error) {
