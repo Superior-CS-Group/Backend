@@ -12,8 +12,12 @@ const SentEstimationSchema = new Mongoose.Schema(
     customerLeadId: {
       type: [Mongoose.Types.ObjectId],
       ref: "CustomerLead",
-    }, 
+    },
     estimaitonScheduleDate: {
+      type: String,
+      default: "",
+    },
+    pdfPath: {
       type: String,
       default: "",
     },
@@ -27,5 +31,8 @@ const SentEstimationSchema = new Mongoose.Schema(
   }
 );
 
-const SentEstimationModel = Mongoose.model("SentEstimaiton", SentEstimationSchema);
+const SentEstimationModel = Mongoose.model(
+  "SentEstimaiton",
+  SentEstimationSchema
+);
 export default SentEstimationModel;

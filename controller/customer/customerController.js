@@ -88,7 +88,7 @@ export const GetInfoCustomerLead = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
-    const checkData = await CustomerLeadModel.findById({ _id: req.body.id });
+    const checkData = await CustomerLeadModel.findById({ _id: req.body.id }).populate("leadPerson");
 
     res.status(200).json({
       Data: checkData,

@@ -6,6 +6,7 @@ import SentEstimationModel from "../../model/estimation/sentEstimateModel.js";
 import sendEmail from "../../utils/sendEmail.js";
 import CustomerLeadModel from "../../model/customer/customerLeadModel.js";
 import pdf from "html-pdf";
+import fs from "fs";
 
 export const addLead = async (req, res) => {
   const userId = req.query.userId || req.user._id;
@@ -296,13 +297,17 @@ export const sentFinalEstimation = async (req, res) => {
   }
 
   try {
-    let sentData = await SentEstimationModel.create({ 
-      customerLeadId: req.body.customerLeadId, 
-      type: "final", 
+    let sentData = await SentEstimationModel.create({
+      // estimateId: req.body.estimateId,
+      customerLeadId: req.body.customerLeadId,
+      type: "final",
     });
 
     for (let i in req.body.customerLeadId) {
       const custId = req.body.customerLeadId[i];
+      // const estimateId = req.body.estimateId[i];
+
+      // let customerData = await CustomerLeadModel.findById({ _id: estimateId });
 
       let customerData = await CustomerLeadModel.findById({ _id: custId });
       var d = new Date();
@@ -353,17 +358,29 @@ export const sentFinalEstimation = async (req, res) => {
                      <img src="http://digimonk.net:1630/static/media/mount-sky.24b1aba7.png" />
                   </td>
                   <td>
-                     <p style="margin: 0 0 5px 0">Mountain Sky Proposal</p> <span>Sales: Siloh Churchill </span>
-                     <br> <span>Dates:11-02-2011</span>
+                     <p style="margin: 0 0 5px 0">Mountain Sky Proposal</p> <span>Sales: ${
+                       customerData.leadPerson[0].name
+                     } </span>
+                     <br> <span>Dates: ${day + "-" + month + "-" + year}</span>
                   </td>
                </tr>
                <tr>
                   <td style="padding: 10px 14px;">
                      <p style="margin: 0 0 5px 0">Prepared For:</p>
-                     <h4 style="margin: 0 0 5px 0">Leslie Alexander</h4>
+                     <h4 style="margin: 0 0 5px 0">${customerData.name}</h4>
                      <span>Located At</span>
                      
-                      <h4 style="margin:  0 0 5px 0">Singpore</h6>
+                      <h4 style="margin:  0 0 5px 0">${
+                        customerData.address +
+                        " " +
+                        customerData.city +
+                        " " +
+                        customerData.state +
+                        " " +
+                        customerData.country +
+                        " " +
+                        customerData.postalCode
+                      }</h6>
                   </td>
                   <td></td>
                </tr>
@@ -575,6 +592,30 @@ export const sentFinalEstimation = async (req, res) => {
       
       </html>`;
 
+      const options = {
+        format: "A4",
+      };
+      let pdfName =
+        day +
+        "" +
+        month +
+        "" +
+        year +
+        "" +
+        time +
+        "" +
+        minutes +
+        "" +
+        seconds +
+        "-" +
+        customerData.email;
+      pdf
+        .create(finalPreview, options)
+        .toFile(`./pdf/${pdfName}.pdf`, (err, res) => {
+          if (err) {
+            console.log(err);
+          }
+        });
       const message = `<html>
       <head>
          <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
@@ -604,7 +645,7 @@ export const sentFinalEstimation = async (req, res) => {
                   <td style="padding: 10px 14px;">You can contact us by clicking the button below.
    </td>
                </tr>
-               <tr><td style="padding: 25px 14px;"><a href="" style="background-color: #1A73E8; color: #fff;border-radius: 20px; padding: 5px 25px" >Open PDF</a> &nbsp; <a href="" style="background-color: #1A73E8; color: #fff;border-radius: 20px; padding: 5px 25px" >Open Link</a> </td></tr>
+               <tr><td style="padding: 25px 14px;"><a href="${req.protocol}://${req.hostname}:1630/pdf/${pdfName}.pdf" style="background-color: #1A73E8; color: #fff;border-radius: 20px; padding: 5px 25px" >Open PDF</a> &nbsp; <a href="${req.protocol}://${req.hostname}:1630/pdf/${pdfName}.pdf" style="background-color: #1A73E8; color: #fff;border-radius: 20px; padding: 5px 25px" >Open Link</a> </td></tr>
    
                            <tr>
                   <td style="padding: 5px 14px;">Sincerely
@@ -638,35 +679,40 @@ export const sentFinalEstimation = async (req, res) => {
       </body>
    </html>`;
 
-      const options = {
-        format: "A4",
-      };
-      const pdfName =
-        day +
-        "" +
-        month +
-        "" +
-        year +
-        "" +
-        time +
-        "" +
-        minutes +
-        "" +
-        seconds +
-        "-" +
-        customerData.email;
-      pdf
-        .create(finalPreview, options)
-        .toFile(`./pdf/${pdfName}.pdf`, (err, res) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+
+      var str2 = Date.now();
+      // console.log(str2);
+      // console.log(`${req.protocol}://${req.hostname}:1629/pdf/${pdfName}.pdf`)
+      await SentEstimationModel.findByIdAndUpdate(
+        { _id: sentData._id },
+        {
+          $set: {
+            pdfPath: `${pdfName}.pdf`,
+          },
+        },
+        { new: true }
+      );
+      await CustomerLeadModel.findByIdAndUpdate(
+        { _id: customerData._id },
+        {
+          $set: {
+            estimaitonSentDate: str2,
+          },
+        },
+        { new: true }
+      );
 
       await sendEmail({
         email: customerData.email,
         subject: "Here is your estimation",
         message,
+        attachments: [
+          {
+            filename: pdfName + ".pdf",
+            contentType: "application/pdf",
+            path: `${req.protocol}://${req.hostname}:1630/pdf/${pdfName}.pdf`,
+          },
+        ],
       });
     }
 
