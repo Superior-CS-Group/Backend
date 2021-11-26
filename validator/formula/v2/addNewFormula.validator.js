@@ -20,28 +20,28 @@ const validateAddNewFormulaInput = (data) => {
         {
           name: "Total Cost",
           unit: "",
-          view: "client",
           value: "",
           automatic: true,
           color: "gray",
           disabled: true,
+          type: "result_locked",
         },
         {
           name: "Gross Profit",
           unit: "",
-          view: "client",
           value: "",
           automatic: true,
           disabled: true,
+          type: "result_locked",
         },
         {
           name: "Markup",
           unit: "",
-          view: "client",
           value: "60",
           automatic: true,
           color: "gray",
           disabled: true,
+          type: "prefilled",
         },
       ];
   data.materials = !isEmpty(data.materials) ? data.materials : [];
