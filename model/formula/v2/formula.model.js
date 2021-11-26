@@ -23,8 +23,9 @@ const FormulaSchema = new mongoose.Schema({
           ref: "Unit",
         },
         view: {
-          type: String,
-          enum: ["client", "internal", "fulls"],
+          type: [String],
+          enum: ["client", "internal", "full"],
+          default: ["client", "internal", "full"],
         },
         value: {
           type: String,
