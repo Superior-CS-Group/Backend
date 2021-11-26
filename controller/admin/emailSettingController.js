@@ -1,15 +1,17 @@
 import EmailSettingModel from "../../model/emailSettingModel.js"; 
 import UserModel from "../../model/customerModel.js";
+import StaffModel from "../../model/staff/staffModel.js";
 import services from "../../utils/services.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
+ 
 
 export const updateEmailSetting = async (req, res) => {
   try {
     const userId = req.query.userId || req.user._id;
     console.log(userId)
-    const currentUser = await UserModel.findById(userId);
+    const currentUser = await StaffModel.findById(userId);
 
     if (!currentUser) {
       return res.status(401).json({ error: "User not found" });
@@ -46,7 +48,7 @@ export const getEmailSetting = async (req, res) => {
   try {
     const userId = req.query.userId || req.user._id;
     console.log(userId)
-    const currentUser = await UserModel.findById(userId);
+    const currentUser = await StaffModel.findById(userId);
 
     if (!currentUser) {
       return res.status(401).json({ error: "User not found" });
@@ -69,7 +71,7 @@ export const changePassword = async (req, res) => {
   
   const userId = req.query.userId || req.user._id;
   console.log(userId)
-  const currentUser = await UserModel.findById(userId);
+  const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
     return res.status(401).json({ error: "User not found" });

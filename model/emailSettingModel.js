@@ -14,6 +14,13 @@ const EmailSettingSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    port: {
+      type: String,
+      required: true,
+    },
+    logo: {
+      type: String, 
+    },
   },
   { timestamps: true }
 );
