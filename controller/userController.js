@@ -251,6 +251,41 @@ export const updateAccount = async (req, res) => {
   }
 };
 
+export const getUserList = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+
+  try {
+    const user = await UserModel.find().sort({_id:-1});
+    
+    return res.status(200).json({
+      message: "User List", 
+      DataLength: user.length,
+      Data: user,
+    });
+  } catch (error) {
+    console.log("GetUser: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const removeUserDetails = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+
+  try {
+    await UserModel.findByIdAndDelete(userId);
+
+    const user = await UserModel.find().sort({_id:-1});
+     
+    return res.status(200).json({
+      message: "User removed", 
+      user: user,
+    });
+  } catch (error) {
+    console.log("GetUserDetails: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 //-------------
 
 export const recoverPassword = async (req, res) => {
