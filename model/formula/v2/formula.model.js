@@ -16,7 +16,13 @@ const FormulaSchema = new mongoose.Schema({
         name: { type: String },
         type: {
           type: String,
-          enum: ["manual", "prefilled", "result_editable", "result_locked"],
+          enum: [
+            "manual",
+            "prefilled",
+            "result_editable",
+            "result_locked",
+            "dropdown",
+          ],
         },
         unit: {
           type: String,
