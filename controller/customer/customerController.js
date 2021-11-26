@@ -11,10 +11,15 @@ export const addLead = async (req, res) => {
   const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
-    return res.status(401).json({ error: "User not found" });
+    return res.status(401).json({ errors: "User not found" });
   }
 
   try {
+
+    const checkCustomer = await CustomerLeadModel.findOne({email:req.body.email});
+    if (checkCustomer) {
+      return res.status(401).json({ errors: "Email Id Already Exists!" });
+    }
     var preInvoiceNumber;
 
     const getData = await CustomerLeadModel.find().sort({ _id: -1 }).limit(1);

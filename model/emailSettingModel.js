@@ -18,6 +18,9 @@ const EmailSettingSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    fromEmail: {
+      type: String, 
+    },
     logo: {
       type: String, 
     },

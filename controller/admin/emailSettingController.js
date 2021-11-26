@@ -1,16 +1,16 @@
-import EmailSettingModel from "../../model/emailSettingModel.js"; 
+import EmailSettingModel from "../../model/emailSettingModel.js";
 import UserModel from "../../model/customerModel.js";
 import StaffModel from "../../model/staff/staffModel.js";
 import services from "../../utils/services.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
- 
+import base64ToFile from "../../utils/base64ToFile.js";
 
 export const updateEmailSetting = async (req, res) => {
   try {
     const userId = req.query.userId || req.user._id;
-    console.log(userId)
+    console.log(`${req.protocol}://${req.hostname}`);
     const currentUser = await StaffModel.findById(userId);
 
     if (!currentUser) {
@@ -19,6 +19,17 @@ export const updateEmailSetting = async (req, res) => {
     const existingEmail = await EmailSettingModel.find();
 
     if (existingEmail.length) {
+      let profileImg = "";
+      if (req.body.profileImage) {
+        profileImg = await base64ToFile(
+          req.body.profileImage,
+          currentUser._id,
+          "crmlogo"
+        );
+      } else {
+        profileImg = req.body.oldLogo;
+      }
+
       await EmailSettingModel.findByIdAndUpdate(
         {
           _id: existingEmail[0]._id,
@@ -28,6 +39,8 @@ export const updateEmailSetting = async (req, res) => {
             host: req.body.host,
             username: req.body.username,
             password: req.body.password,
+            fromEmail: req.body.fromEmail,
+            logo: profileImg,
           },
         }
       );
@@ -37,7 +50,7 @@ export const updateEmailSetting = async (req, res) => {
 
     const existingEmail1 = await EmailSettingModel.find();
 
-    res.status(200).json({ msg: "success", existingEmail: existingEmail1 });
+    res.status(200).json({ msg: "success", Data: existingEmail1 });
   } catch (error) {
     console.log("error:", error);
     res.status(500).json({ msg: "Internal server error" });
@@ -47,7 +60,7 @@ export const updateEmailSetting = async (req, res) => {
 export const getEmailSetting = async (req, res) => {
   try {
     const userId = req.query.userId || req.user._id;
-    console.log(userId)
+    console.log(userId);
     const currentUser = await StaffModel.findById(userId);
 
     if (!currentUser) {
@@ -55,7 +68,7 @@ export const getEmailSetting = async (req, res) => {
     }
     const existingEmail = await EmailSettingModel.find();
 
-    res.status(200).json({ msg: "success", existingEmail });
+    res.status(200).json({ msg: "success", Data: existingEmail });
   } catch (error) {
     console.log("error:", error);
     res.status(500).json({ msg: "Internal server error" });
@@ -68,9 +81,9 @@ export const changePassword = async (req, res) => {
   const newPassword = req.body.newPassword;
   const confirmPassword = req.body.confirmPassword;
   console.log(req.body);
-  
+
   const userId = req.query.userId || req.user._id;
-  console.log(userId)
+  console.log(userId);
   const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
@@ -116,4 +129,3 @@ export const changePassword = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
- 

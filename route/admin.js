@@ -47,7 +47,7 @@ AdminRoute.get("/lead-source-list", authProtect, LeadSourceList);
 AdminRoute.post("/update-status", authProtect, ChangeStatus);
 AdminRoute.post("/remove-lead-source", authProtect, LeadSourceRemove);
 
-AdminRoute.post("/get-email-setting", authProtect, getEmailSetting);
+AdminRoute.get("/get-email-setting", authProtect, getEmailSetting);
 AdminRoute.post("/update-email-setting", authProtect, updateEmailSetting);
 AdminRoute.post("/update-password", authProtect, changePassword);
 

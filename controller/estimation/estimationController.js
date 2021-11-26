@@ -173,6 +173,13 @@ export const sentEstimation = async (req, res) => {
         dayoftime = "<b> evening</b>";
       }
 
+      const currentDate =
+        day +
+        "" +
+        month +
+        "" +
+        year
+
       const message = `<html>
       <head>
          <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
@@ -308,8 +315,11 @@ export const sentFinalEstimation = async (req, res) => {
       // const estimateId = req.body.estimateId[i];
 
       // let customerData = await CustomerLeadModel.findById({ _id: estimateId });
+     
 
       let customerData = await CustomerLeadModel.findById({ _id: custId });
+      console.log(customerData.leadPerson[0].name,"customerData.leadPerson[0].name");
+      
       var d = new Date();
       var day = ("0" + d.getDate()).slice(-2);
       var month = ("0" + (d.getMonth() + 1)).slice(-2);
@@ -348,14 +358,14 @@ export const sentFinalEstimation = async (req, res) => {
             <table style="border-bottom: 2px solid #000;background-color: #222222; ">
                <tr>
                   <td>
-                     <img src="http://digimonk.net:1630/static/media/estimate-banner.30261a19.png" style="width:100%;" />
+                     <img src="https://onepercent.portal.superiorcsgroup.com/static/media/estimate-banner.30261a19.png" style="width:100%;" />
                   </td>
                </tr>
             </table>
             <table style="color: #000;font-size: 20px;">
                <tr>
                   <td style="padding: 10px 14px;">
-                     <img src="http://digimonk.net:1630/static/media/mount-sky.24b1aba7.png" />
+                     <img src="https://onepercent.portal.superiorcsgroup.com/static/media/mount-sky.24b1aba7.png" />
                   </td>
                   <td>
                      <p style="margin: 0 0 5px 0">Mountain Sky Proposal</p> <span>Sales: ${
@@ -405,7 +415,7 @@ export const sentFinalEstimation = async (req, res) => {
             <tr>
                <td style="display: flex;align-items: center;justify-content: space-between;margin: 10px 14px 0;background-color: #3483fa;border-radius: 25px;color:#fff;position: relative;">
                   <span style="display: flex;align-items: center;">
-      <img src="http://digimonk.net:1630/static/media/estimate-banner.30261a19.png" style="height: 80px;width:120px;border-radius: 20px;margin-right: 8px" /><h4>Demolition & Prep</h4></span>
+      <img src="https://onepercent.portal.superiorcsgroup.com/static/media/estimate-banner.30261a19.png" style="height: 80px;width:120px;border-radius: 20px;margin-right: 8px" /><h4>Demolition & Prep</h4></span>
              <h5 style="padding-right:5px ">$3600.00</h5>
           </td>
             </tr>
@@ -488,7 +498,7 @@ export const sentFinalEstimation = async (req, res) => {
                </tr>
                 <tr>
                <td colspan="2">
-                  <img src="http://digimonk.net:1630/static/media/team.1728b5f1.jpg" style="width: 100%" />
+                  <img src="https://onepercent.portal.superiorcsgroup.com/static/media/team.1728b5f1.jpg" style="width: 100%" />
                </td>
             </tr>
             </table>
@@ -568,21 +578,21 @@ export const sentFinalEstimation = async (req, res) => {
             </td>
             </tr>
             <tr>
-               <td style="padding: 10px 14px"><b><label>Contractor Signature</label></b>  <p>Harsh</p>
+               <td style="padding: 10px 14px"><b><label>Contractor Signature</label></b>  <p>${customerData.name}</p>
                </td>
-               <td><b><label>Date</label></b>  <p>22/11/21</p>
-               </td>
-            </tr>
-            <tr>
-               <td style="padding: 10px 14px"><b><label>Owner</label></b>  <p>Harsh</p>
-               </td>
-               <td><b><label>Company</label></b>  <p>Harsh</p>
+               <td><b><label>Date</label></b>  <p>${day + "-" + month + "-" + year}</p>
                </td>
             </tr>
             <tr>
-               <td style="padding: 10px 14px"><b><label>Customer Signature</label></b>  <p>Harsh</p>
+               <td style="padding: 10px 14px"><b><label>Owner</label></b>  <p>${customerData.name}</p>
                </td>
-               <td><b><label>Date</label></b>  <p>22/09/21</p>
+               <td><b><label>Company</label></b>  <p>${customerData.name}</p>
+               </td>
+            </tr>
+            <tr>
+               <td style="padding: 10px 14px"><b><label>Customer Signature</label></b>  <p>${customerData.name}</p>
+               </td>
+               <td><b><label>Date</label></b>  <p>${day + "-" + month + "-" + year}</p>
                </td>
             </tr>
             </table>
@@ -611,7 +621,7 @@ export const sentFinalEstimation = async (req, res) => {
         customerData.email;
       pdf
         .create(finalPreview, options)
-        .toFile(`./pdf/${pdfName}.pdf`, (err, res) => {
+        .toFile(`./public/media/pdf/${pdfName}.pdf`, (err, res) => {
           if (err) {
             console.log(err);
           }
@@ -645,7 +655,7 @@ export const sentFinalEstimation = async (req, res) => {
                   <td style="padding: 10px 14px;">You can contact us by clicking the button below.
    </td>
                </tr>
-               <tr><td style="padding: 25px 14px;"><a href="${req.protocol}://${req.hostname}:1630/pdf/${pdfName}.pdf" style="background-color: #1A73E8; color: #fff;border-radius: 20px; padding: 5px 25px" >Open PDF</a> &nbsp; <a href="${req.protocol}://${req.hostname}:1630/pdf/${pdfName}.pdf" style="background-color: #1A73E8; color: #fff;border-radius: 20px; padding: 5px 25px" >Open Link</a> </td></tr>
+               <tr><td style="padding: 25px 14px;"><a href="${req.protocol}://${req.hostname}:5001/media/pdf/${pdfName}.pdf" style="background-color: #1A73E8; color: #fff;border-radius: 20px; padding: 5px 25px" >Open PDF</a> &nbsp; <a href="${req.protocol}://${req.hostname}:5001/media/pdf/${pdfName}.pdf" style="background-color: #1A73E8; color: #fff;border-radius: 20px; padding: 5px 25px" >Open Link</a> </td></tr>
    
                            <tr>
                   <td style="padding: 5px 14px;">Sincerely
