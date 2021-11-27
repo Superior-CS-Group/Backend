@@ -7,7 +7,6 @@ const catalogSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["catalog, subCatalog"],
     required: true,
   },
   description: {
@@ -25,7 +24,7 @@ const catalogSchema = new mongoose.Schema({
     },
   },
   unit: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String, //mongoose.Schema.Types.ObjectId
     required: function () {
       return this.type === "catalog";
     },
@@ -43,5 +42,5 @@ const catalogSchema = new mongoose.Schema({
   },
 });
 
-const CatalogModel = mongoose.model("Catalog", catalogSchema);
+const CatalogModel = mongoose.model("CatalogV2", catalogSchema);
 export default CatalogModel;

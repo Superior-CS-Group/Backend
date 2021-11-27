@@ -10,7 +10,7 @@ const variationSchema = new mongoose.Schema({
     required: true,
   },
   unit: {
-    type: mongoose.Schema.Types.ObjectIc,
+    type: String, // mongoose.Schema.Types.ObjectId,
     required: true,
   },
   quantity: {
@@ -31,5 +31,5 @@ const variationSchema = new mongoose.Schema({
   },
 });
 
-const VariationModel = mongoose.model("Variation", variationSchema);
-export default VariationModel;
+const VariationModelV2 = mongoose.model("VariationV2", variationSchema);
+export default VariationModelV2;

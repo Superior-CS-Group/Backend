@@ -1,5 +1,5 @@
 import CatalogModel from "../../../model/services/v2/catalogModel.js";
-import VariationModel from "../../../model/services/variationModel.js";
+import VariationModelV2 from "../../../model/services/v2/variationModel.js";
 import {
   validateCreateCatalogInput,
   validateCreateVariationInput,
@@ -9,10 +9,11 @@ export async function createCatalog(req, res) {
   try {
     const { isValid, errors } = validateCreateCatalogInput(req.body);
     if (!isValid) {
-      return res.status(400).json(errors);
+      return res.status(400).json({ errors });
     }
 
-    const newCatalog = new CatalogModel(req.body);
+    const newCatalog = await CatalogModel.create(req.body);
+    console.log("newCatalogBOdy: ", newCatalog);
     return res
       .status(200)
       .json({ msg: "New Catalog created successfully", data: newCatalog });
@@ -64,7 +65,8 @@ export async function createVariation(req, res) {
     if (!isValid) {
       return res.status(400).json(errors);
     }
-    const newVariation = new CatalogModel(req.body);
+    const newVariation = new VariationModelV2(req.body);
+    await newVariation.save();
     await CatalogModel.findByIdAndUpdate(req.body.materialId, {
       $push: {
         variations: newVariation._id,
@@ -84,9 +86,11 @@ export async function createVariation(req, res) {
 export async function getVariationsByCatalog(req, res) {
   try {
     const catalogId = req.params.catalogId;
-    const variations = VariationModel.find({ catalogId });
+    const variations = await VariationModelV2.find({ catalogId });
+    console.log("valriations: ", variations);
     return res.status(200).json({ data: variations });
   } catch (error) {
+    console.log("error: ", error);
     return res
       .status(500)
       .json({ msg: "Internal Server Error", errors: error });
