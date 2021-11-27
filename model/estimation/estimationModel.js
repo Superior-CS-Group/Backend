@@ -80,6 +80,10 @@ const EstimationSchema = new Mongoose.Schema(
       default: "",
     },
 
+    distance: {
+      type: Number,
+      default: 0,
+    },
     leadInvoinceNo: {
       type: String,
       default: "E1000001",
