@@ -7,7 +7,7 @@ import { InvoiceNumber } from "invoice-number";
 
 export const addLead = async (req, res) => {
   const userId = req.query.userId || req.user._id;
-  // console.log(req.body);
+  console.log(req.body);
   const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
@@ -40,6 +40,7 @@ export const addLead = async (req, res) => {
       city: req.body.city,
       postalCode: req.body.postalCode,
       address: req.body.address,
+      distance: req.body.distance,
       otherInformation: req.body.otherInformation,
       leadInvoinceNo: newInvoiceNo,
       leadPerson: currentUser._id,
@@ -72,6 +73,7 @@ export const addLead = async (req, res) => {
       leadPerson: currentUser._id,
       leadInvoinceNo: newEstimateInvoiceNo,
       customerLeadId: getCustomerData._id,
+      distance: req.body.distance,
     });
 
     res.status(200).json({
@@ -158,6 +160,7 @@ export const updateCustomerInfo = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
+    // console.log(req.body)
     const checkData = await CustomerLeadModel.findById({ _id: req.body.id });
     if (checkData) {
       await CustomerLeadModel.findByIdAndUpdate(
@@ -170,7 +173,7 @@ export const updateCustomerInfo = async (req, res) => {
     } else {
     }
     const checkData1 = await CustomerLeadModel.findById({ _id: req.body.id });
-    // console.log(checkData1)
+    console.log(req.body)
     res.status(200).json({
       Data: checkData1,
     });
@@ -252,7 +255,9 @@ export const CustomerLeadRemove = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
-    await LeadSourceModel.findByIdAndDelete({ _id: req.body.id });
+    console.log(req.body)
+    await CustomerLeadModel.findByIdAndDelete({ _id: req.body.id });
+    await EstimationModel.findOneAndDelete({ customerLeadId: req.body.id });
 
     const checkData = await LeadSourceModel.find().sort({ _id: -1 });
 
