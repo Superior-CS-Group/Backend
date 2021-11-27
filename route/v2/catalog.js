@@ -1,12 +1,12 @@
 import express from "express";
-import { authProtect } from "../../controller/authController";
+import { authProtect } from "../../controller/authController.js";
 import {
   createCatalog,
   createVariation,
   getCatalogs,
   getVariationsByCatalog,
   updateCatalog,
-} from "../../controller/v2/catalog/catalog.controller";
+} from "../../controller/v2/catalog/catalog.controller.js";
 
 const CatalogRouteV2 = express.Router();
 

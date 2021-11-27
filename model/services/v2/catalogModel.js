@@ -25,7 +25,7 @@ const catalogSchema = new mongoose.Schema({
     },
   },
   unit: {
-    type: mongoose.Schema.Types.ObjectIc,
+    type: mongoose.Schema.Types.ObjectId,
     required: function () {
       return this.type === "catalog";
     },
