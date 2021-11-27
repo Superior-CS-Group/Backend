@@ -5,6 +5,7 @@ import {
   createVariation,
   getCatalogs,
   getVariationsByCatalog,
+  searchCatalogByName,
   updateCatalog,
 } from "../../controller/v2/catalog/catalog.controller.js";
 
@@ -18,5 +19,6 @@ CatalogRouteV2.get(
   "/get-allVariation-by-catalog/:catalogId",
   getVariationsByCatalog
 );
+CatalogRouteV2.get("/search-catalog-by-name/:catalogName", searchCatalogByName);
 
 export default CatalogRouteV2;

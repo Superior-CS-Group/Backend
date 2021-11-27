@@ -28,6 +28,10 @@ const FormulaSchema = new mongoose.Schema({
           type: String,
           ref: "Unit",
         },
+        dropdown: {
+          type: String,
+          default: "",
+        },
         view: {
           type: [String],
           enum: ["client", "internal", "full"],

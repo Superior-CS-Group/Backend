@@ -96,3 +96,20 @@ export async function getVariationsByCatalog(req, res) {
       .json({ msg: "Internal Server Error", errors: error });
   }
 }
+
+export async function searchCatalogByName(req, res) {
+  try {
+    const type = req.query.searchFor;
+    const catalogName = req.params.catalogName || "";
+    const catalogs = await CatalogModel.find({
+      name: { $regex: catalogName, $options: "i" },
+      type: type,
+    });
+    return res.status(200).json({ data: catalogs });
+  } catch (error) {
+    console.log("error: ", error);
+    return res
+      .status(500)
+      .json({ msg: "Internal Server Error", errors: error });
+  }
+}
