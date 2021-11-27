@@ -20,10 +20,11 @@ import StaffRoute from "./route/staff.js";
 import LeadSourceRoute from "./route/leadsource.js";
 import UserRoleRoute from "./route/userrole.js";
 import UnitRoute from "./route/unit.js";
-import StatusNameRoute from "./route/statusName.js"; 
+import StatusNameRoute from "./route/statusName.js";
 import EmailTemplateRoute from "./route/emailTemplate.js";
 import FormulaRoute from "./route/formula/v1/formula.route.js";
 import FormulaRouteV2 from "./route/formula/v2/formula.route.js";
+import CatalogRouteV2 from "./route/v2/catalog.js";
 
 const app = express();
 app.use(cors());
@@ -76,6 +77,7 @@ app.use("/api/status", StatusNameRoute);
 app.use("/api/formula", FormulaRoute);
 app.use("/api/email-template", EmailTemplateRoute);
 app.use("/api/v2/formula", FormulaRouteV2);
+app.use("/api/v2/catalog", CatalogRouteV2);
 
 app.get("/", (_req, res) => res.status(200).send("Yes its working"));
 

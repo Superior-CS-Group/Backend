@@ -20,5 +20,5 @@ const VariationSchema = new Mongoose.Schema(
   }
 );
 
-const VariationeModel = Mongoose.model("variation", VariationSchema);
-export default VariationeModel;
+const VariationModel = Mongoose.model("variation", VariationSchema);
+export default VariationModel;
