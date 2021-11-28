@@ -72,7 +72,7 @@ const FormulaSchema = new mongoose.Schema({
         },
         formula: {
           type: [mongoose.Schema.Types.ObjectId],
-          ref: "variation",
+          ref: "CatalogV2",
         },
       },
     ],

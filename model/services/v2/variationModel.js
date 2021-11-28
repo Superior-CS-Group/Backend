@@ -25,7 +25,7 @@ const variationSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  materialId: {
+  catelogId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Catalog",
   },

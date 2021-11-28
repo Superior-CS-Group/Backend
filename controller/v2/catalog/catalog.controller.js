@@ -85,8 +85,9 @@ export async function createVariation(req, res) {
 
 export async function getVariationsByCatalog(req, res) {
   try {
-    const catalogId = req.params.catalogId;
-    const variations = await VariationModelV2.find({ catalogId });
+    const catelogId = req.params.catalogId;
+    console.log("catelogId: ", catelogId);
+    const variations = await VariationModelV2.find({ catelogId });
     console.log("valriations: ", variations);
     return res.status(200).json({ data: variations });
   } catch (error) {
