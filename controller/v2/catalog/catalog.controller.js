@@ -105,7 +105,7 @@ export async function getVariationsByCatalog(req, res) {
 
 export async function searchCatalogByName(req, res) {
   try {
-    const type = req.query.searchFor;
+    const type = req.query.searchFor || "a";
     const catalogName = req.params.catalogName || "";
     const catalogs = await CatalogModel.find({
       name: { $regex: catalogName, $options: "i" },

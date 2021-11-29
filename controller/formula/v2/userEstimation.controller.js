@@ -30,6 +30,7 @@ export async function updateUserEstimation(req, res) {
       .status(200)
       .json({ message: "Updated Successfully", data: userEstimation });
   } catch (error) {
+    console.log("error: ", error);
     res.status(500).json({
       message: "Internal Server Error",
     });
@@ -38,7 +39,7 @@ export async function updateUserEstimation(req, res) {
 
 export async function getUserEstimation(req, res) {
   try {
-    const userId = req.user._id;
+    const userId = req.params.userId;
     const userEstimation = await UserEstimationModel.find({
       userId: userId,
     });
