@@ -9,10 +9,10 @@ const catalogSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-    default: "",
-  },
+  // description: {
+  //   type: String,
+  //   default: "",
+  // },
   image: {
     type: [String],
     default: [],
@@ -29,12 +29,12 @@ const catalogSchema = new mongoose.Schema({
       return this.type === "catalog";
     },
   },
-  quantity: {
-    type: Number,
-    required: function () {
-      return this.type === "catalog";
-    },
-  },
+  // quantity: {
+  //   type: Number,
+  //   required: function () {
+  //     return this.type === "catalog";
+  //   },
+  // },
   variations: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Variation",

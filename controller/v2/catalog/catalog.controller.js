@@ -7,13 +7,13 @@ import {
 
 export async function createCatalog(req, res) {
   try {
+    console.log("req: ", req.user);
     const { isValid, errors } = validateCreateCatalogInput(req.body);
     if (!isValid) {
       return res.status(400).json({ errors });
     }
 
     const newCatalog = await CatalogModel.create(req.body);
-    console.log("newCatalogBOdy: ", newCatalog);
     return res
       .status(200)
       .json({ msg: "New Catalog created successfully", data: newCatalog });

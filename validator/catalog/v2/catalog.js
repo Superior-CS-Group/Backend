@@ -8,7 +8,7 @@ export const validateCreateCatalogInput = (data) => {
   data.type = !isEmpty(data.type) ? data.type : "";
   data.price = !isEmpty(data.price) ? data.price : "";
   data.unit = !isEmpty(data.unit) ? data.unit : "";
-  data.quantity = !isEmpty(data.quantity) ? data.quantity : "";
+  // data.quantity = !isEmpty(data.quantity) ? data.quantity : "";
 
   if (Validator.isEmpty(data.name)) {
     errors.name = "Name Field is required";
@@ -25,9 +25,9 @@ export const validateCreateCatalogInput = (data) => {
     if (Validator.isEmpty(data.unit)) {
       errors.unit = "Unit Field is required";
     }
-    if (!data.quantity) {
-      errors.quantity = "Quantity Field is required";
-    }
+    // if (!data.quantity) {
+    //   errors.quantity = "Quantity Field is required";
+    // }
   }
 
   return {
@@ -42,7 +42,7 @@ export const validateCreateVariationInput = (data) => {
   data.name = !isEmpty(data.name) ? data.name : "";
   data.price = !isEmpty(data.price) ? data.price : "";
   data.unit = !isEmpty(data.unit) ? data.unit : "";
-  data.quantity = !isEmpty(data.quantity) ? data.quantity : "";
+  // data.quantity = !isEmpty(data.quantity) ? data.quantity : "";
   data.catelogId = !isEmpty(data.catelogId) ? data.catelogId : "";
   console.log("data: ", data);
   if (Validator.isEmpty(data.name)) {
@@ -54,9 +54,9 @@ export const validateCreateVariationInput = (data) => {
   if (Validator.isEmpty(data.unit)) {
     errors.unit = "Unit Field is required";
   }
-  if (!data.quantity) {
-    errors.quantity = "Quantity Field is required";
-  }
+  // if (!data.quantity) {
+  //   errors.quantity = "Quantity Field is required";
+  // }
   if (Validator.isEmpty(data.catelogId)) {
     errors.catelogId = "Catelog Id Field is required";
   }

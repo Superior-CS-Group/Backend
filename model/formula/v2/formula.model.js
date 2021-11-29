@@ -70,6 +70,10 @@ const FormulaSchema = new mongoose.Schema({
         charge: {
           type: String,
         },
+        manual: {
+          type: Boolean,
+          default: false,
+        },
         formula: {
           type: [mongoose.Schema.Types.ObjectId],
           ref: "CatalogV2",
