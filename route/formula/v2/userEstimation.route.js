@@ -17,6 +17,10 @@ UserEstimationRoute.put(
   authProtect,
   updateUserEstimation
 );
-UserEstimationRoute.get("/get-user-estimation", authProtect, getUserEstimation);
+UserEstimationRoute.get(
+  "/get-user-estimation/:userId",
+  authProtect,
+  getUserEstimation
+);
 
 export default UserEstimationRoute;

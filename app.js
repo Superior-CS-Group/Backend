@@ -78,7 +78,7 @@ app.use("/api/status", StatusNameRoute);
 app.use("/api/formula", FormulaRoute);
 app.use("/api/email-template", EmailTemplateRoute);
 app.use("/api/v2/formula", FormulaRouteV2);
-app.use("/api/v2/user-stimation", UserEstimationRoute);
+app.use("/api/v2/user-estimation", UserEstimationRoute);
 app.use("/api/v2/catalog", CatalogRouteV2);
 
 app.get("/", (_req, res) => res.status(200).send("Yes its working"));
