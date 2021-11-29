@@ -13,10 +13,10 @@ const variationSchema = new mongoose.Schema({
     type: String, // mongoose.Schema.Types.ObjectId,
     required: true,
   },
-  quantity: {
-    type: Number,
-    required: true,
-  },
+  // quantity: {
+  //   type: Number,
+  // required: true,
+  // },
   image: {
     type: [String],
     default: [],
