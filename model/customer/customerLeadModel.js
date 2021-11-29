@@ -63,6 +63,10 @@ const CustomerLeadSchema = new Mongoose.Schema(
       type: String,
       default: "",
     },
+    estimaitonSent: {
+      type: Boolean,
+      default: false,
+    },
     estimaitonSentDate: {
       type: String,
       default: "",

@@ -21,6 +21,14 @@ const SentEstimationSchema = new Mongoose.Schema(
       type: String,
       default: "",
     },
+    estimateNumber: {
+      type: String,
+      default: "",
+    },
+    estimateDate: {
+      type: String,
+      default: "",
+    },
     type: {
       type: String,
       default: "remider",

@@ -143,6 +143,26 @@ export const sentEstimation = async (req, res) => {
   }
 
   try {
+    var today = new Date();
+    var dd = today.getDate();
+
+    var mm = today.getMonth() + 1;
+    var yy = today.getFullYear().toString().substr(-2);
+
+    let preEstimateInvoiceNumber;
+    const getEstimateData = await EstimationModel.find()
+      .sort({ _id: -1 })
+      .limit(1);
+    if (getEstimateData.length > 0) {
+      preEstimateInvoiceNumber = getEstimateData[0].leadInvoinceNo;
+    } else {
+      preEstimateInvoiceNumber = mm + "" + dd + "" + yy + "-01";
+    }
+
+    var newEstimateInvoiceNo = InvoiceNumber.next(
+      `${preEstimateInvoiceNumber}`
+    );
+
     let sentData = await SentEstimationModel.create({
       estimateId: req.body.estimateId,
       customerLeadId: req.body.customerLeadId,
@@ -154,6 +174,7 @@ export const sentEstimation = async (req, res) => {
       const custId = req.body.customerLeadId[i];
 
       let customerData = await CustomerLeadModel.findById({ _id: custId });
+
       var d = new Date();
       var day = ("0" + d.getDate()).slice(-2);
       var month = ("0" + (d.getMonth() + 1)).slice(-2);
@@ -173,12 +194,7 @@ export const sentEstimation = async (req, res) => {
         dayoftime = "<b> evening</b>";
       }
 
-      const currentDate =
-        day +
-        "" +
-        month +
-        "" +
-        year
+      const currentDate = day + "" + month + "" + year;
 
       const message = `<html>
       <head>
@@ -304,22 +320,70 @@ export const sentFinalEstimation = async (req, res) => {
   }
 
   try {
+    var today = new Date();
+    var dd = today.getDate();
+
+    var mm = today.getMonth() + 1;
+    var yy = today.getFullYear().toString().substr(-2);
+    const checkdate = mm + "" + dd + "" + yy;
+    let preEstimateInvoiceNumber;
+    const getEstimateData = await SentEstimationModel.find({
+      estimateDate: checkdate,
+    })
+      .sort({ _id: -1 })
+      .limit(1);
+      console.log(getEstimateData);
+    if (getEstimateData.length > 0) {
+      preEstimateInvoiceNumber = getEstimateData[0].estimateNumber;
+    } else {
+      preEstimateInvoiceNumber = mm + "" + dd + "" + yy + "-00";
+    }
+
+    var newEstimateInvoiceNo = InvoiceNumber.next(
+      `${preEstimateInvoiceNumber}`
+    );
+    console.log(newEstimateInvoiceNo);
+
     let sentData = await SentEstimationModel.create({
       // estimateId: req.body.estimateId,
       customerLeadId: req.body.customerLeadId,
       type: "final",
+      estimateNumber: newEstimateInvoiceNo,
+      estimateDate: mm + "" + dd + "" + yy,
     });
 
     for (let i in req.body.customerLeadId) {
       const custId = req.body.customerLeadId[i];
-      // const estimateId = req.body.estimateId[i];
 
-      // let customerData = await CustomerLeadModel.findById({ _id: estimateId });
-     
+      await EstimationModel.findOneAndUpdate(
+        { customerLeadId: custId },
+        {
+          $set: {
+            estimaitonSent: true,
+            estimaitonSentDate: today,
+            leadInvoinceNo: newEstimateInvoiceNo,
+          },
+        },
+        { new: true }
+      );
+      await CustomerLeadModel.findByIdAndUpdate(
+        { _id: custId },
+        {
+          $set: {
+            estimaitonSent: true,
+            estimaitonSentDate: today,
+            leadInvoinceNo: newEstimateInvoiceNo,
+          },
+        },
+        { new: true }
+      );
 
       let customerData = await CustomerLeadModel.findById({ _id: custId });
-      console.log(customerData.leadPerson[0].name,"customerData.leadPerson[0].name");
-      
+      // console.log(
+      //   customerData.leadPerson[0].name,
+      //   "customerData.leadPerson[0].name"
+      // );
+
       var d = new Date();
       var day = ("0" + d.getDate()).slice(-2);
       var month = ("0" + (d.getMonth() + 1)).slice(-2);
@@ -578,21 +642,31 @@ export const sentFinalEstimation = async (req, res) => {
             </td>
             </tr>
             <tr>
-               <td style="padding: 10px 14px"><b><label>Contractor Signature</label></b>  <p>${customerData.name}</p>
+               <td style="padding: 10px 14px"><b><label>Contractor Signature</label></b>  <p>${
+                 customerData.name
+               }</p>
                </td>
-               <td><b><label>Date</label></b>  <p>${day + "-" + month + "-" + year}</p>
+               <td><b><label>Date</label></b>  <p>${
+                 day + "-" + month + "-" + year
+               }</p>
                </td>
             </tr>
             <tr>
-               <td style="padding: 10px 14px"><b><label>Owner</label></b>  <p>${customerData.name}</p>
+               <td style="padding: 10px 14px"><b><label>Owner</label></b>  <p>${
+                 customerData.name
+               }</p>
                </td>
                <td><b><label>Company</label></b>  <p>${customerData.name}</p>
                </td>
             </tr>
             <tr>
-               <td style="padding: 10px 14px"><b><label>Customer Signature</label></b>  <p>${customerData.name}</p>
+               <td style="padding: 10px 14px"><b><label>Customer Signature</label></b>  <p>${
+                 customerData.name
+               }</p>
                </td>
-               <td><b><label>Date</label></b>  <p>${day + "-" + month + "-" + year}</p>
+               <td><b><label>Date</label></b>  <p>${
+                 day + "-" + month + "-" + year
+               }</p>
                </td>
             </tr>
             </table>
@@ -688,7 +762,6 @@ export const sentFinalEstimation = async (req, res) => {
          </div>
       </body>
    </html>`;
-
 
       var str2 = Date.now();
       // console.log(str2);
