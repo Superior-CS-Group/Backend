@@ -85,7 +85,12 @@ export async function createVariation(req, res) {
 
 export async function getVariationsByCatalog(req, res) {
   try {
-    const catelogId = req.params.catalogId;
+    const catelogId = req.query.catalogId;
+    if (!catelogId) {
+      return res
+        .status(404)
+        .json({ errors: { catalogId: "Catalog Id is required" } });
+    }
     console.log("catelogId: ", catelogId);
     const variations = await VariationModelV2.find({ catelogId });
     console.log("valriations: ", variations);
