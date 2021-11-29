@@ -13,7 +13,7 @@ const catalogSchema = new mongoose.Schema({
   //   type: String,
   //   default: "",
   // },
-  image: {
+  images: {
     type: [String],
     default: [],
   },
