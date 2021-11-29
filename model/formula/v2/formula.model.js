@@ -52,6 +52,10 @@ const FormulaSchema = new mongoose.Schema({
           type: String,
           default: "#00ac07",
         },
+        formula: {
+          type: [mongoose.Schema.Types.ObjectId],
+          ref: "CatalogV2",
+        },
       },
     ],
   },
@@ -69,6 +73,10 @@ const FormulaSchema = new mongoose.Schema({
         },
         charge: {
           type: String,
+        },
+        manual: {
+          type: Boolean,
+          default: false,
         },
         formula: {
           type: [mongoose.Schema.Types.ObjectId],

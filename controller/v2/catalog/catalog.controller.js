@@ -4,16 +4,30 @@ import {
   validateCreateCatalogInput,
   validateCreateVariationInput,
 } from "../../../validator/catalog/v2/catalog.js";
-
+import base64ToFile from "../../../utils/base64ToFile.js";
 export async function createCatalog(req, res) {
   try {
+    console.log("req: ", req.user);
     const { isValid, errors } = validateCreateCatalogInput(req.body);
     if (!isValid) {
       return res.status(400).json({ errors });
     }
 
+    const images = [];
+    if (req.body.images && req.body.images.length > 0) {
+      for (let i = 0; i < req.body.images.length; i++) {
+        const imageUrl = await base64ToFile(
+          req.body.images[i].split(",")[1],
+          req.user.id,
+          "materials"
+        );
+        images.push(imageUrl);
+      }
+    }
+
+    req.body.images = images;
+
     const newCatalog = await CatalogModel.create(req.body);
-    console.log("newCatalogBOdy: ", newCatalog);
     return res
       .status(200)
       .json({ msg: "New Catalog created successfully", data: newCatalog });
