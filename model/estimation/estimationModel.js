@@ -41,7 +41,7 @@ const EstimationSchema = new Mongoose.Schema(
     },
     estimaitonStatus: {
       type: String,
-      default: "Process",
+      default: "Lead Added",
     },
     estimaitonSentDate: {
       type: String,

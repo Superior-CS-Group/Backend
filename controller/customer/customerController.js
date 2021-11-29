@@ -44,6 +44,7 @@ export const addLead = async (req, res) => {
       otherInformation: req.body.otherInformation,
       leadInvoinceNo: newInvoiceNo,
       leadPerson: currentUser._id,
+      spouse: req.body.spouse,
     });
 
     var preEstimateInvoiceNumber;

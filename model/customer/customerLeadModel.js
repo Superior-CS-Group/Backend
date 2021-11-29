@@ -80,6 +80,17 @@ const CustomerLeadSchema = new Mongoose.Schema(
       type: String,
       default: "C1000001",
     },
+    spouse: {
+      type: [
+        {
+          name: { type: String },
+          email: { type: String },
+          phone: { type: String},
+          otherInfo: { type: String}, 
+        },
+      ],
+      required: false,
+    },
   },
   {
     timestamps: true,

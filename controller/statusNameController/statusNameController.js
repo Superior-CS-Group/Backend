@@ -39,7 +39,7 @@ export const StatusList = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
-    const statusListData = await StatusNameModel.find().sort({ _id: -1 });
+    const statusListData = await StatusNameModel.find().sort({ _id: 1 });
 
     res.status(200).json({
       DataLength: statusListData.length,
