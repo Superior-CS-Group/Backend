@@ -25,6 +25,7 @@ import EmailTemplateRoute from "./route/emailTemplate.js";
 import FormulaRoute from "./route/formula/v1/formula.route.js";
 import FormulaRouteV2 from "./route/formula/v2/formula.route.js";
 import CatalogRouteV2 from "./route/v2/catalog.js";
+import UserEstimationRoute from "./route/formula/v2/userEstimation.route.js";
 
 const app = express();
 app.use(cors());
@@ -77,6 +78,7 @@ app.use("/api/status", StatusNameRoute);
 app.use("/api/formula", FormulaRoute);
 app.use("/api/email-template", EmailTemplateRoute);
 app.use("/api/v2/formula", FormulaRouteV2);
+app.use("/api/v2/user-stimation", UserEstimationRoute);
 app.use("/api/v2/catalog", CatalogRouteV2);
 
 app.get("/", (_req, res) => res.status(200).send("Yes its working"));
