@@ -2,6 +2,7 @@ import CatalogModel from "../../../model/services/v2/catalogModel.js";
 import VariationModelV2 from "../../../model/services/v2/variationModel.js";
 import {
   validateCreateCatalogInput,
+  validateCreateServiceInput,
   validateCreateVariationInput,
 } from "../../../validator/catalog/v2/catalog.js";
 import base64ToFile from "../../../utils/base64ToFile.js";
@@ -119,15 +120,83 @@ export async function getVariationsByCatalog(req, res) {
 
 export async function searchCatalogByName(req, res) {
   try {
-    const type = req.query.searchFor || "a";
+    const type = req.query.searchFor;
     const catalogName = req.params.catalogName || "";
+    let filter = {};
+    if (!type) {
+      filter = {
+        type: {
+          $or: ["catalog", "service"],
+        },
+      };
+    } else {
+      filter = {
+        type: type,
+      };
+    }
     const catalogs = await CatalogModel.find({
       name: { $regex: catalogName, $options: "i" },
-      type: type,
+      ...filter,
     });
     return res.status(200).json({ data: catalogs });
   } catch (error) {
     console.log("error: ", error);
+    return res
+      .status(500)
+      .json({ msg: "Internal Server Error", errors: error });
+  }
+}
+
+export async function createService(req, res) {
+  try {
+    const { isValid, errors } = validateCreateServiceInput(req.body);
+    if (!isValid) {
+      return res.status(400).json({ errors });
+    }
+    const newService = new CatalogModel(req.body);
+    await newService.save();
+    return res.status(200).json({ msg: "New Service is created successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ msg: "Internal Server Error", errors: error });
+  }
+}
+
+export async function updateService(req, res) {
+  try {
+    const serviceId = req.params.serviceId;
+    const { isValid, errors } = validateCreateServiceInput(req.body);
+    if (!isValid) {
+      return res.status(400).json({ errors });
+    }
+    const updatedService = await CatalogModel.findByIdAndUpdate(
+      serviceId,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    return res
+      .status(200)
+      .json({ msg: "Service updated successfully", data: updatedService });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ msg: "Internal Server Error", errors: error });
+  }
+}
+
+export async function getServices(req, res) {
+  try {
+    const pageNumber = req.query.pageNumber || 1;
+    const pageSize = req.query.pageSize || 10;
+    const services = await CatalogModel.find({ type: "service" })
+      .skip((pageNumber - 1) * pageSize)
+      .limit(pageSize);
+    return res.status(200).json({ data: services, pageNumber, pageSize });
+  } catch (error) {
+    console.log("errors: ", error);
     return res
       .status(500)
       .json({ msg: "Internal Server Error", errors: error });
