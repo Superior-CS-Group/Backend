@@ -13,7 +13,10 @@ export async function createCatalog(req, res) {
     if (!isValid) {
       return res.status(400).json({ errors });
     }
-
+    const isExists = await CatalogModel.findOne({ name: req.body.name });
+    if (isExists) {
+      return res.status(400).json({ errors: { name: "Already Exists" } });
+    }
     const images = [];
     if (req.body.images && req.body.images.length > 0) {
       for (let i = 0; i < req.body.images.length; i++) {
@@ -45,6 +48,10 @@ export async function updateCatalog(req, res) {
     if (!isValid) {
       return res.status(400).json({ errors });
     }
+    const isExists = await CatalogModel.findOne({ name: req.body.name });
+    if (isExists) {
+      return res.status(400).json({ errors: { name: "Already Exists" } });
+    }
     const updatedCatalog = await CatalogModel.findByIdAndUpdate(
       catalogId,
       {
@@ -64,8 +71,12 @@ export async function updateCatalog(req, res) {
 
 export async function getCatalogs(req, res) {
   try {
-    const catalogs = await CatalogModel.find();
-    return res.status(200).json({ data: catalogs });
+    const catalogs = await CatalogModel.find({
+      $or: [{ type: "catalog" }, { type: "subCatalog" }],
+    });
+    return res.status(200).json({
+      data: catalogs,
+    });
   } catch (error) {
     console.log(error);
     return res
@@ -79,6 +90,13 @@ export async function createVariation(req, res) {
     const { isValid, errors } = validateCreateVariationInput(req.body);
     if (!isValid) {
       return res.status(400).json(errors);
+    }
+    const isExists = await VariationModelV2.findOne({
+      name: req.body.name,
+      catelogId: req.body.catelogId,
+    });
+    if (isExists) {
+      return res.status(400).json({ errors: { name: "Already Exists" } });
     }
     const newVariation = new VariationModelV2(req.body);
     await newVariation.save();
@@ -151,6 +169,10 @@ export async function createService(req, res) {
     if (!isValid) {
       return res.status(400).json({ errors });
     }
+    const isExists = await CatalogModel.findOne({ name: req.body.name });
+    if (isExists) {
+      return res.status(400).json({ errors: { name: "Already Exists" } });
+    }
     const newService = new CatalogModel(req.body);
     await newService.save();
     return res.status(200).json({ msg: "New Service is created successfully" });
@@ -167,6 +189,10 @@ export async function updateService(req, res) {
     const { isValid, errors } = validateCreateServiceInput(req.body);
     if (!isValid) {
       return res.status(400).json({ errors });
+    }
+    const isExists = await CatalogModel.findOne({ name: req.body.name });
+    if (isExists) {
+      return res.status(400).json({ errors: { name: "Already Exists" } });
     }
     const updatedService = await CatalogModel.findByIdAndUpdate(
       serviceId,

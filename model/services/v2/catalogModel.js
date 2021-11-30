@@ -4,6 +4,7 @@ const catalogSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   type: {
     type: String,
