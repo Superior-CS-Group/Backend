@@ -4,34 +4,24 @@ const catalogSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   type: {
     type: String,
-    enum: ["catalog, subCatalog"],
     required: true,
   },
-  description: {
-    type: String,
-    default: "",
-  },
-  image: {
+  images: {
     type: [String],
     default: [],
   },
   price: {
     type: Number,
     required: function () {
-      return this.type === "catalog";
+      return this.type === "catalog" || this.type === "service";
     },
   },
   unit: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: function () {
-      return this.type === "catalog";
-    },
-  },
-  quantity: {
-    type: Number,
+    type: String, //mongoose.Schema.Types.ObjectId
     required: function () {
       return this.type === "catalog";
     },
@@ -41,7 +31,19 @@ const catalogSchema = new mongoose.Schema({
     ref: "Variation",
     default: [],
   },
+  hours: {
+    type: Number,
+    required: function () {
+      return this.type === "service";
+    },
+  },
+  day: {
+    type: Number,
+    required: function () {
+      return this.type === "service";
+    },
+  },
 });
 
-const CatalogModel = mongoose.model("Catalog", catalogSchema);
+const CatalogModel = mongoose.model("CatalogV2", catalogSchema);
 export default CatalogModel;

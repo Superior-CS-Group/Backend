@@ -41,7 +41,7 @@ const EstimationSchema = new Mongoose.Schema(
     },
     estimaitonStatus: {
       type: String,
-      default: "Process",
+      default: "Lead Added",
     },
     estimaitonSentDate: {
       type: String,
@@ -80,6 +80,10 @@ const EstimationSchema = new Mongoose.Schema(
       default: "",
     },
 
+    distance: {
+      type: Number,
+      default: 0,
+    },
     leadInvoinceNo: {
       type: String,
       default: "E1000001",

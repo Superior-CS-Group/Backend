@@ -35,6 +35,10 @@ const CustomerLeadSchema = new Mongoose.Schema(
       type: String,
       default: "",
     },
+    distance: {
+      type: Number,
+      default: 0,
+    },
     otherInformation: {
       type: String,
       default: "",
@@ -69,12 +73,23 @@ const CustomerLeadSchema = new Mongoose.Schema(
     },
     estimaitonStatus: {
       type: String,
-      default: "Process",
+      default: "Lead Added",
     },
 
     leadInvoinceNo: {
       type: String,
       default: "C1000001",
+    },
+    spouse: {
+      type: [
+        {
+          name: { type: String },
+          email: { type: String },
+          phone: { type: String},
+          otherInfo: { type: String}, 
+        },
+      ],
+      required: false,
     },
   },
   {

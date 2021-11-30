@@ -22,11 +22,16 @@ const FormulaSchema = new mongoose.Schema({
             "result_editable",
             "result_locked",
             "dropdown",
+            "boolean",
           ],
         },
         unit: {
           type: String,
           ref: "Unit",
+        },
+        dropdown: {
+          type: String,
+          default: "",
         },
         view: {
           type: [String],
@@ -48,6 +53,10 @@ const FormulaSchema = new mongoose.Schema({
           type: String,
           default: "#00ac07",
         },
+        formula: {
+          type: [mongoose.Schema.Types.ObjectId],
+          ref: "CatalogV2",
+        },
       },
     ],
   },
@@ -66,9 +75,13 @@ const FormulaSchema = new mongoose.Schema({
         charge: {
           type: String,
         },
+        manual: {
+          type: Boolean,
+          default: false,
+        },
         formula: {
           type: [mongoose.Schema.Types.ObjectId],
-          ref: "variation",
+          ref: "CatalogV2",
         },
       },
     ],
