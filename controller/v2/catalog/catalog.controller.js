@@ -123,11 +123,9 @@ export async function searchCatalogByName(req, res) {
     const type = req.query.searchFor;
     const catalogName = req.params.catalogName || "";
     let filter = {};
-    if (!type) {
+    if (!type || !["catalog", "service", "variation"].includes(type)) {
       filter = {
-        type: {
-          $or: ["catalog", "service"],
-        },
+        $or: [{ type: "catalog" }, { type: "service" }],
       };
     } else {
       filter = {
