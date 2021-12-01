@@ -14,6 +14,7 @@ import {
   RemoveVariation,
   getVariationsData,
   updateService,
+  removeService,
 } from "../../controller/v2/catalog/catalog.controller.js";
 
 const CatalogRouteV2 = express.Router();
@@ -26,6 +27,7 @@ CatalogRouteV2.post("/remove-catalog", authProtect, RemoveCatelog);
 CatalogRouteV2.post("/remove-variation", authProtect, RemoveVariation);
 CatalogRouteV2.post("/get-variation", getVariationsData);
 CatalogRouteV2.post("/create-service", authProtect, createService);
+CatalogRouteV2.post("/remove-services", authProtect, removeService);
 CatalogRouteV2.put("/update-catalog/:catalogId", authProtect, updateCatalog);
 CatalogRouteV2.put("/update-service/:serviceId", authProtect, updateService);
 CatalogRouteV2.get("/get-all-catalog", getCatalogs);

@@ -317,3 +317,27 @@ export async function getServices(req, res) {
       .json({ msg: "Internal Server Error", errors: error });
   }
 }
+
+
+export const removeService = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+  // console.log(userId);
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ error: "User not found" });
+  }
+  try {
+    await CatalogModel.findByIdAndDelete({ _id: req.body.id });
+
+    const checkData = await CatalogModel.find().sort({ _id: -1 });
+
+    res.status(200).json({
+      DataLength: checkData.length,
+      data: checkData,
+    });
+  } catch (error) {
+    console.log("error:", error);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
