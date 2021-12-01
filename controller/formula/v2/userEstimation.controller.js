@@ -1,7 +1,15 @@
 import UserEstimationModel from "../../../model/formula/v2/userEstimation.js";
+import { generateEstimationNumber } from "../../../utils/generateEstimationNumber.js";
 
 export async function createUserEstimation(req, res) {
   try {
+    const lastEntry = await UserEstimationModel.find()
+      .sort({ createdAt: -1 })
+      .limit(1);
+    console.log("lastEntry", lastEntry);
+    req.body.estimationNumber = generateEstimationNumber(
+      lastEntry[0] && lastEntry[0].estimationNumber
+    );
     const userEstimation = new UserEstimationModel(req.body);
     await userEstimation.save();
     return res
@@ -49,5 +57,15 @@ export async function getUserEstimation(req, res) {
       message: "Internal Server Error",
       errors: error,
     });
+  }
+}
+
+export async function getUserEstimationDetailsById(req, res) {
+  const estimationId = req.params.estimationId;
+  try {
+    const userEstimation = await UserEstimationModel.findById(estimationId);
+    return res.status(200).json({ data: userEstimation });
+  } catch (error) {
+    return res.status(500).json({ msg: "Internal Server Error" });
   }
 }

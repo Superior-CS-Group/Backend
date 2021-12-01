@@ -15,6 +15,10 @@ const UserEstimationSchema = new mongoose.Schema(
       type: String,
       default: "pending",
     },
+    estimationNumber: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

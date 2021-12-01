@@ -6,7 +6,6 @@ import SentEstimationModel from "../../model/estimation/sentEstimateModel.js";
 import sendEmail from "../../utils/sendEmail.js";
 import CustomerLeadModel from "../../model/customer/customerLeadModel.js";
 import pdf from "html-pdf";
-import fs from "fs";
 
 export const addLead = async (req, res) => {
   const userId = req.query.userId || req.user._id;
