@@ -75,6 +75,10 @@ const CustomerLeadSchema = new Mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    estimaitonScheduleDate: {
+      type: String,
+      default: "",
+    },
     estimaitonStatus: {
       type: String,
       default: "Lead Added",

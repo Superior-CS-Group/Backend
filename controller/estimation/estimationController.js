@@ -176,6 +176,10 @@ export const sentEstimation = async (req, res) => {
       let customerData = await CustomerLeadModel.findById({ _id: custId });
 
       var d = new Date();
+      var dd = d.getDate();
+      var mm = d.getMonth() + 1;
+      var yy = d.getFullYear().toString().substr(-2);
+
       var day = ("0" + d.getDate()).slice(-2);
       var month = ("0" + (d.getMonth() + 1)).slice(-2);
       var year = d.getFullYear();
@@ -183,6 +187,25 @@ export const sentEstimation = async (req, res) => {
       let dayoftime;
       var minutes = d.getMinutes();
       var seconds = d.getSeconds();
+
+      await EstimationModel.findOneAndUpdate(
+        { customerLeadId: custId },
+        {
+          $set: {
+            estimaitonScheduleDate: mm + "-" + dd + "-" + yy,
+          },
+        },
+        { new: true }
+      );
+      await CustomerLeadModel.findByIdAndUpdate(
+        { _id: custId },
+        {
+          $set: {
+            estimaitonScheduleDate: mm + "-" + dd + "-" + yy,
+          },
+        },
+        { new: true }
+      );
 
       if (time < 12) {
         dayoftime = "<b> morning</b>";
@@ -332,7 +355,7 @@ export const sentFinalEstimation = async (req, res) => {
     })
       .sort({ _id: -1 })
       .limit(1);
-      console.log(getEstimateData);
+    console.log(getEstimateData);
     if (getEstimateData.length > 0) {
       preEstimateInvoiceNumber = getEstimateData[0].estimateNumber;
     } else {
@@ -360,7 +383,7 @@ export const sentFinalEstimation = async (req, res) => {
         {
           $set: {
             estimaitonSent: true,
-            estimaitonSentDate: today,
+            estimaitonSentDate: mm + "-" + dd + "-" + yy,
             leadInvoinceNo: newEstimateInvoiceNo,
           },
         },
@@ -371,7 +394,7 @@ export const sentFinalEstimation = async (req, res) => {
         {
           $set: {
             estimaitonSent: true,
-            estimaitonSentDate: today,
+            estimaitonSentDate: mm + "-" + dd + "-" + yy,
             leadInvoinceNo: newEstimateInvoiceNo,
           },
         },

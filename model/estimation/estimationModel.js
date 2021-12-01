@@ -79,7 +79,10 @@ const EstimationSchema = new Mongoose.Schema(
       type: String,
       default: "",
     },
-
+    estimaitonScheduleDate: {
+      type: String,
+      default: "",
+    },
     distance: {
       type: Number,
       default: 0,
