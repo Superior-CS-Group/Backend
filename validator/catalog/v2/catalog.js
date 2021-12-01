@@ -66,3 +66,34 @@ export const validateCreateVariationInput = (data) => {
     errors,
   };
 };
+
+export const validateCreateServiceInput = (data) => {
+  const errors = {};
+
+  data.name = !isEmpty(data.name) ? data.name : "";
+  data.type = !isEmpty(data.type) ? data.type : "";
+  data.hours = !isEmpty(data.hours) ? data.hours : 0;
+  data.day = !isEmpty(data.day) ? data.day : 0;
+  data.price = !isEmpty(data.productionRate) ? data.productionRate : 0;
+
+  if (Validator.isEmpty(data.name)) {
+    errors.name = "Name Field is required";
+  }
+  if (Validator.isEmpty(data.type)) {
+    errors.type = "Type Field is required";
+  }
+  if (!data.hours) {
+    errors.hours = "Hours Field is required";
+  }
+  if (!data.day) {
+    errors.day = "Day Field is required";
+  }
+  if (!data.price) {
+    errors.productionRate = "Production Rate is required";
+  }
+
+  return {
+    errors,
+    isValid: isEmpty(errors),
+  };
+};

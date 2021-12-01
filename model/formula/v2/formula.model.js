@@ -22,6 +22,7 @@ const FormulaSchema = new mongoose.Schema({
             "result_editable",
             "result_locked",
             "dropdown",
+            "boolean",
           ],
         },
         unit: {

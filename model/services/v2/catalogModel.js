@@ -4,15 +4,12 @@ const catalogSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   type: {
     type: String,
     required: true,
   },
-  // description: {
-  //   type: String,
-  //   default: "",
-  // },
   images: {
     type: [String],
     default: [],
@@ -20,7 +17,7 @@ const catalogSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: function () {
-      return this.type === "catalog";
+      return this.type === "catalog" || this.type === "service";
     },
   },
   unit: {
@@ -29,16 +26,22 @@ const catalogSchema = new mongoose.Schema({
       return this.type === "catalog";
     },
   },
-  // quantity: {
-  //   type: Number,
-  //   required: function () {
-  //     return this.type === "catalog";
-  //   },
-  // },
   variations: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Variation",
     default: [],
+  },
+  hours: {
+    type: Number,
+    required: function () {
+      return this.type === "service";
+    },
+  },
+  day: {
+    type: Number,
+    required: function () {
+      return this.type === "service";
+    },
   },
 });
 
