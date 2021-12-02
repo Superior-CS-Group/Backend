@@ -87,7 +87,8 @@ export async function searchFormulaByName(req, res) {
       title: { $regex: new RegExp(searchTerm), $options: "i" },
     })
       .populate("materials.formula")
-      .populate("elements.formula");
+      .populate("elements.formula")
+      .populate("catalogs");
     return res.status(200).json({ data: formulas });
   } catch (error) {
     console.log(error);

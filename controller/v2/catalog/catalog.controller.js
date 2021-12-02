@@ -86,9 +86,13 @@ export const deleteCatelog = async (req, res) => {
 
 export async function getCatalogs(req, res) {
   try {
-    const catalogs = await CatalogModel.find({
-      $or: [{ type: "catalog" }, { type: "subCatalog" }],
-    });
+    const catalogId = req.query.catalogId || "";
+    console.log("catalogId: ", catalogId);
+    const filter = { $or: [{ type: "catalog" }, { type: "subCatalog" }] };
+    if (catalogId && catalogId !== "undefined") {
+      filter._id = catalogId;
+    }
+    const catalogs = await CatalogModel.find(filter);
     return res.status(200).json({
       data: catalogs,
     });

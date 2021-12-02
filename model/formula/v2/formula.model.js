@@ -93,6 +93,11 @@ const FormulaSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  catalogs: {
+    type: [mongoose.Schema.Types.ObjectId],
+    default: [],
+    ref: "CatalogV2",
+  },
 });
 
 const FormulaModelV2 = mongoose.model("FormulaV2", FormulaSchema);
