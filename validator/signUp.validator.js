@@ -17,8 +17,8 @@ const validateSignUpInput = (data) => {
   
   if (Validator.isEmpty(data.password)) {
     errors.password = "Password is required";
-  } else if (!Validator.isLength(data.password, 8, 20)) {
-    errors.password = "Password must be 8 character long";
+  } else if (!Validator.isLength(data.password, 6, 20)) {
+    errors.password = "Password must be 6 character long";
   }
   return {
     errors,

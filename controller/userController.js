@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { promisify } from "util";
 
 import UserModel from "../model/staff/staffModel.js";
+import EmailSettingModel from "../model/emailSettingModel.js";
 import validateSignUpInput from "../validator/signUp.validator.js";
 import services from "../utils/services.js";
 import sendEmail from "../utils/sendEmail.js";
@@ -27,9 +28,175 @@ export const signUp = async (req, res) => {
     }
     const newUser = new UserModel({
       email: req.body.email,
+      name: req.body.name,
       companyName: req.body.companyName,
+      contactNo: req.body.contactNo,
       currency: "USD",
       timeZone: "(GMT +8) Pacific Standard Time",
+    });
+
+    // Sent email to activate account
+    const emailSettingData = await EmailSettingModel.findOne();
+    // console.log(emailSettingData);
+    var ndate = new Date();
+    var hours = ndate.getHours();
+    var format = "";
+    var ndate = new Date();
+    var hr = ndate.getHours();
+    var h = hr % 12;
+    let greet;
+    if (hr < 12) {
+      greet = "Morning";
+      format = "AM";
+    } else if (hr >= 12 && hr <= 17) {
+      greet = "Afternoon";
+      format = "PM";
+    } else if (hr >= 17 && hr <= 24) {
+      greet = "Evening";
+    }
+
+    const adminMessage = `<html>
+    <head>
+       <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+       <meta name="viewport" content="width=device-width">
+       <meta http-equiv="X-UA-Compatible" content="IE=edge">
+       <meta name="x-apple-disable-message-reformatting">
+       <title>One Percent </title>
+       <style>html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
+     border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}</style>
+    </head>
+    <body>
+       <div class="email-container">
+            <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
+             <tr>
+                <td style="padding: 30px 15px; border-top-right-radius: 10px"><img src="${emailSettingData.logo}"/>
+                   
+                </td>
+                               
+             </tr>
+          </table>
+          <table style="color: #000;font-size: 20px; ">
+             <tr>
+                <td style="padding: 10px 14px;"><h3>Account Approval request</h3></td>
+             </tr>
+             <tr>
+                <td style="padding: 10px 14px;">A new Account had been created </td>
+             </tr>
+             <tr>
+                <td style="padding: 10px 14px;"><a href="">Click Here </a> to see the request of new account.</td>
+             </tr>
+             
+ 
+ 
+                         <tr>
+                <td style="padding: 5px 14px;">Sincerely
+ </td>
+             </tr>
+                         <tr>
+                <td style="padding: 10px 14px;">The One Percent Software Team
+ </td>
+             </tr>
+          </table>
+          <table style=" color: #000; font-size: 20px;">
+             <tr>
+                <td style="text-align: center;padding-bottom: 5px;">
+                   <ul style="display: inline-block;padding: 0">
+                <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/facebook.png"/></a></li>
+                <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/twitter.png"/></a></li>
+                <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/instagram.png"/></a></li>
+                <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/youtube.png"/></a></li></ul></td>
+             </tr>
+             
+          </table>
+          <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
+             <tr>
+                <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com </td>
+             </tr>
+             <tr>
+                <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a></td>
+             </tr>
+          </table>
+       </div>
+    </body>
+ </html>`;
+
+    const message = `<html>
+     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+        <meta name="viewport" content="width=device-width">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="x-apple-disable-message-reformatting">
+        <title>One Percent </title>
+        <style>html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
+      border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}</style>
+     </head>
+     <body>
+        <div class="email-container">
+             <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
+              <tr>
+                 <td style="padding: 30px 15px; border-top-right-radius: 10px"><img src="${emailSettingData.logo}""/>
+                    
+                 </td>
+                                
+              </tr>
+           </table>
+           <table style="color: #000;font-size: 20px; ">
+              <tr>
+                 <td style="padding: 10px 14px;"><h4>Sign Up Request</h4></td>
+              </tr>
+              <tr>
+                 <td style="padding: 10px 14px;">Good ${greet}, <b>${req.body.name}</b>,</td>
+              </tr>
+              <tr>
+                 <td style="padding: 10px 14px;">Thank you for Application, Now Your application is Pending.</td>
+              </tr><tr>
+              
+                 <td style="padding: 10px 14px;"> We will Notify you when Admin Approved your Account.</td>
+              </tr>
+  
+  
+                          <tr>
+                 <td style="padding: 5px 14px;">Sincerely
+  </td>
+              </tr>
+                          <tr>
+                 <td style="padding: 10px 14px;">The One Percent Software Team
+  </td>
+              </tr>
+           </table>
+           <table style=" color: #000; font-size: 20px;">
+              <tr>
+                 <td style="text-align: center;padding-bottom: 5px;">
+                    <ul style="display: inline-block;padding: 0">
+                 <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/facebook.png"/></a></li>
+                 <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/twitter.png"/></a></li>
+                 <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/instagram.png"/></a></li>
+                 <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/youtube.png"/></a></li></ul></td>
+              </tr>
+              
+           </table>
+           <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
+              <tr>
+                 <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com </td>
+              </tr>
+              <tr>
+                 <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a></td>
+              </tr>
+           </table>
+        </div>
+     </body>
+  </html>`;
+
+    await sendEmail({
+      email: newUser.email,
+      subject: "New Account",
+      message,
+    });
+
+    await sendEmail({
+      email: "garrym@superiorcsgroup.com",
+      subject: "New Account",
+      adminMessage,
     });
 
     const payload1 = {
@@ -52,13 +219,13 @@ export const signUp = async (req, res) => {
         }
         newUser.password = hash;
         await newUser.save();
-        const payload = {
-          _id: newUser._id,
-          email: newUser.email,
-        };
-        const token = jwt.sign(payload, services.JWT_KEY, {
-          expiresIn: 31556926,
-        });
+        // const payload = {
+        //   _id: newUser._id,
+        //   email: newUser.email,
+        // };
+        // const token = jwt.sign(payload, services.JWT_KEY, {
+        //   expiresIn: 31556926,
+        // });
 
         let profileImage = "";
         if (req.body.profileImage) {
@@ -94,7 +261,7 @@ export const signUp = async (req, res) => {
 
         return res.status(200).json({
           message: "User registred Successfully",
-          token: token,
+          // token: token,
           user: userData,
         });
       });
@@ -147,7 +314,7 @@ export const signIn = async (req, res) => {
       details.username = req.body.email;
     }
 
-    if(req.body.email ==="" || req.body.password ===""){
+    if (req.body.email === "" || req.body.password === "") {
       return res.status(401).json({ error: "Fields are not blank!" });
     }
 
@@ -158,9 +325,9 @@ export const signIn = async (req, res) => {
     if (!bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(401).json({ error: "Password are incorrect " });
     }
-    // if (!user.isEmailVerified) {
-    //   return res.status(401).json({ error: "Account not activate!" });
-    // }
+    if (!user.activeStatus) {
+      return res.status(401).json({ error: "Account not activate!" });
+    }
     const payload = {
       _id: user._id,
       email: user.email,
@@ -255,10 +422,12 @@ export const getUserList = async (req, res) => {
   const userId = req.query.userId || req.user._id;
 
   try {
-    const user = await UserModel.find().sort({_id:-1});
-    
+    const user = await UserModel.find({ $ne: { userRole: "admin" } }).sort({
+      _id: -1,
+    });
+
     return res.status(200).json({
-      message: "User List", 
+      message: "User List",
       DataLength: user.length,
       Data: user,
     });
@@ -274,10 +443,10 @@ export const removeUserDetails = async (req, res) => {
   try {
     await UserModel.findByIdAndDelete(userId);
 
-    const user = await UserModel.find().sort({_id:-1});
-     
+    const user = await UserModel.find().sort({ _id: -1 });
+
     return res.status(200).json({
-      message: "User removed", 
+      message: "User removed",
       user: user,
     });
   } catch (error) {
@@ -315,13 +484,13 @@ export const recoverPassword = async (req, res) => {
       }
     );
 
-    const message = `<p>We have recieved a request to have your password reset for <b>Wishify Account</b>. If you did not make this request, please ignore this email.  <br> 
+    const message = `<p>We have recieved a request to have your password reset for <b>User Account</b>. If you did not make this request, please ignore this email.  <br> 
       <br> To reset your password, please <a href = "${req.headers.origin}/change-password/${token}"> <b>Visit this link</b> </a> </p> <hr>  
       <h3> <b>Having Trouble? </b> </h3> 
       <p>If the above link does not work try copying this link into your browser. </p> 
       <p><a href="${req.headers.origin}/change-password/${token}">Click here</a></p>  <hr>
       <h3><b> Questions? <b> </h3>
-      <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>wishify.com</b></p>
+      <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>User.com</b></p>
       `;
 
     await sendEmail({
@@ -341,9 +510,10 @@ export const recoverPassword = async (req, res) => {
 
 export const changePassword = async (req, res) => {
   const token = req.body.token;
+  const userId = req.body.id;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-
+console.log(req.body)
   try {
     if (password != confirmPassword) {
       return res
@@ -351,9 +521,9 @@ export const changePassword = async (req, res) => {
         .json({ error: "Password and Confirm Password does not match!" });
     }
 
-    const decoded = await promisify(jwt.verify)(token, services.JWT_KEY);
+    // const decoded = await promisify(jwt.verify)(token, services.JWT_KEY);
     // console.log(decoded)
-    const currentUser = await UserModel.findById(decoded._id);
+    const currentUser = await UserModel.findById({_id:userId});
 
     if (!currentUser) {
       return res.status(401).json({ error: "User not found" });
@@ -366,7 +536,6 @@ export const changePassword = async (req, res) => {
       { _id: currentUser._id },
       {
         $set: {
-          password_reset_token: "",
           password: newpassword,
         },
       }
@@ -409,13 +578,13 @@ export const changeEmail = async (req, res) => {
       }
     );
 
-    const message = `<p>We have recieved a request to have your change email for <b>Wishify Account</b>. If you did not make this request, please ignore this email.  <br> 
+    const message = `<p>We have recieved a request to have your change email for <b>User Account</b>. If you did not make this request, please ignore this email.  <br> 
       <br> To change your email, please <a href = "${req.headers.origin}/change-email/${token}"> <b>Visit this link</b> </a> </p> <hr>  
       <h3> <b>Having Trouble? </b> </h3> 
       <p>If the above link does not work try copying this link into your browser. </p> 
       <p><a href="${req.headers.origin}/change-email/${token}">Click here</a></p>  <hr>
       <h3><b> Questions? <b> </h3>
-      <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>wishify.com</b></p>
+      <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>User.com</b></p>
       `;
 
     await sendEmail({
@@ -555,6 +724,42 @@ export const notificationSettings = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const updateAccountStatus = async (req, res) => {
+   
+  const details = {};
+  details._id = req.body.id;
+  try {
+    const user = await UserModel.findOne(details);
+
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    let activestatus;
+    if (user.activeStatus === true) {
+      activestatus = false;
+    } else {
+      activestatus = true;
+    }
+
+    await UserModel.findByIdAndUpdate(
+      { _id: user._id },
+      {
+        $set: {
+          activeStatus: activestatus,
+        },
+      }
+    );
+    const user2 = await UserModel.findById({_id: user._id});
+
+    return res.status(200).json({
+      message: "Status Updated",
+      user: user2,
+    });
+  } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

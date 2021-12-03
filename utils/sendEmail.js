@@ -5,21 +5,23 @@ import smtpTransport  from "nodemailer-smtp-transport";
 const sendEmail = async (options) => {
  
   const emailsettings = await SMTPModel.findOne();
-  // let host = emailsettings.host;
-  // let user = emailsettings.username;
-  // let pass = emailsettings.password;
 
-  let host = 'gmail';
-  let user = 'tonyc@superiorcsgroup.com';
-  let pass = 'superiorcsgroup#123';
+  console.log(emailsettings)
+  let host = emailsettings.host;
+  let user = emailsettings.username;
+  let pass = emailsettings.password;
+
+  // let host = 'gmail';
+  // let user = 'tonyc@superiorcsgroup.com';
+  // let pass = 'superiorcsgroup#123';
 
   var transporter = nodemailer.createTransport(
     smtpTransport({
       service: 'gmail',
       // host: host,
-      // tls: { rejectUnauthorized: true },
-      // secureConnection: true,
-      // port: 465,
+      tls: { rejectUnauthorized: true },
+      secureConnection: true,
+      port: 465,
       auth: {
         user: user,
         pass: pass,

@@ -15,6 +15,7 @@ import {
   notificationSettings,
   getUserList,
   removeUserDetails,
+  updateAccountStatus,
 } from "../controller/userController.js";
 
 import {
@@ -22,7 +23,8 @@ import {
   UpcomingEstimaitonLead,
   assignCustomerLead,
   updateCustomerInfo,
-  GetInfoCustomerLead, CustomerLeadRemove
+  GetInfoCustomerLead,
+  CustomerLeadRemove,
 } from "../controller/customer/customerController.js";
 
 const UserRoute = express.Router();
@@ -49,6 +51,7 @@ UserRoute.get("/get-details", authProtect, getUserDetails);
 UserRoute.get("/user-list", authProtect, getUserList);
 UserRoute.get("/user-delete", authProtect, removeUserDetails);
 UserRoute.post("/update", authProtect, updateAccount);
+UserRoute.post("/update-status", authProtect, updateAccountStatus);
 UserRoute.get("/remove-profile-image", authProtect, removeProfileImage);
 UserRoute.post("/notification-settings", authProtect, notificationSettings);
 

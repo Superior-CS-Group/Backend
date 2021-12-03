@@ -29,7 +29,7 @@ const StaffSchema = new Mongoose.Schema(
     },
     activeStatus: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     companyName: {
       type: String,
@@ -40,6 +40,14 @@ const StaffSchema = new Mongoose.Schema(
       default: "",
     },
     currency: {
+      type: String,
+      default: "",
+    },
+    userRole: {
+      type: String,
+      default: "user",
+    },
+    contactNo: {
       type: String,
       default: "",
     },
