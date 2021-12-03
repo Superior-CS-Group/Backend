@@ -97,3 +97,15 @@ export async function searchFormulaByName(req, res) {
       .json({ errors: error, msg: "Internal Server Error" });
   }
 }
+
+export async function deleteFormulaByIdHandler(req, res) {
+  try {
+    const formulaId = req.params.formulaId || "";
+    const formula = await FormulaModelV2.findByIdAndDelete(formulaId);
+    return res.status(200).json({ data: formula });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ errors: error, msg: "internal Server Error" });
+  }
+}

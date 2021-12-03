@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addNewFormulaHandler,
+  deleteFormulaByIdHandler,
   getAllFormulaHandler,
   getFormulaByIdHandler,
   searchFormulaByName,
@@ -13,6 +14,10 @@ FormulaRouteV2.post("/add-new-formula", addNewFormulaHandler);
 FormulaRouteV2.put(
   "/update-formula-by-id/:formulaId",
   updateFormulaByIdHandler
+);
+FormulaRouteV2.delete(
+  "/delete-formula-by-id/:formulaId",
+  deleteFormulaByIdHandler
 );
 FormulaRouteV2.get("/get-formula-by-id/:formulaId", getFormulaByIdHandler);
 FormulaRouteV2.get("/get-all-formula", getAllFormulaHandler);

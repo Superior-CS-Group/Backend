@@ -19,6 +19,42 @@ const UserEstimationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    estimateSettings: {
+      type: {
+        builtInDesignCost: {
+          type: Number,
+        },
+        fluffNumberDiscount: {
+          type: Number,
+        },
+      },
+      default: {
+        builtInDesignCost: 0,
+        fluffNumberDiscount: 0,
+      },
+    },
+    paymentTerms: {
+      type: [
+        {
+          title: {
+            type: String,
+          },
+          value: {
+            type: Number,
+          },
+        },
+      ],
+      default: [
+        {
+          title: "Deposit payment at signing of contract",
+          value: 12,
+        },
+        {
+          title: "Progress payment when project is started",
+          value: 88,
+        },
+      ],
+    },
   },
   {
     timestamps: true,

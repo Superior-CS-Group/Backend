@@ -16,7 +16,7 @@ export const validateCreateCatalogInput = (data) => {
 
   if (Validator.isEmpty(data.type)) {
     errors.type = "Type Field is required";
-  } else if (data.type !== "catalog" && data.type !== "subCatalog") {
+  } else if (data.type !== "catalog" && data.type !== "subCatalog"&& data.type !=='variation') {
     errors.type = "Type Field is invalid";
   } else if (data.type === "catalog") {
     if (!data.price) {
