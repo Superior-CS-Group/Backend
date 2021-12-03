@@ -51,12 +51,9 @@ export async function updateCatalog(req, res) {
     if (!isValid) {
       return res.status(400).json({ errors });
     }
-    const isExists = await CatalogModel.findOne({ name: req.body.name });
-    if (isExists) {
-      return res.status(400).json({ errors: { name: "Already Exists" } });
-    }
+  
     const updatedCatalog = await CatalogModel.findByIdAndUpdate(
-      {_id:req.body.catelogId},
+      {_id:req.body._id},
       {
         $set: req.body,
       },
@@ -101,7 +98,7 @@ export async function getCatalogs(req, res) {
   try {
     const catalogs = await CatalogModel.find({
       $or: [{ type: "catalog" }, { type: "subCatalog" }],
-    });
+    })
     return res.status(200).json({
       data: catalogs,
     });
@@ -146,14 +143,15 @@ export async function createVariation(req, res) {
 }
 
 export async function updateVariation(req, res) {
-  try {
+  try { console.log(req.body);
     // const variationId = req.params.variationId;
     const { isValid, errors } = validateCreateCatalogInput(req.body);
     if (!isValid) {
       return res.status(400).json({ errors });
     }
+   
     const updatedVariation = await VariationModelV2.findByIdAndUpdate(
-      {_id:req.body.id},
+      {_id:req.body._id},
       {
         $set: req.body,
       },
