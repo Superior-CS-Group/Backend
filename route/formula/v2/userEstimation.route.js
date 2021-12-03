@@ -2,6 +2,7 @@ import express from "express";
 import { authProtect } from "../../../controller/authController.js";
 import {
   createUserEstimation,
+  deleteUserEstimation,
   getUserEstimation,
   getUserEstimationDetailsById,
   updateUserEstimation,
@@ -18,6 +19,13 @@ UserEstimationRoute.put(
   authProtect,
   updateUserEstimation
 );
+
+UserEstimationRoute.delete(
+  "/delete-user-estimation/:estimationId",
+  authProtect,
+  deleteUserEstimation
+);
+
 UserEstimationRoute.get(
   "/get-user-estimation/:userId",
   authProtect,

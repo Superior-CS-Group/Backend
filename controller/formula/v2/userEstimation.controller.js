@@ -30,7 +30,13 @@ export async function updateUserEstimation(req, res) {
     const userEstimation = await UserEstimationModel.findByIdAndUpdate(
       userEstimationId,
       {
-        $set: { services: req.body.services },
+        $set: {
+          services: req.body.services,
+          estimateSettings: req.body.estimateSettings || {
+            builtInDesignCost: 0,
+            fluffNumberDiscount: 0,
+          },
+        },
       },
       { new: true }
     );
@@ -65,6 +71,16 @@ export async function getUserEstimationDetailsById(req, res) {
   try {
     const userEstimation = await UserEstimationModel.findById(estimationId);
     return res.status(200).json({ data: userEstimation });
+  } catch (error) {
+    return res.status(500).json({ msg: "Internal Server Error" });
+  }
+}
+
+export async function deleteUserEstimation(req, res) {
+  const estimationId = req.params.estimationId;
+  try {
+    await UserEstimationModel.findByIdAndDelete(estimationId);
+    return res.status(200).json({ msg: "Deleted Successfully" });
   } catch (error) {
     return res.status(500).json({ msg: "Internal Server Error" });
   }
