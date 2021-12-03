@@ -49,10 +49,7 @@ export async function updateCatalog(req, res) {
     if (!isValid) {
       return res.status(400).json({ errors });
     }
-    const isExists = await CatalogModel.findOne({ name: req.body.name });
-    if (isExists) {
-      return res.status(400).json({ errors: { name: "Already Exists" } });
-    }
+
     const updatedCatalog = await CatalogModel.findByIdAndUpdate(
       { _id: catalogId },
       {
@@ -137,11 +134,12 @@ export async function createVariation(req, res) {
 
 export async function updateVariation(req, res) {
   try {
-    const variationId = req.params.variationId;
+    const variationId = req.body._id;
     const { isValid, errors } = validateCreateVariationInput(req.body);
     if (!isValid) {
       return res.status(400).json({ errors });
     }
+
     const updatedVariation = await VariationModelV2.findByIdAndUpdate(
       { _id: variationId },
       {
