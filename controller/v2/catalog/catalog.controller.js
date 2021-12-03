@@ -6,7 +6,6 @@ import {
   validateCreateVariationInput,
 } from "../../../validator/catalog/v2/catalog.js";
 import base64ToFile from "../../../utils/base64ToFile.js";
-import StaffModel from "../../../model/staff/staffModel.js";
 
 export async function createCatalog(req, res) {
   try {
@@ -45,15 +44,14 @@ export async function createCatalog(req, res) {
 
 export async function updateCatalog(req, res) {
   try {
-    // const catalogId = req.params.catalogId;
-    console.log(req.body)
+    const catalogId = req.params.catalogId;
     const { isValid, errors } = validateCreateCatalogInput(req.body);
     if (!isValid) {
       return res.status(400).json({ errors });
     }
   
     const updatedCatalog = await CatalogModel.findByIdAndUpdate(
-      {_id:req.body._id},
+      { _id: catalogId },
       {
         $set: req.body,
       },
@@ -69,28 +67,17 @@ export async function updateCatalog(req, res) {
   }
 }
 
-export const RemoveCatelog = async (req, res) => {
-  const userId = req.query.userId || req.user._id;
-  // console.log(userId);
-  const currentUser = await StaffModel.findById(userId);
-
-  if (!currentUser) {
-    return res.status(401).json({ error: "User not found" });
-  }
+export const deleteCatelog = async (req, res) => {
+  const catelogId = req.params.catalogId;
   try {
-
-    await VariationModelV2.deleteMany({ catelogId:req.body.id });
-    await CatalogModel.findByIdAndDelete({ _id: req.body.id });
-
-    const checkData = await CatalogModel.find().sort({ _id: -1 });
-
-    res.status(200).json({
-      DataLength: checkData.length,
-      data: checkData,
-    });
+    const catalog = await CatalogModel.findByIdAndDelete({ _id: catelogId });
+    if (catalog.type === "subCatalog") {
+      await VariationModelV2.deleteMany({ catelogId });
+    }
+    return res.status(200).json({ msg: "Catalog deleted successfully" });
   } catch (error) {
-    console.log("error:", error);
-    res.status(500).json({ msg: "Internal server error" });
+    console.log(error);
+    return res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -109,7 +96,6 @@ export async function getCatalogs(req, res) {
       .json({ msg: "Internal Server Error", errors: error });
   }
 }
-
 
 export async function createVariation(req, res) {
   try {
@@ -143,15 +129,15 @@ export async function createVariation(req, res) {
 }
 
 export async function updateVariation(req, res) {
-  try { console.log(req.body);
-    // const variationId = req.params.variationId;
-    const { isValid, errors } = validateCreateCatalogInput(req.body);
+  try {
+    const variationId = req.params.variationId;
+    const { isValid, errors } = validateCreateVariationInput(req.body);
     if (!isValid) {
       return res.status(400).json({ errors });
     }
    
     const updatedVariation = await VariationModelV2.findByIdAndUpdate(
-      {_id:req.body._id},
+      { _id: variationId },
       {
         $set: req.body,
       },
@@ -167,43 +153,17 @@ export async function updateVariation(req, res) {
   }
 }
 
-export const RemoveVariation = async (req, res) => {
-  const userId = req.query.userId || req.user._id;
-  // console.log(userId);
-  const currentUser = await StaffModel.findById(userId);
-
-  if (!currentUser) {
-    return res.status(401).json({ error: "User not found" });
-  }
+export const deleteVariation = async (req, res) => {
+  const variationId = req.params.variationId;
   try {
-    await VariationModelV2.findByIdAndDelete({ _id: req.body.id });
-
-    const checkData = await VariationModelV2.find().sort({ _id: -1 });
-
-    res.status(200).json({
-      DataLength: checkData.length,
-      data: checkData,
+    await VariationModelV2.findByIdAndDelete({
+      _id: variationId,
     });
+    return res.status(200).json({ msg: "Variation deleted successfully" });
   } catch (error) {
-    console.log("error:", error);
-    res.status(500).json({ msg: "Internal server error" });
+    return res.status(500).json({ msg: "Internal Server Error" });
   }
 };
-
-export async function getVariationsData(req, res) {
-  try {
-    const variationId = req.query.variationId;
-    
-    const variations = await VariationModelV2.findById({ _id:req.body.id });
-    console.log("valriations: ", variations);
-    return res.status(200).json({ data: variations });
-  } catch (error) {
-    console.log("error: ", error);
-    return res
-      .status(500)
-      .json({ msg: "Internal Server Error", errors: error });
-  }
-}
 
 export async function getVariationsByCatalog(req, res) {
   try {
@@ -230,7 +190,7 @@ export async function searchCatalogByName(req, res) {
     const type = req.query.searchFor;
     const catalogName = req.params.catalogName || "";
     let filter = {};
-    if (!type || !["catalog", "service", "variation"].includes(type)) {
+    if (!type || !["catalog", "service", "subCatalog"].includes(type)) {
       filter = {
         $or: [{ type: "catalog" }, { type: "service" }],
       };
@@ -303,7 +263,7 @@ export async function updateService(req, res) {
 export async function getServices(req, res) {
   try {
     const pageNumber = req.query.pageNumber || 1;
-    const pageSize = req.query.pageSize || 10;
+    const pageSize = req.query.pageSize || 100;
     const services = await CatalogModel.find({ type: "service" })
       .skip((pageNumber - 1) * pageSize)
       .limit(pageSize);
@@ -316,26 +276,14 @@ export async function getServices(req, res) {
   }
 }
 
-
-export const removeService = async (req, res) => {
-  const userId = req.query.userId || req.user._id;
-  // console.log(userId);
-  const currentUser = await StaffModel.findById(userId);
-
-  if (!currentUser) {
-    return res.status(401).json({ error: "User not found" });
-  }
+export const deleteService = async (req, res) => {
+  const serviceId = req.params.serviceId;
   try {
-    await CatalogModel.findByIdAndDelete({ _id: req.body.id });
-
-    const checkData = await CatalogModel.find().sort({ _id: -1 });
-
-    res.status(200).json({
-      DataLength: checkData.length,
-      data: checkData,
+    await CatalogModel.findByIdAndDelete({
+      _id: serviceId,
     });
+    return res.status(200).json({ msg: "Service deleted successfully" });
   } catch (error) {
-    console.log("error:", error);
-    res.status(500).json({ msg: "Internal server error" });
+    return res.status(500).json({ msg: "Internal Server Error" });
   }
 };
