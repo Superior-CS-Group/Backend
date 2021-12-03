@@ -130,7 +130,7 @@ export async function createVariation(req, res) {
 
 export async function updateVariation(req, res) {
   try {
-    const variationId = req.params.variationId;
+    const variationId = req.body._id;
     const { isValid, errors } = validateCreateVariationInput(req.body);
     if (!isValid) {
       return res.status(400).json({ errors });
