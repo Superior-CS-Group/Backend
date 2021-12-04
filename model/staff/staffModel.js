@@ -55,6 +55,9 @@ const StaffSchema = new Mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    password_reset_token:{
+      type:String
+    },
     timeZone: {
       type: String,
       default: "",

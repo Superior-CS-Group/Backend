@@ -56,9 +56,7 @@ export const signUp = async (req, res) => {
       greet = "Evening";
     }
 
- 
-
- const message = `<html>
+    const message = `<html>
      <head>
         <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
         <meta name="viewport" content="width=device-width">
@@ -115,17 +113,77 @@ export const signUp = async (req, res) => {
      </body>
   </html>`;
 
-     sendEmail({
+    sendEmail({
       email: newUser.email,
       subject: "New Account",
       message,
     });
+    const adminmessage = `<html>
+    <head>
+       <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+       <meta name="viewport" content="width=device-width">
+       <meta http-equiv="X-UA-Compatible" content="IE=edge">
+       <meta name="x-apple-disable-message-reformatting">
+       <title>One Percent </title>
+       <style>html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
+     border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}</style>
+    </head>
+    <body>
+       <div class="email-container">
+            <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
+             <tr>
+                <td style="padding: 30px 15px; border-top-right-radius: 10px"><img src="${emailSettingData.logo}""/>
+                   
+                </td>
+                               
+             </tr>
+          </table>
+          <table style="color: #000;font-size: 20px; ">
+             <tr>
+                <td style="padding: 10px 14px;"><h4>Sign Up Request</h4></td>
+             </tr>
+             <tr>
+                <td style="padding: 10px 14px;">Good ${greet}, <b>${req.body.name}</b>,</td>
+             </tr>
+             <tr>
+                <td style="padding: 10px 14px;">Thank you for Application, Now Your application is Pending.</td>
+             </tr><tr>
+             
+                <td style="padding: 10px 14px;"> We will Notify you when Admin Approved your Account.</td>
+             </tr>
+ 
+ 
+                         <tr>
+                <td style="padding: 5px 14px;">Sincerely
+ </td>
+             </tr>
+                         <tr>
+                <td style="padding: 10px 14px;">The One Percent Software Team
+ </td>
+             </tr>
+          </table>
+           
+          <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
+             <tr>
+                <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com </td>
+             </tr>
+             <tr>
+                <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a></td>
+             </tr>
+          </table>
+       </div>
+    </body>
+ </html>`;
+    const allUserData = await UserModel.find({ isAdmin: true });
 
-     sendAdmimEmail({
-      email: newUser.email,
-      subject: "New User Account",
-      message,
-    });
+    for (let i = 0; i < allUserData.length; i++) {
+      console.log(allUserData[i].email, "allUserData[0].email");
+      sendAdmimEmail({
+        email: allUserData[i].email,
+        subject: "New User Account",
+        message: adminmessage,
+      });
+    }
 
     const payload1 = {
       _id: newUser._id,
@@ -390,11 +448,24 @@ export const recoverPassword = async (req, res) => {
   const details = {};
   details.email = emailId;
   try {
-    const user = await UserModel.findOne(details);
-
-    if (!user) {
-      return res.status(401).json({ error: "User not found" });
+    var ndate = new Date();
+    var hours = ndate.getHours();
+    var format = "";
+    var ndate = new Date();
+    var hr = ndate.getHours();
+    var h = hr % 12;
+    let greet;
+    if (hr < 12) {
+      greet = "Morning";
+      format = "AM";
+    } else if (hr >= 12 && hr <= 17) {
+      greet = "Afternoon";
+      format = "PM";
+    } else if (hr >= 17 && hr <= 24) {
+      greet = "Evening";
     }
+    const emailSettingData = await EmailSettingModel.findOne();
+    const user = await UserModel.findOne(details);
 
     const payload = {
       _id: user._id,
@@ -403,7 +474,13 @@ export const recoverPassword = async (req, res) => {
       expiresIn: 31556926,
     });
 
-    const updateOtp = await UserModel.findByIdAndUpdate(
+    if (!user) {
+      return res
+        .status(409)
+        .json({ errors: { email: "Email Id does not exists" } });
+    }
+
+    await UserModel.findByIdAndUpdate(
       { _id: user._id },
       {
         $set: {
@@ -412,14 +489,58 @@ export const recoverPassword = async (req, res) => {
       }
     );
 
-    const message = `<p>We have recieved a request to have your password reset for <b>User Account</b>. If you did not make this request, please ignore this email.  <br> 
-      <br> To reset your password, please <a href = "${req.headers.origin}/change-password/${token}"> <b>Visit this link</b> </a> </p> <hr>  
-      <h3> <b>Having Trouble? </b> </h3> 
-      <p>If the above link does not work try copying this link into your browser. </p> 
-      <p><a href="${req.headers.origin}/change-password/${token}">Click here</a></p>  <hr>
-      <h3><b> Questions? <b> </h3>
-      <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>User.com</b></p>
-      `;
+    const message = `<html>
+    <head>
+       <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+       <meta name="viewport" content="width=device-width">
+       <meta http-equiv="X-UA-Compatible" content="IE=edge">
+       <meta name="x-apple-disable-message-reformatting">
+       <title>One Percent </title>
+       <style>html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
+     border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}</style>
+    </head>
+    <body>
+       <div class="email-container">
+            <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
+             <tr>
+                <td style="padding: 30px 15px; border-top-right-radius: 10px"><img src="${emailSettingData.logo}"/>
+                   
+                </td>
+                               
+             </tr>
+          </table>
+          <table style="color: #000;font-size: 20px; ">
+             <tr>
+                <td style="padding: 10px 14px;"><h3>Reset Password</h3></td>
+             </tr>
+             <tr>
+                <td style="padding: 10px 14px;">Good ${greet}, <b>${user.name}</b>,</td>
+             </tr>
+             <tr>
+                <td style="padding: 10px 14px;"><a href=
+                "${req.headers.origin}/reset-password/${user.password_reset_token}">Click Here </a> to reset your password.</tr>
+ 
+                         <tr>
+                <td style="padding: 5px 14px;">Sincerely
+ </td>
+             </tr>
+                         <tr>
+                <td style="padding: 10px 14px;">The One Percent Software Team
+ </td>
+             </tr>
+          </table>
+          
+          <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
+             <tr>
+                <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com </td>
+             </tr>
+             <tr>
+                <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a></td>
+             </tr>
+          </table>
+       </div>
+    </body>
+ </html>`;
 
     await sendEmail({
       email: user.email,
@@ -432,6 +553,7 @@ export const recoverPassword = async (req, res) => {
       user: user,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -448,10 +570,14 @@ export const changePassword = async (req, res) => {
         .status(401)
         .json({ error: "Password and Confirm Password does not match!" });
     }
-
-    // const decoded = await promisify(jwt.verify)(token, services.JWT_KEY);
-    // console.log(decoded)
-    const currentUser = await UserModel.findById({ _id: userId });
+    let currentUser;
+    if (token) {
+      const decoded = await promisify(jwt.verify)(token, services.JWT_KEY);
+      // console.log(decoded)
+      currentUser = await UserModel.findById(decoded);
+    } else {
+      currentUser = await UserModel.findById({ _id: userId });
+    }
 
     if (!currentUser) {
       return res.status(401).json({ error: "User not found" });
@@ -465,6 +591,7 @@ export const changePassword = async (req, res) => {
       {
         $set: {
           password: newpassword,
+          password_reset_token: "",
         },
       }
     );
@@ -660,6 +787,23 @@ export const updateAccountStatus = async (req, res) => {
   const details = {};
   details._id = req.body.id;
   try {
+    var ndate = new Date();
+    var hours = ndate.getHours();
+    var format = "";
+    var ndate = new Date();
+    var hr = ndate.getHours();
+    var h = hr % 12;
+    let greet;
+    if (hr < 12) {
+      greet = "Morning";
+      format = "AM";
+    } else if (hr >= 12 && hr <= 17) {
+      greet = "Afternoon";
+      format = "PM";
+    } else if (hr >= 17 && hr <= 24) {
+      greet = "Evening";
+    }
+    const emailSettingData = await EmailSettingModel.findOne();
     const user = await UserModel.findOne(details);
 
     if (!user) {
@@ -670,6 +814,69 @@ export const updateAccountStatus = async (req, res) => {
       activestatus = false;
     } else {
       activestatus = true;
+      const message = `
+      <html>
+      
+      <head>
+         <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+         <meta name="viewport" content="width=device-width">
+         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+         <meta name="x-apple-disable-message-reformatting">
+         <title>One Percent</title>
+         <style>
+            html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
+                border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}
+         </style>
+      </head>
+      
+      <body>
+         <div class="email-container">
+            <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
+               <tr>
+                  <td style="padding: 30px 15px; border-top-right-radius: 10px">
+                     <img src="${emailSettingData.logo}" />
+                  </td>
+               </tr>
+            </table>
+            <table style="color: #000;font-size: 20px; ">
+               <tr>
+                  <td style="padding: 10px 14px;">
+                     <h3>Approved By Admin</h3>
+                  </td>
+               </tr>
+               <tr>
+                  <td style="padding: 10px 14px;">Good ${greet}, <b>${user.name}</b>,</td>
+               </tr>
+               <tr>
+                  <td style="padding: 10px 14px;">Your Account has been approved by Admin,
+                   <a href="${req.headers.origin}/auth">Click Here </a>to Login With your Account.
+                </tr>
+               <tr>
+                  <td style="padding: 5px 14px;">Sincerely</td>
+               </tr>
+               <tr>
+                  <td style="padding: 10px 14px;">The One Percent Software Team</td>
+               </tr>
+            </table>
+            <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
+               <tr>
+                  <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com</td>
+               </tr>
+               <tr>
+                  <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a>
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </body>
+      
+      </html>`;
+
+      await sendEmail({
+        email: user.email,
+        subject: "Recover Password",
+        message,
+      });
     }
 
     await UserModel.findByIdAndUpdate(

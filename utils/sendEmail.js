@@ -6,7 +6,7 @@ const sendEmail = async (options) => {
  
   const emailsettings = await SMTPModel.findOne();
 
-  console.log(emailsettings)
+  // console.log(emailsettings)
   let host = emailsettings.host;
   let user = emailsettings.username;
   let pass = emailsettings.password;
