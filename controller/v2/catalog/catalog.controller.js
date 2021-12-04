@@ -1,5 +1,6 @@
 import CatalogModel from "../../../model/services/v2/catalogModel.js";
 import VariationModelV2 from "../../../model/services/v2/variationModel.js";
+import FormulaModelV2 from "../../../model/formula/v2/formula.model.js";
 import {
   validateCreateCatalogInput,
   validateCreateServiceInput,
@@ -69,7 +70,18 @@ export async function updateCatalog(req, res) {
 
 export const deleteCatelog = async (req, res) => {
   const catelogId = req.params.catalogId;
+
   try {
+    const isCatalogUsed = await FormulaModelV2.findOne({ catalogs: catelogId });
+    if (isCatalogUsed) {
+      return res.status(400).json({
+        errors: {
+          msg: `${
+            isCatalogUsed.type === "service" ? "Service" : "Catalog"
+          } is used in formula, cannot be deleted`,
+        },
+      });
+    }
     const catalog = await CatalogModel.findByIdAndDelete({ _id: catelogId });
     if (catalog.type === "subCatalog") {
       await VariationModelV2.deleteMany({ catelogId });
@@ -243,7 +255,10 @@ export async function updateService(req, res) {
     if (!isValid) {
       return res.status(400).json({ errors });
     }
-    const isExists = await CatalogModel.findOne({ name: req.body.name });
+    const isExists = await CatalogModel.findOne({
+      name: req.body.name,
+      _id: { $ne: serviceId },
+    });
     if (isExists) {
       return res.status(400).json({ errors: { name: "Already Exists" } });
     }
