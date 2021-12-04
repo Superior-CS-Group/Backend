@@ -11,9 +11,7 @@ const sendEmail = async (options) => {
   let user = emailsettings.username;
   let pass = emailsettings.password;
 
-  // let host = 'gmail';
-  // let user = 'tonyc@superiorcsgroup.com';
-  // let pass = 'superiorcsgroup#123';
+
 
   var transporter = nodemailer.createTransport(
     smtpTransport({

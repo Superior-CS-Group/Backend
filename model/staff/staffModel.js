@@ -51,6 +51,10 @@ const StaffSchema = new Mongoose.Schema(
       type: String,
       default: "",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     timeZone: {
       type: String,
       default: "",

@@ -7,6 +7,7 @@ import EmailSettingModel from "../model/emailSettingModel.js";
 import validateSignUpInput from "../validator/signUp.validator.js";
 import services from "../utils/services.js";
 import sendEmail from "../utils/sendEmail.js";
+import sendAdmimEmail from "../utils/sendEmail.js";
 import base64ToFile from "../utils/base64ToFile.js";
 import fs from "fs";
 
@@ -55,72 +56,9 @@ export const signUp = async (req, res) => {
       greet = "Evening";
     }
 
-    const adminMessage = `<html>
-    <head>
-       <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
-       <meta name="viewport" content="width=device-width">
-       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-       <meta name="x-apple-disable-message-reformatting">
-       <title>One Percent </title>
-       <style>html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
-     border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}</style>
-    </head>
-    <body>
-       <div class="email-container">
-            <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
-             <tr>
-                <td style="padding: 30px 15px; border-top-right-radius: 10px"><img src="${emailSettingData.logo}"/>
-                   
-                </td>
-                               
-             </tr>
-          </table>
-          <table style="color: #000;font-size: 20px; ">
-             <tr>
-                <td style="padding: 10px 14px;"><h3>Account Approval request</h3></td>
-             </tr>
-             <tr>
-                <td style="padding: 10px 14px;">A new Account had been created </td>
-             </tr>
-             <tr>
-                <td style="padding: 10px 14px;"><a href="">Click Here </a> to see the request of new account.</td>
-             </tr>
-             
  
- 
-                         <tr>
-                <td style="padding: 5px 14px;">Sincerely
- </td>
-             </tr>
-                         <tr>
-                <td style="padding: 10px 14px;">The One Percent Software Team
- </td>
-             </tr>
-          </table>
-          <table style=" color: #000; font-size: 20px;">
-             <tr>
-                <td style="text-align: center;padding-bottom: 5px;">
-                   <ul style="display: inline-block;padding: 0">
-                <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/facebook.png"/></a></li>
-                <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/twitter.png"/></a></li>
-                <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/instagram.png"/></a></li>
-                <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/youtube.png"/></a></li></ul></td>
-             </tr>
-             
-          </table>
-          <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
-             <tr>
-                <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com </td>
-             </tr>
-             <tr>
-                <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a></td>
-             </tr>
-          </table>
-       </div>
-    </body>
- </html>`;
 
-    const message = `<html>
+ const message = `<html>
      <head>
         <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
         <meta name="viewport" content="width=device-width">
@@ -164,17 +102,7 @@ export const signUp = async (req, res) => {
   </td>
               </tr>
            </table>
-           <table style=" color: #000; font-size: 20px;">
-              <tr>
-                 <td style="text-align: center;padding-bottom: 5px;">
-                    <ul style="display: inline-block;padding: 0">
-                 <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/facebook.png"/></a></li>
-                 <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/twitter.png"/></a></li>
-                 <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/instagram.png"/></a></li>
-                 <li style="display: inline-block;    padding: 10px 15px;"><a href="#"><img src="http://digimonk.net:1630/youtube.png"/></a></li></ul></td>
-              </tr>
-              
-           </table>
+            
            <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
               <tr>
                  <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com </td>
@@ -187,16 +115,16 @@ export const signUp = async (req, res) => {
      </body>
   </html>`;
 
-    await sendEmail({
+     sendEmail({
       email: newUser.email,
       subject: "New Account",
       message,
     });
 
-    await sendEmail({
-      email: "garrym@superiorcsgroup.com",
-      subject: "New Account",
-      adminMessage,
+     sendAdmimEmail({
+      email: newUser.email,
+      subject: "New User Account",
+      message,
     });
 
     const payload1 = {
@@ -227,42 +155,42 @@ export const signUp = async (req, res) => {
         //   expiresIn: 31556926,
         // });
 
-        let profileImage = "";
-        if (req.body.profileImage) {
-          profileImage = await base64ToFile(
-            req.body.profileImage,
-            newUser._id,
-            profileImage,
-            req
-          );
-        } else {
-          profileImage = "";
-        }
+        // let profileImage = "";
+        // if (req.body.profileImage) {
+        //   profileImage = await base64ToFile(
+        //     req.body.profileImage,
+        //     newUser._id,
+        //     profileImage,
+        //     req
+        //   );
+        // } else {
+        //   profileImage = "";
+        // }
 
-        let companyImage = "";
-        if (req.body.companyImage) {
-          companyImage = await base64ToFile(
-            req.body.companyImage,
-            newUser._id,
-            companyImage,
-            req
-          );
-        } else {
-          companyImage = "";
-        }
+        // let companyImage = "";
+        // if (req.body.companyImage) {
+        //   companyImage = await base64ToFile(
+        //     req.body.companyImage,
+        //     newUser._id,
+        //     companyImage,
+        //     req
+        //   );
+        // } else {
+        //   companyImage = "";
+        // }
 
-        const userData = await UserModel.findByIdAndUpdate(
-          { _id: newUser._id },
-          {
-            $set: { profileImage: profileImage, companyImage: companyImage },
-          },
-          { new: true }
-        );
+        // const userData = await UserModel.findByIdAndUpdate(
+        //   { _id: newUser._id },
+        //   {
+        //     $set: { profileImage: profileImage, companyImage: companyImage },
+        //   },
+        //   { new: true }
+        // );
 
         return res.status(200).json({
           message: "User registred Successfully",
           // token: token,
-          user: userData,
+          user: newUser,
         });
       });
     });
@@ -513,7 +441,7 @@ export const changePassword = async (req, res) => {
   const userId = req.body.id;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-console.log(req.body)
+  console.log(req.body);
   try {
     if (password != confirmPassword) {
       return res
@@ -523,7 +451,7 @@ console.log(req.body)
 
     // const decoded = await promisify(jwt.verify)(token, services.JWT_KEY);
     // console.log(decoded)
-    const currentUser = await UserModel.findById({_id:userId});
+    const currentUser = await UserModel.findById({ _id: userId });
 
     if (!currentUser) {
       return res.status(401).json({ error: "User not found" });
@@ -729,7 +657,6 @@ export const notificationSettings = async (req, res) => {
 };
 
 export const updateAccountStatus = async (req, res) => {
-   
   const details = {};
   details._id = req.body.id;
   try {
@@ -753,7 +680,43 @@ export const updateAccountStatus = async (req, res) => {
         },
       }
     );
-    const user2 = await UserModel.findById({_id: user._id});
+    const user2 = await UserModel.findById({ _id: user._id });
+
+    return res.status(200).json({
+      message: "Status Updated",
+      user: user2,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const updateIsadminStatus = async (req, res) => {
+  const details = {};
+  details._id = req.body.id;
+
+  try {
+    const user = await UserModel.findOne(details);
+    console.log(user);
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    let isAdmin;
+    if (user.isAdmin === true) {
+      isAdmin = false;
+    } else {
+      isAdmin = true;
+    }
+
+    await UserModel.findByIdAndUpdate(
+      { _id: user._id },
+      {
+        $set: {
+          isAdmin: isAdmin,
+        },
+      }
+    );
+    const user2 = await UserModel.findById({ _id: user._id });
 
     return res.status(200).json({
       message: "Status Updated",

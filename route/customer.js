@@ -16,6 +16,7 @@ import {
   getUserList,
   removeUserDetails,
   updateAccountStatus,
+  updateIsadminStatus,
 } from "../controller/userController.js";
 
 import {
@@ -52,6 +53,7 @@ UserRoute.get("/user-list", authProtect, getUserList);
 UserRoute.get("/user-delete", authProtect, removeUserDetails);
 UserRoute.post("/update", authProtect, updateAccount);
 UserRoute.post("/update-status", authProtect, updateAccountStatus);
+UserRoute.post("/update-isadmn-status", authProtect, updateIsadminStatus);
 UserRoute.get("/remove-profile-image", authProtect, removeProfileImage);
 UserRoute.post("/notification-settings", authProtect, notificationSettings);
 
