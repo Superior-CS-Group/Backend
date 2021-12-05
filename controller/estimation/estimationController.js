@@ -71,6 +71,34 @@ export const UpcomingEstimaitonLead = async (req, res) => {
     res.status(500).json({ msg: "Internal server error" });
   }
 };
+export const filterAndSort = async (req, res) => {
+  let data = [];
+
+  // const userId = req.query.userId || req.user._id;
+  // console.log(userId);
+  // const currentUser = await StaffModel.findById(userId);
+
+  // if (!currentUser) {
+  //   return res.status(401).json({ error: "User not found" });
+  // }
+  try {
+    const leadData = await EstimationModel.find({
+      leadSource: "Website",
+      estimaitonStatus: "Process",
+    })
+      .sort({ _id: -1 })
+      .populate("leadPerson")
+      .populate("customerLeadId");
+
+    res.status(200).json({
+      DataLength: leadData.length,
+      Data: leadData,
+    });
+  } catch (error) {
+    console.log("error:", error);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
 
 export const ChangeStatus = async (req, res) => {
   const userId = req.query.userId || req.user._id;
