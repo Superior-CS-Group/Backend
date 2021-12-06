@@ -48,7 +48,7 @@ UserRoute.post("/change-password", changePassword);
 UserRoute.post("/change-email-link", changeEmail);
 UserRoute.post("/update-email", updateEmail);
 
-UserRoute.get("/get-details", authProtect, getUserDetails);
+UserRoute.get("/get-user-details", authProtect, getUserDetails);
 UserRoute.get("/user-list", authProtect, getUserList);
 UserRoute.get("/user-delete", authProtect, removeUserDetails);
 UserRoute.post("/update", authProtect, updateAccount);

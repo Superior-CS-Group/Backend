@@ -42,6 +42,10 @@ const UserEstimationSchema = new mongoose.Schema(
           value: {
             type: Number,
           },
+          editable: {
+            type: Boolean,
+            default: false,
+          },
         },
       ],
       default: [
