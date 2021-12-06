@@ -3,7 +3,7 @@ import Mongoose from "mongoose";
 const TabFilterSchema = new Mongoose.Schema(
   {
     userId: {
-      type: [Mongoose.Types.ObjectId],
+      type: Mongoose.Types.ObjectId,
       ref: "User",
     },
     name: {

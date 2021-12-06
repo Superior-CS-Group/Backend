@@ -48,7 +48,7 @@ export const UpcomingEstimaitonLead = async (req, res) => {
   let data = [];
 
   const userId = req.query.userId || req.user._id;
-  console.log(userId);
+  console.log("id===", req.user);
   const currentUser = await StaffModel.findById(userId);
 
   if (!currentUser) {
@@ -73,22 +73,29 @@ export const UpcomingEstimaitonLead = async (req, res) => {
 };
 export const filterAndSort = async (req, res) => {
   let data = [];
+  console.log("id2===", req.user);
+  const userId = req.query.userId || req.user._id;
 
-  // const userId = req.query.userId || req.user._id;
-  // console.log(userId);
-  // const currentUser = await StaffModel.findById(userId);
+  const currentUser = await StaffModel.findById(userId);
 
-  // if (!currentUser) {
-  //   return res.status(401).json({ error: "User not found" });
-  // }
+  if (!currentUser) {
+    return res.status(401).json({ error: "User not found" });
+  }
   try {
+    let filterData = req.body;
     const leadData = await EstimationModel.find({
-      leadSource: "Website",
-      estimaitonStatus: "Process",
+      leadPerson: { $in: [userId] },
+      // leadSource: "Website",
+      // customerLeadId: { $size: 1 },
     })
       .sort({ _id: -1 })
       .populate("leadPerson")
-      .populate("customerLeadId");
+      .populate({
+        path: "customerLeadId",
+        match: {
+          estimaitonStatus: filterData.estimaitonStatus,
+        },
+      });
 
     res.status(200).json({
       DataLength: leadData.length,

@@ -24,6 +24,6 @@ estimationRoute.post(
   authProtect,
   sentFinalEstimation
 );
-estimationRoute.post("/filter-sort", filterAndSort);
+estimationRoute.post("/filter-sort", authProtect, filterAndSort);
 
 export default estimationRoute;
