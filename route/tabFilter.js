@@ -7,8 +7,8 @@ import {
 } from "../controller/tabController/tabFilter.js";
 const TabFilterRoute = express.Router();
 
-TabFilterRoute.post("/add", addTab);
-TabFilterRoute.get("/list", listTab);
-TabFilterRoute.post("/delete", removeTab);
+TabFilterRoute.post("/add", authProtect, addTab);
+TabFilterRoute.get("/list", authProtect, listTab);
+TabFilterRoute.post("/delete", authProtect, removeTab);
 removeTab;
 export default TabFilterRoute;

@@ -7,15 +7,17 @@ import { InvoiceNumber } from "invoice-number";
 import TabFilterModel from "../../model/tabFilter.js";
 
 export const addTab = async (req, res) => {
-  //   const userId = req.query.userId || req.user._id;
-  //   console.log(req.body);
-  //   const currentUser = await StaffModel.findById(userId);
+  const userId = req.query.userId || req.user._id;
+  console.log(req.body);
+  const currentUser = await StaffModel.findById(userId);
 
-  //   if (!currentUser) {
-  //     return res.status(401).json({ errors: "User not found" });
-  //   }
+  if (!currentUser) {
+    return res.status(401).json({ errors: "User not found" });
+  }
 
   try {
+    let TabData = req.body;
+    TabData["userId"] = userId;
     let Tab = await TabFilterModel.create(req.body);
 
     res.status(200).json({
@@ -29,16 +31,16 @@ export const addTab = async (req, res) => {
 };
 
 export const listTab = async (req, res) => {
-  //   const userId = req.query.userId || req.user._id;
-  //   console.log(req.body);
-  //   const currentUser = await StaffModel.findById(userId);
+  const userId = req.query.userId || req.user._id;
+  console.log(req.body);
+  const currentUser = await StaffModel.findById(userId);
 
-  //   if (!currentUser) {
-  //     return res.status(401).json({ errors: "User not found" });
-  //   }
+  if (!currentUser) {
+    return res.status(401).json({ errors: "User not found" });
+  }
   console.log(req);
   try {
-    let Tab = await TabFilterModel.find();
+    let Tab = await TabFilterModel.find({ userId });
 
     res.status(200).json({
       message: "Success",
