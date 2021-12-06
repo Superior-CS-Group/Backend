@@ -28,8 +28,8 @@ const StaffSchema = new Mongoose.Schema(
       default: "",
     },
     activeStatus: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "Pending",
     },
     companyName: {
       type: String,

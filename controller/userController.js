@@ -119,61 +119,63 @@ export const signUp = async (req, res) => {
       message,
     });
     const adminmessage = `<html>
+
     <head>
        <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
        <meta name="viewport" content="width=device-width">
        <meta http-equiv="X-UA-Compatible" content="IE=edge">
        <meta name="x-apple-disable-message-reformatting">
-       <title>One Percent </title>
-       <style>html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
-     border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}</style>
+       <title>One Percent</title>
+       <style>
+          html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
+              border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}
+       </style>
     </head>
+    
     <body>
        <div class="email-container">
-            <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
+          <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
              <tr>
-                <td style="padding: 30px 15px; border-top-right-radius: 10px"><img src="${emailSettingData.logo}""/>
-                   
+                <td style="padding: 30px 15px; border-top-right-radius: 10px">
+                   <img src="${emailSettingData.logo}" />
                 </td>
-                               
              </tr>
           </table>
           <table style="color: #000;font-size: 20px; ">
-             <tr>
-                <td style="padding: 10px 14px;"><h4>Sign Up Request</h4></td>
-             </tr>
-             <tr>
-                <td style="padding: 10px 14px;">Good ${greet}, <b>${req.body.name}</b>,</td>
-             </tr>
-             <tr>
-                <td style="padding: 10px 14px;">Thank you for Application, Now Your application is Pending.</td>
-             </tr><tr>
-             
-                <td style="padding: 10px 14px;"> We will Notify you when Admin Approved your Account.</td>
-             </tr>
- 
- 
-                         <tr>
-                <td style="padding: 5px 14px;">Sincerely
- </td>
-             </tr>
-                         <tr>
-                <td style="padding: 10px 14px;">The One Percent Software Team
- </td>
-             </tr>
-          </table>
-           
+            <tr>
+               <td style="padding: 10px 14px;"><h3>Account Approval request</h3></td>
+            </tr>
+            <tr>
+               <td style="padding: 10px 14px;">A new Account had been created </td>
+            </tr>
+            <tr>
+               <td style="padding: 10px 14px;"><a href="">Click Here </a> to see the request of new account.</td>
+            </tr>
+            
+
+
+                        <tr>
+               <td style="padding: 5px 14px;">Sincerely
+</td>
+            </tr>
+                        <tr>
+               <td style="padding: 10px 14px;">The One Percent Software Team
+</td>
+            </tr>
+         </table>
           <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
              <tr>
-                <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com </td>
+                <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com</td>
              </tr>
              <tr>
-                <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a></td>
+                <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a>
+                </td>
              </tr>
           </table>
        </div>
     </body>
- </html>`;
+    
+    </html>`;
     const allUserData = await UserModel.find({ isAdmin: true });
 
     for (let i = 0; i < allUserData.length; i++) {
@@ -311,8 +313,11 @@ export const signIn = async (req, res) => {
     if (!bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(401).json({ error: "Password are incorrect " });
     }
-    if (!user.activeStatus) {
+    if (user.activeStatus==="Pending") {
       return res.status(401).json({ error: "Account not activate!" });
+    }
+    if (user.activeStatus==="Rejected") {
+      return res.status(401).json({ error: "Account rejected!" });
     }
     const payload = {
       _id: user._id,
@@ -810,80 +815,79 @@ export const updateAccountStatus = async (req, res) => {
       return res.status(401).json({ error: "User not found" });
     }
     let activestatus;
-    if (user.activeStatus === true) {
-      activestatus = false;
-    } else {
-      activestatus = true;
-      const message = `
-      <html>
-      
-      <head>
-         <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
-         <meta name="viewport" content="width=device-width">
-         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-         <meta name="x-apple-disable-message-reformatting">
-         <title>One Percent</title>
-         <style>
-            html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
-                border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}
-         </style>
-      </head>
-      
-      <body>
-         <div class="email-container">
-            <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
-               <tr>
-                  <td style="padding: 30px 15px; border-top-right-radius: 10px">
-                     <img src="${emailSettingData.logo}" />
-                  </td>
-               </tr>
-            </table>
-            <table style="color: #000;font-size: 20px; ">
-               <tr>
-                  <td style="padding: 10px 14px;">
-                     <h3>Approved By Admin</h3>
-                  </td>
-               </tr>
-               <tr>
-                  <td style="padding: 10px 14px;">Good ${greet}, <b>${user.name}</b>,</td>
-               </tr>
-               <tr>
-                  <td style="padding: 10px 14px;">Your Account has been approved by Admin,
-                   <a href="${req.headers.origin}/auth">Click Here </a>to Login With your Account.
-                </tr>
-               <tr>
-                  <td style="padding: 5px 14px;">Sincerely</td>
-               </tr>
-               <tr>
-                  <td style="padding: 10px 14px;">The One Percent Software Team</td>
-               </tr>
-            </table>
-            <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
-               <tr>
-                  <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com</td>
-               </tr>
-               <tr>
-                  <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a>
-                  </td>
-               </tr>
-            </table>
-         </div>
-      </body>
-      
-      </html>`;
+   
+    let message = `
+    <html>
+    
+    <head>
+       <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+       <meta name="viewport" content="width=device-width">
+       <meta http-equiv="X-UA-Compatible" content="IE=edge">
+       <meta name="x-apple-disable-message-reformatting">
+       <title>One Percent</title>
+       <style>
+          html,body{background-color:#fff!important;margin:0 auto !important;padding:0 !important;height:100% !important;width:100% !important;color:#888!important}.email-container{max-width:600px!important;border: 1px solid #B5BECA;
+              border-radius: 12px;margin:0 auto!important}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}div[style*="margin: 16px 0"]{margin:0 !important}table,td{mso-table-lspace:0pt !important;mso-table-rspace:0pt !important}table{width:100%;border-spacing:0 !important;border-collapse:collapse !important;table-layout:fixed !important;margin:0 auto !important}img{-ms-interpolation-mode:bicubic}a{text-decoration:none!important}*[x-apple-data-detectors], .unstyle-auto-detected-links *,.aBn{border-bottom:0 !important;cursor:default !important;color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-weight:inherit !important;line-height:inherit !important}@media only screen and (min-device-width: 320px) and (max-device-width: 374px){u ~ div .email-container{min-width:320px !important}}@media only screen and (min-device-width: 375px) and (max-device-width: 413px){u ~ div .email-container{min-width:375px !important}}@media only screen and (min-device-width: 414px){u ~ div .email-container{min-width:414px !important}}
+       </style>
+    </head>
+    
+    <body>
+       <div class="email-container">
+          <table style="background-color: #E8F1FD;border-top-right-radius:10px;border-top-left-radius:10px; ">
+             <tr>
+                <td style="padding: 30px 15px; border-top-right-radius: 10px">
+                   <img src="${emailSettingData.logo}" />
+                </td>
+             </tr>
+          </table>
+          <table style="color: #000;font-size: 20px; ">
+             <tr>
+                <td style="padding: 10px 14px;">
+                   <h3>${req.body.activeStatus} By Admin</h3>
+                </td>
+             </tr>
+             <tr>
+                <td style="padding: 10px 14px;">Good ${greet}, <b>${user.name}</b>,</td>
+             </tr>
+             <tr>
+                <td style="padding: 10px 14px;">Your Account has been ${req.body.activeStatus} by Admin,`
+                if(req.body.activeStatus==="Approved"){
+                   message +=   `<a href="${req.headers.origin}/auth">Click Here </a>to Login With your Account.`
+                }
+                
+         message += ` </tr>
+             <tr>
+                <td style="padding: 5px 14px;">Sincerely</td>
+             </tr>
+             <tr>
+                <td style="padding: 10px 14px;">The One Percent Software Team</td>
+             </tr>
+          </table>
+          <table style="background-color: #E8F1FD; font-size: 20px;border-bottom-right-radius:10px;border-bottom-left-radius:10px;">
+             <tr>
+                <td style=" text-align: center;">You're receiving this email because you are a subscriber of TheOnePercent.com</td>
+             </tr>
+             <tr>
+                <td style="padding-bottom: 20px; text-align: center;">If you feel you received it by mistake or wish to unsubscribe,<a href="#" style="color: deepskyblue;"><b> click here</b></a>
+                </td>
+             </tr>
+          </table>
+       </div>
+    </body>
+    
+    </html>`;
 
-      await sendEmail({
-        email: user.email,
-        subject: "Recover Password",
-        message,
-      });
-    }
+    await sendEmail({
+      email: user.email,
+      subject: `Account  ${req.body.activeStatus}`,
+      message,
+    });
 
     await UserModel.findByIdAndUpdate(
       { _id: user._id },
       {
         $set: {
-          activeStatus: activestatus,
+          activeStatus: req.body.activeStatus,
         },
       }
     );
