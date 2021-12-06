@@ -339,17 +339,8 @@ export const getUserDetails = async (req, res) => {
 
   try {
     const user = await UserModel.findById(userId);
-    const payload = {
-      _id: user._id,
-      email: user.email,
-      username: user.username,
-    };
-    const token = jwt.sign(payload, services.JWT_KEY, {
-      expiresIn: 31556926,
-    });
     return res.status(200).json({
       message: "User details",
-      token: token,
       user: user,
     });
   } catch (error) {
