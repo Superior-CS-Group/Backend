@@ -10,6 +10,18 @@ export async function createUserEstimation(req, res) {
     req.body.estimationNumber = generateEstimationNumber(
       lastEntry[0] && lastEntry[0].estimationNumber
     );
+    if (req.body.paymentTerms && req.body.paymentTerms.length === 0) {
+      req.body.paymentTerms = [
+        {
+          title: "Deposit payment at signing of contract",
+          value: 12,
+        },
+        {
+          title: "Progress payment when project is started",
+          value: 88,
+        },
+      ];
+    }
     const userEstimation = new UserEstimationModel(req.body);
     await userEstimation.save();
     return res
@@ -36,6 +48,7 @@ export async function updateUserEstimation(req, res) {
             builtInDesignCost: 0,
             fluffNumberDiscount: 0,
           },
+          paymentTerms: req.body.paymentTerms,
         },
       },
       { new: true }
