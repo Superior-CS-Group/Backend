@@ -13,6 +13,12 @@ export async function addNewFormulaHandler(req, res) {
     if (!isValid) {
       return res.status(400).json({ errors: errors });
     }
+    const isExist = await FormulaModelV2.findOne({ title: req.body.title });
+    if (isExist) {
+      return res
+        .status(400)
+        .json({ errors: { title: "Formula already exist" } });
+    }
     const formula = new FormulaModelV2({
       ...req.body,
     });
@@ -36,6 +42,15 @@ export async function updateFormulaByIdHandler(req, res) {
       return res.status(400).json({ errors: errors });
     }
     const formulaId = req.params.formulaId || "";
+    // const isExists = await FormulaModelV2.findOne({
+    //   _id: { $ne: formulaId },
+    //   title: req.body.title,
+    // });
+    // if (isExists) {
+    //   return res
+    //     .status(400)
+    //     .json({ errors: { title: "Title Already Exists" } });
+    // }
     const formula = await FormulaModelV2.findByIdAndUpdate(
       formulaId,
       {
