@@ -2,6 +2,8 @@ import FormulaModelV2 from "../../../model/formula/v2/formula.model.js";
 
 import validateAddNewFormulaInput from "../../../validator/formula/v2/addNewFormula.validator.js";
 
+import base64ToFile from "../../../utils/base64ToFile.js";
+
 /**
  * @author digimonk technologies
  * @developer - Saral Shrivastava
@@ -19,6 +21,14 @@ export async function addNewFormulaHandler(req, res) {
         .status(400)
         .json({ errors: { title: "Formula already exist" } });
     }
+    if (req.body.photo && req.body.photo.includes(",")) {
+      req.body.photo = await base64ToFile(
+        req.body.photo.split(",")[1],
+        req.user.id,
+        "serviceTemplate"
+      );
+    }
+
     const formula = new FormulaModelV2({
       ...req.body,
     });
@@ -51,6 +61,13 @@ export async function updateFormulaByIdHandler(req, res) {
     //     .status(400)
     //     .json({ errors: { title: "Title Already Exists" } });
     // }
+    if (req.body.photo && req.body.photo.includes(",")) {
+      req.body.photo = await base64ToFile(
+        req.body.photo.split(",")[1],
+        req.user.id,
+        "serviceTemplate"
+      );
+    }
     const formula = await FormulaModelV2.findByIdAndUpdate(
       formulaId,
       {
