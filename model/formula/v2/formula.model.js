@@ -80,6 +80,11 @@ const FormulaSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
           },
+          type: {
+            type: String,
+            enum: ["material", "labor", "subcontractor"],
+            default: "material",
+          },
           formula: {
             type: [mongoose.Schema.Types.ObjectId],
             ref: "CatalogV2",
