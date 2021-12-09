@@ -85,18 +85,31 @@ export const filterAndSort = async (req, res) => {
   }
   try {
     let filterData = req.body;
+    let days = parseInt(filterData.dateFilter);
+    console.log(filterData);
+    var pastDate = new Date();
+    console.log(pastDate);
+    pastDate.setDate(pastDate.getDate() - days);
+    console.log(pastDate);
+    let matchObj = {};
+    if (filterData.estimaitonStatus.length > 0) {
+      matchObj["estimaitonStatus"] = filterData.estimaitonStatus;
+    }
+
+    if (filterData.leadSource.length > 0) {
+      matchObj["leadSource"] = filterData.leadSource;
+    }
     const leadData = await EstimationModel.find({
       leadPerson: { $in: [userId] },
+      createdAt: { $gte: pastDate, $lte: new Date() },
       // leadSource: "Website",
       // customerLeadId: { $size: 1 },
     })
-      .sort({ _id: -1 })
+      .sort({ _id: filterData.sortDropdown })
       .populate("leadPerson")
       .populate({
         path: "customerLeadId",
-        match: {
-          estimaitonStatus: filterData.estimaitonStatus,
-        },
+        match: matchObj,
       });
 
     res.status(200).json({
