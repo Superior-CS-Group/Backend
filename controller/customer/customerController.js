@@ -34,7 +34,7 @@ export const addLead = async (req, res) => {
     const customerLead = await CustomerLeadModel.create({
       name: req.body.name,
       email: req.body.email,
-      contactNo: req.body.contactNo,
+      // contactNo: req.body.contactNo,
       country: req.body.country,
       state: req.body.state,
       city: req.body.city,

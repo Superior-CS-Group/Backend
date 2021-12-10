@@ -28,7 +28,7 @@ export const addLead = async (req, res) => {
     const createLeadData = await EstimationModel.create({
       name: req.body.customerName,
       email: req.body.email,
-      contactNo: req.body.contactNo,
+      // contactNo: req.body.contactNo,
       leadSource: req.body.leadSource,
       leadPerson: req.body.leadPerson,
       estimaitonDate: req.body.estimaitonDate,

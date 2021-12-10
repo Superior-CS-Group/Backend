@@ -27,6 +27,7 @@ import FormulaRouteV2 from "./route/formula/v2/formula.route.js";
 import CatalogRouteV2 from "./route/v2/catalog.js";
 import UserEstimationRoute from "./route/formula/v2/userEstimation.route.js";
 import TabFilterRoute from "./route/tabFilter.js";
+import QuestionRoute from "./route/question.js";
 
 const app = express();
 app.use(cors());
@@ -82,6 +83,7 @@ app.use("/api/v2/formula", FormulaRouteV2);
 app.use("/api/v2/user-estimation", UserEstimationRoute);
 app.use("/api/v2/catalog", CatalogRouteV2);
 app.use("/api/tab-filter", TabFilterRoute);
+app.use("/api/question", QuestionRoute);
 
 app.get("/", (_req, res) => res.status(200).send("Yes its working"));
 
