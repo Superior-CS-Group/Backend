@@ -29,7 +29,13 @@ import {
   isExistingLeadEmailHandler,
 } from "../controller/customer/customerController.js";
 
+import { addQualifyingForm } from "../controller/customer/qualifyingFormController.js";
+
 const UserRoute = express.Router();
+
+// CRM
+UserRoute.post("/check-qualifying-form", authProtect, addQualifyingForm);
+
 
 // Lead
 UserRoute.post("/add", authProtect, addLead);
