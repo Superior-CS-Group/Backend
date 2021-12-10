@@ -38,7 +38,7 @@ export const listTab = async (req, res) => {
   if (!currentUser) {
     return res.status(401).json({ errors: "User not found" });
   }
-  console.log(req);
+  // console.log(req);
   try {
     let Tab = await TabFilterModel.find({ userId });
 
