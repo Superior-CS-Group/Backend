@@ -26,6 +26,7 @@ import {
   updateCustomerInfo,
   GetInfoCustomerLead,
   CustomerLeadRemove,
+  isExistingLeadEmailHandler,
 } from "../controller/customer/customerController.js";
 
 const UserRoute = express.Router();
@@ -34,9 +35,10 @@ const UserRoute = express.Router();
 UserRoute.post("/add", authProtect, addLead);
 UserRoute.post("/update-info", authProtect, updateCustomerInfo);
 UserRoute.post("/assign-lead", authProtect, assignCustomerLead);
-UserRoute.get("/upcoming-estimation", authProtect, UpcomingEstimaitonLead);
 UserRoute.post("/get-info", authProtect, GetInfoCustomerLead);
 UserRoute.post("/delete-lead", authProtect, CustomerLeadRemove);
+UserRoute.get("/upcoming-estimation", authProtect, UpcomingEstimaitonLead);
+UserRoute.get("/is-exist-lead-email", isExistingLeadEmailHandler);
 
 // Customer Profile
 UserRoute.post("/sign-up", signUp);

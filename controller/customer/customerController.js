@@ -15,65 +15,64 @@ export const addLead = async (req, res) => {
   }
 
   try {
+    // const checkCustomer = await CustomerLeadModel.findOne({email:req.body.email});
+    // if (checkCustomer) {
+    //   return res.status(401).json({ errors: "Email Id Already Exists!" });
+    // }
+    // var preInvoiceNumber;
 
-    const checkCustomer = await CustomerLeadModel.findOne({email:req.body.email});
-    if (checkCustomer) {
-      return res.status(401).json({ errors: "Email Id Already Exists!" });
-    }
-    var preInvoiceNumber;
+    // const getData = await CustomerLeadModel.find().sort({ _id: -1 }).limit(1);
+    // if (getData.length > 0) {
+    //   preInvoiceNumber = getData[0].leadInvoinceNo;
+    // } else {
+    //   preInvoiceNumber = "C1000001";
+    // }
 
-    const getData = await CustomerLeadModel.find().sort({ _id: -1 }).limit(1);
-    if (getData.length > 0) {
-      preInvoiceNumber = getData[0].leadInvoinceNo;
-    } else {
-      preInvoiceNumber = "C1000001";
-    }
-
-    var newInvoiceNo = InvoiceNumber.next(`${preInvoiceNumber}`);
+    // var newInvoiceNo = InvoiceNumber.next(`${preInvoiceNumber}`);
 
     const customerLead = await CustomerLeadModel.create({
       name: req.body.name,
       email: req.body.email,
       // contactNo: req.body.contactNo,
-      country: req.body.country,
+      // country: req.body.country,
       state: req.body.state,
       city: req.body.city,
       postalCode: req.body.postalCode,
       address: req.body.address,
       distance: req.body.distance,
       otherInformation: req.body.otherInformation,
-      leadInvoinceNo: newInvoiceNo,
+      // leadInvoinceNo: newInvoiceNo,
       leadPerson: currentUser._id,
       spouse: req.body.spouse,
     });
 
-    var preEstimateInvoiceNumber;
+    // var preEstimateInvoiceNumber;
 
-    const getCustomerData = await CustomerLeadModel.findById({
-      _id: customerLead._id,
-    });
+    // const getCustomerData = await CustomerLeadModel.findById({
+    //   _id: customerLead._id,
+    // });
 
-    const getEstimateData = await EstimationModel.find()
-      .sort({ _id: -1 })
-      .limit(1);
-    if (getEstimateData.length > 0) {
-      preEstimateInvoiceNumber = getEstimateData[0].leadInvoinceNo;
-    } else {
-      preEstimateInvoiceNumber = "E1000001";
-    }
+    // const getEstimateData = await EstimationModel.find()
+    //   .sort({ _id: -1 })
+    //   .limit(1);
+    // if (getEstimateData.length > 0) {
+    //   preEstimateInvoiceNumber = getEstimateData[0].leadInvoinceNo;
+    // } else {
+    //   preEstimateInvoiceNumber = "E1000001";
+    // }
 
-    var newEstimateInvoiceNo = InvoiceNumber.next(
-      `${preEstimateInvoiceNumber}`
-    );
+    // var newEstimateInvoiceNo = InvoiceNumber.next(
+    //   `${preEstimateInvoiceNumber}`
+    // );
 
     await EstimationModel.create({
-      name: getCustomerData.customerName,
-      email: getCustomerData.email,
-      contactNo: getCustomerData.contactNo,
-      leadSource: getCustomerData.leadSource,
+      name: customerLead.name,
+      email: customerLead.email,
+      contactNo: customerLead.contactNo,
+      leadSource: customerLead.leadSource,
       leadPerson: currentUser._id,
-      leadInvoinceNo: newEstimateInvoiceNo,
-      customerLeadId: getCustomerData._id,
+      // leadInvoinceNo: newEstimateInvoiceNo,
+      customerLeadId: customerLead._id,
       distance: req.body.distance,
     });
 
@@ -87,6 +86,18 @@ export const addLead = async (req, res) => {
   }
 };
 
+export const isExistingLeadEmailHandler = async (req, res) => {
+  const userEmail = req.query.email;
+  const checkCustomer = await CustomerLeadModel.findOne({
+    email: userEmail,
+  });
+  if (checkCustomer) {
+    return res.status(200).json({ msg: "Success" });
+  } else {
+    return res.status(404).json({ errors: { email: "Email Id Not Found!" } });
+  }
+};
+
 export const GetInfoCustomerLead = async (req, res) => {
   const userId = req.query.userId || req.user._id;
   console.log(req.body);
@@ -96,7 +107,9 @@ export const GetInfoCustomerLead = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
-    const checkData = await CustomerLeadModel.findById({ _id: req.body.id }).populate("leadPerson");
+    const checkData = await CustomerLeadModel.findById({
+      _id: req.body.id,
+    }).populate("leadPerson");
 
     res.status(200).json({
       Data: checkData,
@@ -169,12 +182,12 @@ export const updateCustomerInfo = async (req, res) => {
         {
           $set: req.body,
         },
-        { new: true },
+        { new: true }
       );
     } else {
     }
     const checkData1 = await CustomerLeadModel.findById({ _id: req.body.id });
-    console.log(req.body)
+    console.log(req.body);
     res.status(200).json({
       Data: checkData1,
     });
@@ -256,7 +269,7 @@ export const CustomerLeadRemove = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
-    console.log(req.body)
+    console.log(req.body);
     await CustomerLeadModel.findByIdAndDelete({ _id: req.body.id });
     await EstimationModel.findOneAndDelete({ customerLeadId: req.body.id });
 

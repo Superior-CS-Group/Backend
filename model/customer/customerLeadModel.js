@@ -5,7 +5,7 @@ const CustomerLeadSchema = new Mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
     },
     name: {
       type: String,
