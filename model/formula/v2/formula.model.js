@@ -58,6 +58,14 @@ const FormulaSchema = new mongoose.Schema(
             type: [mongoose.Schema.Types.ObjectId],
             ref: "CatalogV2",
           },
+          customInput: {
+            type: [
+              {
+                name: { type: String },
+                value: { type: String },
+              },
+            ],
+          },
         },
       ],
     },
