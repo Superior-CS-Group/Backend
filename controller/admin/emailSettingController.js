@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
 import base64ToFile from "../../utils/base64ToFile.js";
+import sharp from "sharp";
 
 export const updateEmailSetting = async (req, res) => {
   try {
@@ -26,6 +27,15 @@ export const updateEmailSetting = async (req, res) => {
           currentUser._id,
           "crmlogo"
         );
+        console.log(profileImg, "urlprofileImage");
+
+      //  const thumpThumb = await sharp(profileImg)
+      //     .resize({
+      //       width: 150,
+      //       height: 97,
+      //     })
+      //     .toFile("sammy-resized.png");
+      //     console.log(thumpThumb)
       } else {
         profileImg = req.body.oldLogo;
       }
