@@ -38,7 +38,7 @@ export const UserRoleList = async (req, res) => {
     return res.status(401).json({ error: "User not found" });
   }
   try {
-    const leadSourceData = await UserRoleModel.find().sort({ _id: -1 });
+    const leadSourceData = await (await UserRoleModel.find({ }, { name: 1 }).sort({ name: 1 }));
 
     res.status(200).json({
       userDataLength: leadSourceData.length,
