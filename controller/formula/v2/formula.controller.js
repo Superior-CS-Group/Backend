@@ -52,15 +52,6 @@ export async function updateFormulaByIdHandler(req, res) {
       return res.status(400).json({ errors: errors });
     }
     const formulaId = req.params.formulaId || "";
-    // const isExists = await FormulaModelV2.findOne({
-    //   _id: { $ne: formulaId },
-    //   title: req.body.title,
-    // });
-    // if (isExists) {
-    //   return res
-    //     .status(400)
-    //     .json({ errors: { title: "Title Already Exists" } });
-    // }
     if (req.body.photo && req.body.photo.includes(",")) {
       req.body.photo = await base64ToFile(
         req.body.photo.split(",")[1],
@@ -120,7 +111,8 @@ export async function searchFormulaByName(req, res) {
     })
       .populate("materials.formula")
       .populate("elements.formula")
-      .populate("catalogs");
+      .populate("catalogs")
+      .populate("materials.unit");
     return res.status(200).json({ data: formulas });
   } catch (error) {
     console.log(error);
