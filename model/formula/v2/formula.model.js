@@ -26,10 +26,6 @@ const FormulaSchema = new mongoose.Schema(
               "boolean",
             ],
           },
-          unit: {
-            type: String,
-            ref: "Unit",
-          },
           dropdown: {
             type: String,
             default: "",
@@ -75,6 +71,10 @@ const FormulaSchema = new mongoose.Schema(
           name: {
             type: String,
           },
+          unit: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Unit",
+          },
           quantity: {
             type: String,
           },
@@ -109,7 +109,6 @@ const FormulaSchema = new mongoose.Schema(
     },
     catalogs: {
       type: [mongoose.Schema.Types.ObjectId],
-      default: [],
       ref: "CatalogV2",
     },
   },
