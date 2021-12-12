@@ -19,6 +19,9 @@ const TabFilterSchema = new Mongoose.Schema(
       type: Object,
       required: false,
     },
+    columnOrder: {
+      type: [],
+    },
   },
   {
     timestamps: true,
