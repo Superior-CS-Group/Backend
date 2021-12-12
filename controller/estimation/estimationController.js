@@ -85,7 +85,7 @@ export const filterAndSort = async (req, res) => {
   }
   try {
     let filterData = req.body;
-    let days = parseInt(filterData.dateFilter);
+    let days = parseInt(filterData.dateFilter ? filterData.dateFilter : "7");
     console.log(filterData);
     var pastDate = new Date();
     console.log(pastDate);
@@ -118,7 +118,7 @@ export const filterAndSort = async (req, res) => {
     });
   } catch (error) {
     console.log("error:", error);
-    res.status(500).json({ msg: "Internal server error" });
+    res.status(500).json({ msg: "Internal server error", error });
   }
 };
 
