@@ -102,3 +102,35 @@ export const updateTab = async (req, res) => {
     res.status(500).json({ errors: { error: "Internal Server Error" } });
   }
 };
+
+export const updateTabColOrder = async (req, res) => {
+  const userId = req.query.userId || req.user._id;
+  console.log(req.params);
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ errors: "User not found" });
+  }
+
+  try {
+    let TabData = req.body;
+    // TabData["userId"] = userId;
+
+    await TabFilterModel.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: { columnOrder: TabData },
+      }
+    );
+    let Tab = await TabFilterModel.findById({ _id: req.params.id });
+    res.status(200).json({
+      message: "Success",
+      Data: Tab,
+    });
+  } catch (errors) {
+    console.log(errors);
+    res
+      .status(500)
+      .json({ errors: { error: "Internal Server Error", errors } });
+  }
+};
