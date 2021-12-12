@@ -34,7 +34,7 @@ const StaffSchema = new Mongoose.Schema(
     companyName: {
       type: String,
       default: "",
-    }, 
+    },
     companyImage: {
       type: String,
       default: "",
@@ -55,12 +55,16 @@ const StaffSchema = new Mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    password_reset_token:{
-      type:String
+    password_reset_token: {
+      type: String,
     },
     timeZone: {
       type: String,
       default: "",
+    },
+    organization: {
+      type: Mongoose.Schema.Types.ObjectId,
+      required: true,
     },
   },
   {
