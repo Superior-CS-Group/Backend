@@ -149,7 +149,7 @@ export const signUp = async (req, res) => {
                <td style="padding: 10px 14px;">A new Account had been created </td>
             </tr>
             <tr>
-               <td style="padding: 10px 14px;"><a href="">Click Here </a> to see the request of new account.</td>
+               <td style="padding: 10px 14px;"><a href="${req.headers.origin}/userlist/">Click Here </a> to see the request of new account.</td>
             </tr>
             
 

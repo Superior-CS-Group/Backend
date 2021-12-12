@@ -30,12 +30,19 @@ import {
 } from "../controller/customer/customerController.js";
 
 import { addQualifyingForm } from "../controller/customer/qualifyingFormController.js";
+import {
+  addAttachement,
+  AttachementList,
+  FindGoogleAddress,
+} from "../controller/customer/attachmentController.js";
 
 const UserRoute = express.Router();
 
 // CRM
 UserRoute.post("/check-qualifying-form", authProtect, addQualifyingForm);
-
+UserRoute.post("/add-attachement", authProtect, addAttachement);
+UserRoute.post("/google-address", authProtect, FindGoogleAddress);
+UserRoute.post("/attachement-list", authProtect, AttachementList);
 
 // Lead
 UserRoute.post("/add", authProtect, addLead);
