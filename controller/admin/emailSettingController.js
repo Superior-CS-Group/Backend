@@ -50,6 +50,7 @@ export const updateEmailSetting = async (req, res) => {
             username: req.body.username,
             password: req.body.password,
             fromEmail: req.body.fromEmail,
+            googleKey: req.body.googleKey,
             logo: profileImg,
           },
         }

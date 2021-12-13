@@ -36,7 +36,7 @@ const CustomerLeadSchema = new Mongoose.Schema(
       default: "",
     },
     distance: {
-      type: Number,
+      type: String,
       default: 0,
     },
     otherInformation: {
@@ -81,7 +81,7 @@ const CustomerLeadSchema = new Mongoose.Schema(
     },
     estimaitonStatus: {
       type: String,
-      default: "Lead Added",
+      default: "Need to write estimate",
     },
 
     leadInvoinceNo: {

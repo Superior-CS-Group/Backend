@@ -24,6 +24,9 @@ const EmailSettingSchema = mongoose.Schema(
     logo: {
       type: String, 
     },
+    googleKey: {
+      type: String, 
+    },
   },
   { timestamps: true }
 );

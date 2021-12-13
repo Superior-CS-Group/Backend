@@ -4,6 +4,7 @@ import StaffModel from "../../model/staff/staffModel.js";
 import CustomerLeadModel from "../../model/customer/customerLeadModel.js";
 import EstimationModel from "../../model/estimation/estimationModel.js";
 import { InvoiceNumber } from "invoice-number";
+import distance from "google-distance-matrix";
 
 export const addLead = async (req, res) => {
   const userId = req.query.userId || req.user._id;
@@ -386,4 +387,67 @@ export const membserRemove = async (req, res) => {
     console.log("error:", error);
     res.status(500).json({ msg: "Internal server error" });
   }
+};
+
+export const FindGoogleAddress = async (req, res) => {
+  const userId = req.user._id;
+  // console.log(req.body);
+  const currentUser = await StaffModel.findById(userId);
+
+  if (!currentUser) {
+    return res.status(401).json({ errors: "User not found" });
+  }
+
+  var origins = [req.body.origins];
+  var destinations = [req.body.destinations];
+  distance.key("AIzaSyBC9O1b8JhFyUiE2kAU-ULbcio2siKePYU");
+  // distance.units("imperial");
+  distance.mode("driving");
+
+  distance.matrix(
+    origins,
+    destinations,
+    function (err, distances, distanceAddress) {
+      if (err) {
+        return console.log(err);
+      }
+      if (!distances) {
+        return console.log("no distances");
+      }
+      if (distances.status == "OK") {
+        for (var i = 0; i < origins.length; i++) {
+          for (var j = 0; j < destinations.length; j++) {
+            var origin = distances.origin_addresses[i];
+            var destination = distances.destination_addresses[j];
+            if (distances.rows[0].elements[j].status == "OK") {
+              var distance = distances.rows[i].elements[j].distance.text;
+              var duration = distances.rows[i].elements[j].duration.text;
+              distanceAddress =
+                "Distance from " +
+                origin +
+                " to " +
+                destination +
+                " is " +
+                distance +
+                " and time " +
+                duration;
+
+              return res.status(200).json({
+                message: "Success",
+                Address: duration,
+              });
+            } else {
+              distanceAddress =
+                destination + " is not reachable by land from " + origin;
+
+              return res.status(200).json({
+                message: "Success",
+                Address: distanceAddress,
+              });
+            }
+          }
+        }
+      }
+    }
+  );
 };
