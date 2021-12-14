@@ -204,7 +204,7 @@ export async function getVariationsByCatalog(req, res) {
 export async function searchCatalogByName(req, res) {
   try {
     const type = req.query.searchFor;
-    const catalogName = req.params.catalogName || "";
+    const catalogName = req.query.catalogName || "";
     let filter = {};
     if (!type || !["catalog", "service", "subCatalog"].includes(type)) {
       filter = {

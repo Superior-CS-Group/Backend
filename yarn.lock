@@ -4191,7 +4191,17 @@
     "prop-types" "^15.6.2"
     "react-lifecycles-compat" "^3.0.4"
 
-"react-transition-group@^4", "react-transition-group@4.3.0":
+"react-transition-group@^4":
+  "integrity" "sha512-/RNYfRAMlZwDSr6z4zNKV6xu53/e2BuaBbGhbyYIXTrmgu/bGHzmqOs7mJSJBHy9Ud+ApHx3QjrkKSp1pxvlFg=="
+  "resolved" "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.4.2.tgz"
+  "version" "4.4.2"
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    "dom-helpers" "^5.0.1"
+    "loose-envify" "^1.4.0"
+    "prop-types" "^15.6.2"
+
+"react-transition-group@4.3.0":
   "integrity" "sha512-1qRV1ZuVSdxPlPf4O8t7inxUGpdyO5zG9IoNfJxSO0ImU2A1YWkEQvFPuIPZmMLkg5hYs7vv5mMOyfgSkvAwvw=="
   "resolved" "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.3.0.tgz"
   "version" "4.3.0"

@@ -51,7 +51,7 @@ CatalogRouteV2.get("/get-all-catalog", getCatalogs);
 CatalogRouteV2.get("/get-all-services", getServices);
 CatalogRouteV2.get("/get-all-variation-by-catalog", getVariationsByCatalog);
 
-CatalogRouteV2.get("/search-catalog-by-name/:catalogName", searchCatalogByName);
+CatalogRouteV2.get("/search-catalog-by-name", searchCatalogByName);
 
 export default CatalogRouteV2;
 

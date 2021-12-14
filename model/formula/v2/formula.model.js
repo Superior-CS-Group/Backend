@@ -100,6 +100,33 @@ const FormulaSchema = new mongoose.Schema(
         },
       ],
     },
+    hiddenValues: {
+      type: [
+        {
+          name: {
+            type: String,
+          },
+          value: {
+            type: String,
+          },
+          isConditional: {
+            type: Boolean,
+          },
+          expression: {
+            condition: {
+              type: String,
+            },
+            fullfill: {
+              type: String,
+            },
+            fail: {
+              type: String,
+            },
+          },
+        },
+      ],
+      default: [],
+    },
     clientContract: {
       type: String,
     },
